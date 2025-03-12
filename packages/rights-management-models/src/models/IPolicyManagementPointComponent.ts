@@ -6,7 +6,7 @@ import type { IOdrlPolicy } from "@twin.org/standards-w3c-odrl";
 
 /**
  * Interface describing a Policy Management Point (PMP) contract.
- * Provide the policies to the PDP based on the data and identities.
+ * Provide the policies to the Policy Decision Point (PDP) based on the data and identities.
  */
 export interface IPolicyManagementPointComponent extends IComponent {
 	/**

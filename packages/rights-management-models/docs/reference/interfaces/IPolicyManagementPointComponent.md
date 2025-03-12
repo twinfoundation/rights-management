@@ -1,7 +1,7 @@
 # Interface: IPolicyManagementPointComponent
 
 Interface describing a Policy Management Point (PMP) contract.
-Provide the policies to the PDP based on the data and identities.
+Provide the policies to the Policy Decision Point (PDP) based on the data and identities.
 
 ## Extends
 
