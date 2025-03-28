@@ -31,8 +31,6 @@
 		"prepare": "ts-patch install -s"
 	},
 	"dependencies": {
-		"@twin.org/attestation-models": "next",
-		"@twin.org/blob-storage-models": "next",
 		"@twin.org/core": "next",
 		"@twin.org/data-json-ld": "next",
 		"@twin.org/entity": "next",
