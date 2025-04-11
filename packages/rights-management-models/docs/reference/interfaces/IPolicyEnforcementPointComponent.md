@@ -13,17 +13,33 @@ be returned.
 
 ### intercept()
 
-> **intercept**(`data`, `userIdentity`, `nodeIdentity`): `Promise`\<`IJsonLdNodeObject`\>
+> **intercept**\<`T`\>(`assetType`, `action`, `data`, `userIdentity`, `nodeIdentity`): `Promise`\<`undefined` \| `T`\>
 
 Process the data using Policy Decision Point (PDP) and return the manipulated data.
 
+#### Type Parameters
+
+• **T** = `unknown`
+
 #### Parameters
+
+##### assetType
+
+`string`
+
+The type of asset being processed.
+
+##### action
+
+`string`
+
+The action being performed on the asset.
 
 ##### data
 
-`IJsonLdNodeObject`
-
 The data to process.
+
+`undefined` | `T`
 
 ##### userIdentity
 
@@ -39,6 +55,6 @@ The node identity to use in the decision making.
 
 #### Returns
 
-`Promise`\<`IJsonLdNodeObject`\>
+`Promise`\<`undefined` \| `T`\>
 
 The manipulated data with any policies applied.

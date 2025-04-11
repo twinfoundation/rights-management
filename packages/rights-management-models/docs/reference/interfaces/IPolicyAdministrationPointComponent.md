@@ -1,7 +1,7 @@
 # Interface: IPolicyAdministrationPointComponent
 
 Interface describing a Policy Administration Point (PAP) contract.
-Manages policies for the rights management, policies are also retrieved by the
+Manages policies for the rights management, policies are also queried by the
 Policy Management Point (PMP) when it handles requests from the Policy Decision Point (PDP).
 
 ## Extends

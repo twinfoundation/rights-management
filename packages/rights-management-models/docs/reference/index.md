@@ -8,3 +8,7 @@
 - [IPolicyExecutionPointComponent](interfaces/IPolicyExecutionPointComponent.md)
 - [IPolicyInformationPointComponent](interfaces/IPolicyInformationPointComponent.md)
 - [IPolicyManagementPointComponent](interfaces/IPolicyManagementPointComponent.md)
+
+## Type Aliases
+
+- [PolicyActionCallback](type-aliases/PolicyActionCallback.md)

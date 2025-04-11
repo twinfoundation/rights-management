@@ -1,7 +1,6 @@
 // Copyright 2024 IOTA Stiftung.
 // SPDX-License-Identifier: Apache-2.0.
 import type { IComponent } from "@twin.org/core";
-import type { IJsonLdNodeObject } from "@twin.org/data-json-ld";
 import type { IOdrlPolicy } from "@twin.org/standards-w3c-odrl";
 
 /**
@@ -17,14 +16,18 @@ export interface IPolicyDecisionPointComponent extends IComponent {
 	 * Uses the Policy Management Point (PMP) to retrieve the policies and the
 	 * Policy Information Point (PIP) to retrieve additional information.
 	 * Executes any actions on the Policy Execution Point (PEP) when the decision is made.
+	 * @param assetType The type of asset being processed.
+	 * @param action The action being performed on the asset.
 	 * @param data The data to make a decision on.
 	 * @param userIdentity The user identity to use in the decision making.
 	 * @param nodeIdentity The node identity to use in the decision making.
 	 * @returns Returns the policy decisions which apply to the data so that the PEP
 	 * can manipulate the data accordingly.
 	 */
-	evaluate(
-		data: IJsonLdNodeObject,
+	evaluate<T = unknown>(
+		assetType: string,
+		action: string,
+		data: T | undefined,
 		userIdentity: string,
 		nodeIdentity: string
 	): Promise<IOdrlPolicy[]>;

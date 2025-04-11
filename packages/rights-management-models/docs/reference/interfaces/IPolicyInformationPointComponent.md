@@ -12,17 +12,33 @@ it is making decisions.
 
 ### retrieve()
 
-> **retrieve**(`data`, `userIdentity`, `nodeIdentity`): `Promise`\<`IJsonLdNodeObject`[]\>
+> **retrieve**\<`T`\>(`assetType`, `action`, `data`, `userIdentity`, `nodeIdentity`): `Promise`\<`IJsonLdNodeObject`[]\>
 
 Retrieve additional information which is relevant in the PDP decision making.
 
+#### Type Parameters
+
+• **T** = `unknown`
+
 #### Parameters
+
+##### assetType
+
+`string`
+
+The type of asset being processed.
+
+##### action
+
+`string`
+
+The action being performed on the asset.
 
 ##### data
 
-`IJsonLdNodeObject`
-
 The data to get any additional information for.
+
+`undefined` | `T`
 
 ##### userIdentity
 

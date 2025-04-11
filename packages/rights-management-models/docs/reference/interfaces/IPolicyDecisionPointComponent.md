@@ -14,20 +14,36 @@ Point (PEP) will execute any registered actions.
 
 ### evaluate()
 
-> **evaluate**(`data`, `userIdentity`, `nodeIdentity`): `Promise`\<`IOdrlPolicy`[]\>
+> **evaluate**\<`T`\>(`assetType`, `action`, `data`, `userIdentity`, `nodeIdentity`): `Promise`\<`IOdrlPolicy`[]\>
 
 Evaluate requests from a Policy Enforcement Point (PEP).
 Uses the Policy Management Point (PMP) to retrieve the policies and the
 Policy Information Point (PIP) to retrieve additional information.
 Executes any actions on the Policy Execution Point (PEP) when the decision is made.
 
+#### Type Parameters
+
+• **T** = `unknown`
+
 #### Parameters
+
+##### assetType
+
+`string`
+
+The type of asset being processed.
+
+##### action
+
+`string`
+
+The action being performed on the asset.
 
 ##### data
 
-`IJsonLdNodeObject`
-
 The data to make a decision on.
+
+`undefined` | `T`
 
 ##### userIdentity
 

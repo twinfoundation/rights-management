@@ -11,17 +11,33 @@ Provide the policies to the Policy Decision Point (PDP) based on the data and id
 
 ### retrieve()
 
-> **retrieve**(`data`, `userIdentity`, `nodeIdentity`): `Promise`\<`IOdrlPolicy`[]\>
+> **retrieve**\<`T`\>(`assetType`, `action`, `data`, `userIdentity`, `nodeIdentity`): `Promise`\<`IOdrlPolicy`[]\>
 
 Get the policies from a PAP based on the data and identities.
 
+#### Type Parameters
+
+• **T** = `unknown`
+
 #### Parameters
+
+##### assetType
+
+`string`
+
+The type of asset being processed.
+
+##### action
+
+`string`
+
+The action being performed on the asset.
 
 ##### data
 
-`IJsonLdNodeObject`
-
 The data to retrieve the policies for.
+
+`undefined` | `T`
 
 ##### userIdentity
 

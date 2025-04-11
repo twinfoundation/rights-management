@@ -13,17 +13,33 @@ registered actions based on the decision.
 
 ### executeActions()
 
-> **executeActions**(`data`, `userIdentity`, `nodeIdentity`, `policies`): `Promise`\<`void`\>
+> **executeActions**\<`T`\>(`assetType`, `action`, `data`, `userIdentity`, `nodeIdentity`, `policies`): `Promise`\<`void`\>
 
 Execute actions based on the PDP's decisions.
 
+#### Type Parameters
+
+• **T** = `unknown`
+
 #### Parameters
+
+##### assetType
+
+`string`
+
+The type of asset being processed.
+
+##### action
+
+`string`
+
+The action being performed on the asset.
 
 ##### data
 
-`IJsonLdNodeObject`
-
 The data used in the decision by the PDP.
+
+`undefined` | `T`
 
 ##### userIdentity
 
@@ -53,9 +69,13 @@ Nothing.
 
 ### registerAction()
 
-> **registerAction**(`actionId`, `action`): `Promise`\<`void`\>
+> **registerAction**\<`T`\>(`actionId`, `action`): `Promise`\<`void`\>
 
 Register an action to be executed.
+
+#### Type Parameters
+
+• **T** = `unknown`
 
 #### Parameters
 
@@ -67,7 +87,7 @@ The id of the action to register.
 
 ##### action
 
-(`data`, `userIdentity`, `nodeIdentity`, `policies`) => `Promise`\<`void`\>
+[`PolicyActionCallback`](../type-aliases/PolicyActionCallback.md)\<`T`\>
 
 The action to execute.
 

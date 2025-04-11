@@ -6,7 +6,7 @@ import type { IOdrlPolicy } from "@twin.org/standards-w3c-odrl";
 
 /**
  * Interface describing a Policy Administration Point (PAP) contract.
- * Manages policies for the rights management, policies are also retrieved by the
+ * Manages policies for the rights management, policies are also queried by the
  * Policy Management Point (PMP) when it handles requests from the Policy Decision Point (PDP).
  */
 export interface IPolicyAdministrationPointComponent extends IComponent {
