@@ -17,7 +17,9 @@ Get the policies from a PAP based on the data and identities.
 
 #### Type Parameters
 
-• **T** = `unknown`
+##### T
+
+`T` = `unknown`
 
 #### Parameters
 

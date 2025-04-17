@@ -1,6 +1,6 @@
 # Type Alias: PolicyActionCallback()\<T\>
 
-> **PolicyActionCallback**\<`T`\>: (`assetType`, `action`, `data`, `userIdentity`, `nodeIdentity`, `policies`) => `Promise`\<`void`\>
+> **PolicyActionCallback**\<`T`\> = (`assetType`, `action`, `data`, `userIdentity`, `nodeIdentity`, `policies`) => `Promise`\<`void`\>
 
 Callback function type for policy actions.
 This function is called when a policy action is executed.
@@ -10,7 +10,9 @@ The function should return a promise that resolves when the action is complete.
 
 ## Type Parameters
 
-• **T** = `unknown`
+### T
+
+`T` = `unknown`
 
 ## Parameters
 

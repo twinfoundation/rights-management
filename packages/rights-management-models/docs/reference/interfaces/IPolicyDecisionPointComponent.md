@@ -23,7 +23,9 @@ Executes any actions on the Policy Execution Point (PEP) when the decision is ma
 
 #### Type Parameters
 
-• **T** = `unknown`
+##### T
+
+`T` = `unknown`
 
 #### Parameters
 

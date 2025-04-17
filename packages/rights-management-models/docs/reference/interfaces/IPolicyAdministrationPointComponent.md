@@ -78,7 +78,7 @@ Nothing.
 
 ### query()
 
-> **query**(`conditions`?, `cursor`?): `Promise`\<\{ `cursor`: `string`; `policies`: `IOdrlPolicy`[]; \}\>
+> **query**(`conditions?`, `cursor?`): `Promise`\<\{ `cursor`: `string`; `policies`: `IOdrlPolicy`[]; \}\>
 
 Query the policies using the specified conditions.
 

@@ -18,7 +18,9 @@ Retrieve additional information which is relevant in the PDP decision making.
 
 #### Type Parameters
 
-• **T** = `unknown`
+##### T
+
+`T` = `unknown`
 
 #### Parameters
 

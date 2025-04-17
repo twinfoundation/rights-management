@@ -19,7 +19,9 @@ Process the data using Policy Decision Point (PDP) and return the manipulated da
 
 #### Type Parameters
 
-• **T** = `unknown`
+##### T
+
+`T` = `unknown`
 
 #### Parameters
 
