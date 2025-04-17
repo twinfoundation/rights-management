@@ -19,7 +19,9 @@ Execute actions based on the PDP's decisions.
 
 #### Type Parameters
 
-• **T** = `unknown`
+##### T
+
+`T` = `unknown`
 
 #### Parameters
 
@@ -75,7 +77,9 @@ Register an action to be executed.
 
 #### Type Parameters
 
-• **T** = `unknown`
+##### T
+
+`T` = `unknown`
 
 #### Parameters
 
