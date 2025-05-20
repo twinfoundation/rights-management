@@ -39,4 +39,29 @@ describe("rights-management-pap", () => {
 		expect(retrievedPolicy["@type"]).toEqual("Set");
 		expect(Array.isArray(retrievedPolicy.permission)).toBeTruthy();
 	});
+
+	test("should retrieve a policy from entity storage", async () => {
+		await policyAdminPoint.store(SAMPLE_POLICY);
+
+		const retrievedPolicy = await policyAdminPoint.retrieve(TEST_POLICY_ID);
+
+		// Verify the retrieved policy matches the original
+		expect(retrievedPolicy).toBeDefined();
+		expect(retrievedPolicy.uid).toEqual(TEST_POLICY_ID);
+		expect(retrievedPolicy["@type"]).toEqual("Set");
+
+		// Ensure permission exists on both objects before comparing
+		expect(retrievedPolicy.permission).toBeDefined();
+		expect(SAMPLE_POLICY.permission).toBeDefined();
+
+		if (retrievedPolicy.permission && SAMPLE_POLICY.permission) {
+			expect(retrievedPolicy.permission).toHaveLength(1);
+			expect(retrievedPolicy.permission[0].target).toEqual(SAMPLE_POLICY.permission[0].target);
+			expect(retrievedPolicy.permission[0].action).toEqual(SAMPLE_POLICY.permission[0].action);
+		}
+	});
+
+	test("should throw error when retrieving non-existent policy", async () => {
+		await expect(policyAdminPoint.retrieve("non-existent-policy")).rejects.toThrow();
+	});
 });
