@@ -198,7 +198,6 @@ export class PolicyAdministrationPointComponent implements IPolicyAdministration
 		// Convert profile if present
 		if (storagePolicy.profile) {
 			try {
-				// Check if string is parseable as JSON
 				const profileStr =
 					typeof storagePolicy.profile === "string"
 						? storagePolicy.profile
@@ -245,7 +244,6 @@ export class PolicyAdministrationPointComponent implements IPolicyAdministration
 		// Convert target if present
 		if (storagePolicy.target) {
 			try {
-				// Check if string is parseable as JSON
 				const targetStr =
 					typeof storagePolicy.target === "string" ? storagePolicy.target : storagePolicy.target[0]; // Use first element if it's an array
 
