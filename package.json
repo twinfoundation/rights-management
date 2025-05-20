@@ -47,7 +47,8 @@
 		"release-please": "17.0.0"
 	},
 	"workspaces": [
-		"packages/rights-management-models"
+		"packages/rights-management-models",
+		"packages/rights-management-pap"
 	],
 	"type": "module"
 }
