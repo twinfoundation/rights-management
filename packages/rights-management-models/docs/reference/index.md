@@ -8,6 +8,12 @@
 - [IPolicyExecutionPointComponent](interfaces/IPolicyExecutionPointComponent.md)
 - [IPolicyInformationPointComponent](interfaces/IPolicyInformationPointComponent.md)
 - [IPolicyManagementPointComponent](interfaces/IPolicyManagementPointComponent.md)
+- [IPapQueryRequest](interfaces/IPapQueryRequest.md)
+- [IPapQueryResponse](interfaces/IPapQueryResponse.md)
+- [IPapRemoveRequest](interfaces/IPapRemoveRequest.md)
+- [IPapRetrieveRequest](interfaces/IPapRetrieveRequest.md)
+- [IPapRetrieveResponse](interfaces/IPapRetrieveResponse.md)
+- [IPapStoreRequest](interfaces/IPapStoreRequest.md)
 
 ## Type Aliases
 

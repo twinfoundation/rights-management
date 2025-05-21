@@ -1,5 +1,7 @@
 {
 	"error": {
-		"policyNotFound": "Policy not found with id: \"{{policyId}}\""
+		"papComponent": {
+			"policyNotFound": "Policy not found with id: \"{policyId}\""
+		}
 	}
 }

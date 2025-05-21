@@ -48,7 +48,8 @@
 	},
 	"workspaces": [
 		"packages/rights-management-models",
-		"packages/rights-management-pap"
+		"packages/rights-management-pap",
+		"packages/rights-management-pap-service"
 	],
 	"type": "module"
 }
