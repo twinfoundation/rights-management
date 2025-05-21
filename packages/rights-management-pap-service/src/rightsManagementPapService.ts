@@ -42,7 +42,6 @@ export class RightsManagementPapService implements IPolicyAdministrationPointCom
 	constructor(options?: IPolicyAdministrationPointServiceConstructorOptions) {
 		this._defaultNamespace = options?.config?.defaultNamespace ?? "odrl-policy";
 
-		// Create an EntityStorageService for OdrlPolicy entities
 		const entityStorageService = new EntityStorageService({
 			entityStorageType: this._defaultNamespace,
 			config: {
@@ -51,7 +50,6 @@ export class RightsManagementPapService implements IPolicyAdministrationPointCom
 			}
 		});
 
-		// Create the PolicyAdministrationPointComponent
 		this._papComponent = new PolicyAdministrationPointComponent({
 			entityStorage: entityStorageService
 		});
