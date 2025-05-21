@@ -3,3 +3,4 @@
 export * from "./entities/odrlPolicy";
 export * from "./policyAdministrationPointComponent";
 export * from "./models/IPolicyAdministrationPointComponentOptions";
+export * from "./utils/odrlPolicyConverters";

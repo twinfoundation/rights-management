@@ -21,5 +21,13 @@ export interface IPolicyAdministrationPointComponentOptions {
 		 * Defaults to 100.
 		 */
 		maxQueryResults?: number;
+		/**
+		 * Include the user identity when performing storage operations, defaults to true.
+		 */
+		includeUserIdentity?: boolean;
+		/**
+		 * Include the node identity when performing storage operations, defaults to true.
+		 */
+		includeNodeIdentity?: boolean;
 	};
 }

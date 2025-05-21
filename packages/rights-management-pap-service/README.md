@@ -1,6 +1,6 @@
-# TWIN Rights Management PAP Service
+# TWIN Rights Management Policy Administration Point Service
 
-Rights Management PAP service implementation and REST endpoint definitions.
+Rights Management Policy Administration Point service implementation and REST endpoint definitions.
 
 ## Installation
 

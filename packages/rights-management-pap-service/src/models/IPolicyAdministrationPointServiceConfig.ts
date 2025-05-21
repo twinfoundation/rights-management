@@ -9,4 +9,12 @@ export interface IPolicyAdministrationPointServiceConfig {
 	 * What is the default connector to use for PAP. If not provided the first connector from the factory will be used.
 	 */
 	defaultNamespace?: string;
+	/**
+	 * Include the user identity when performing storage operations, defaults to true.
+	 */
+	includeUserIdentity?: boolean;
+	/**
+	 * Include the node identity when performing storage operations, defaults to true.
+	 */
+	includeNodeIdentity?: boolean;
 }

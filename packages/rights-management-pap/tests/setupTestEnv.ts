@@ -25,6 +25,8 @@ export const TEST_DIRECTORY = `${TEST_DIRECTORY_ROOT}test-data-${Converter.bytes
 
 export const TEST_POLICY_ID = "http://example.com/policy/1";
 export const TEST_ASSET_ID = "http://example.com/asset/1";
+export const TEST_USER_IDENTITY = "user:1234";
+export const TEST_NODE_IDENTITY = "node:5678";
 
 export const SAMPLE_POLICY: IOdrlPolicy = {
 	"@context": OdrlContexts.Context,
@@ -78,6 +80,10 @@ export const createTestPolicies = async (
 		const assetId = `http://example.com/asset/${Math.ceil(i / 2)}`;
 		const action = i % 3 === 0 ? ("display" as ActionType) : ("use" as ActionType);
 
-		await policyAdminPoint.store(createTestPolicy(i.toString(), policyType, assetId, action));
+		await policyAdminPoint.store(
+			createTestPolicy(i.toString(), policyType, assetId, action),
+			TEST_USER_IDENTITY,
+			TEST_NODE_IDENTITY
+		);
 	}
 };
