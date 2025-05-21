@@ -19,7 +19,7 @@ describe("rights-management-pap", () => {
 
 	beforeEach(() => {
 		const entityStorageService = new EntityStorageService<OdrlPolicy>({
-			entityStorageType: "odrl-policy", // This uses the connector registered in setupTestEnv
+			entityStorageType: "odrl-policy",
 			config: {
 				includeNodeIdentity: false,
 				includeUserIdentity: false
@@ -32,7 +32,6 @@ describe("rights-management-pap", () => {
 	});
 
 	afterAll(async () => {
-		// Only attempt to remove the directory if it exists
 		if (existsSync(TEST_DIRECTORY_ROOT)) {
 			await rm(TEST_DIRECTORY_ROOT, { recursive: true });
 		}
@@ -54,7 +53,6 @@ describe("rights-management-pap", () => {
 
 		const retrievedPolicy = await policyAdminPoint.retrieve(TEST_POLICY_ID);
 
-		// Verify the retrieved policy matches the original
 		expect(retrievedPolicy).toBeDefined();
 		expect(retrievedPolicy.uid).toEqual(TEST_POLICY_ID);
 		expect(retrievedPolicy["@type"]).toEqual("Set");
@@ -86,92 +84,87 @@ describe("rights-management-pap", () => {
 		await expect(policyAdminPoint.retrieve(TEST_POLICY_ID)).rejects.toThrow();
 	});
 
-	describe("query method", () => {
-		test("should query policies without conditions", async () => {
-			await createTestPolicies(policyAdminPoint);
+	test("should query policies without conditions", async () => {
+		await createTestPolicies(policyAdminPoint);
 
-			const result = await policyAdminPoint.query();
+		const result = await policyAdminPoint.query();
 
-			expect(result.policies).toBeDefined();
-			expect(result.policies.length).toEqual(10);
-		});
+		expect(result.policies).toBeDefined();
+		expect(result.policies.length).toEqual(10);
+	});
 
-		test("should query policies with specific conditions", async () => {
-			await createTestPolicies(policyAdminPoint);
+	test("should query policies with specific conditions", async () => {
+		await createTestPolicies(policyAdminPoint);
 
-			// Create a condition for policies of type "Offer" using proper IComparator structure
-			const typeCondition: EntityCondition<IOdrlPolicy> = {
-				property: "@type",
-				value: "Offer",
-				comparison: "equals"
-			};
+		const typeCondition: EntityCondition<IOdrlPolicy> = {
+			property: "@type",
+			value: "Offer",
+			comparison: "equals"
+		};
 
-			// Query policies with the type condition
-			const result = await policyAdminPoint.query(typeCondition);
+		// Query policies with the type condition
+		const result = await policyAdminPoint.query(typeCondition);
 
-			// Check only "Offer" policies were returned
-			expect(result.policies).toBeDefined();
-			expect(result.policies.length).toEqual(5);
+		// Check only "Offer" policies were returned
+		expect(result.policies).toBeDefined();
+		expect(result.policies.length).toEqual(5);
 
-			// Validate that only Offer policies were returned
-			for (const policy of result.policies) {
-				expect(policy["@type"]).toEqual("Offer");
-			}
-		});
+		// Validate that only Offer policies were returned
+		for (const policy of result.policies) {
+			expect(policy["@type"]).toEqual("Offer");
+		}
+	});
 
-		test("should return empty result for non-matching conditions", async () => {
-			await createTestPolicies(policyAdminPoint);
+	test("should return empty result for non-matching conditions", async () => {
+		await createTestPolicies(policyAdminPoint);
 
-			// Condition that won't match any policy using proper IComparator structure
-			const nonMatchingCondition: EntityCondition<IOdrlPolicy> = {
-				property: "@type",
-				value: "NonExistentType",
-				comparison: "equals"
-			};
+		const nonMatchingCondition: EntityCondition<IOdrlPolicy> = {
+			property: "@type",
+			value: "NonExistentType",
+			comparison: "equals"
+		};
 
-			// Query with conditions that don't match any policy
-			const result = await policyAdminPoint.query(nonMatchingCondition);
+		// Query with conditions that don't match any policy
+		const result = await policyAdminPoint.query(nonMatchingCondition);
 
-			expect(result.policies).toBeDefined();
-			expect(result.policies).toEqual([]);
-			expect(result.cursor).toBeUndefined();
-		});
+		expect(result.policies).toBeDefined();
+		expect(result.policies).toEqual([]);
+		expect(result.cursor).toBeUndefined();
+	});
 
-		test("should handle pagination with cursor", async () => {
-			await createTestPolicies(policyAdminPoint);
+	test("should handle pagination with cursor", async () => {
+		await createTestPolicies(policyAdminPoint);
 
-			// Get first page (default max is set in component)
-			const firstPage = await policyAdminPoint.query();
+		// Get first page (default max is set in component)
+		const firstPage = await policyAdminPoint.query();
 
-			// Check first page
-			expect(firstPage.policies).toBeDefined();
-			expect(firstPage.policies.length).toBeGreaterThan(0);
+		// Check first page
+		expect(firstPage.policies).toBeDefined();
+		expect(firstPage.policies.length).toBeGreaterThan(0);
 
-			// If we got all 10 policies in the first page, no pagination is happening
-			if (firstPage.policies.length < 10 && firstPage.cursor) {
-				// Get second page using cursor
-				const secondPage = await policyAdminPoint.query(undefined, firstPage.cursor);
+		// If we got all 10 policies in the first page, no pagination is happening
+		if (firstPage.policies.length < 10 && firstPage.cursor) {
+			// Get second page using cursor
+			const secondPage = await policyAdminPoint.query(undefined, firstPage.cursor);
 
-				// Check second page
-				expect(secondPage.policies).toBeDefined();
-				expect(secondPage.policies.length).toBeGreaterThan(0);
+			// Check second page
+			expect(secondPage.policies).toBeDefined();
+			expect(secondPage.policies.length).toBeGreaterThan(0);
 
-				// Combine pages and verify no duplicates
-				const allPolicyIds = [
-					...firstPage.policies.map(p => p.uid),
-					...secondPage.policies.map(p => p.uid)
-				];
+			// Combine pages and verify no duplicates
+			const allPolicyIds = [
+				...firstPage.policies.map(p => p.uid),
+				...secondPage.policies.map(p => p.uid)
+			];
 
-				const uniqueIds = new Set(allPolicyIds);
-				expect(uniqueIds.size).toEqual(allPolicyIds.length);
-				expect(uniqueIds.size).toBeGreaterThanOrEqual(10);
-			}
-		});
+			const uniqueIds = new Set(allPolicyIds);
+			expect(uniqueIds.size).toEqual(allPolicyIds.length);
+			expect(uniqueIds.size).toBeGreaterThanOrEqual(10);
+		}
+	});
 
-		test("should handle invalid cursor gracefully", async () => {
-			await createTestPolicies(policyAdminPoint);
-
-			await expect(policyAdminPoint.query(undefined, "invalid-cursor")).resolves.toBeDefined();
-		});
+	test("should handle invalid cursor gracefully", async () => {
+		await createTestPolicies(policyAdminPoint);
+		await expect(policyAdminPoint.query(undefined, "invalid-cursor")).resolves.toBeDefined();
 	});
 });
