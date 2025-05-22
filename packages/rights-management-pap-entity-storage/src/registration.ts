@@ -3,19 +3,19 @@
 import type { IEntityStorageComponent } from "@twin.org/entity-storage-models";
 import { PolicyAdministrationPointComponentFactory } from "@twin.org/rights-management-models";
 import type { OdrlPolicy } from "./entities/odrlPolicy";
-import type { IPolicyAdministrationPointComponentOptions } from "./models/IPolicyAdministrationPointComponentOptions";
-import { PolicyAdministrationPointComponent } from "./policyAdministrationPointComponent";
+import type { IPolicyAdministrationPointComponentEntityStorageOptions } from "./models/IPolicyAdministrationPointComponentEntityStorageOptions";
+import { PolicyAdministrationPointComponentEntityStorage } from "./policyAdministrationPointComponentEntityStorage";
 
 /**
  * Register the entity storage implementation of the Policy Administration Point component with the factory.
  * @param options Options for creating the component.
  */
-export function registerEntityStoragePapComponent(
-	options: IPolicyAdministrationPointComponentOptions
+export function registerEntityStoragePolicyAdministrationPointComponent(
+	options: IPolicyAdministrationPointComponentEntityStorageOptions
 ): void {
 	PolicyAdministrationPointComponentFactory.register(
-		PolicyAdministrationPointComponent.NAMESPACE,
-		() => new PolicyAdministrationPointComponent(options)
+		PolicyAdministrationPointComponentEntityStorage.NAMESPACE,
+		() => new PolicyAdministrationPointComponentEntityStorage(options)
 	);
 }
 
@@ -25,12 +25,12 @@ export function registerEntityStoragePapComponent(
  * @param maxQueryResults The maximum number of query results to return.
  * @returns A function that creates a new entity storage policy administration point component.
  */
-export function createEntityStoragePapComponentFactory(
+export function createEntityStoragePolicyAdministrationPointComponentFactory(
 	entityStorage: IEntityStorageComponent<OdrlPolicy>,
 	maxQueryResults?: number
-): () => PolicyAdministrationPointComponent {
+): () => PolicyAdministrationPointComponentEntityStorage {
 	return () =>
-		new PolicyAdministrationPointComponent({
+		new PolicyAdministrationPointComponentEntityStorage({
 			entityStorage,
 			config: {
 				maxQueryResults

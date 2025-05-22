@@ -8,6 +8,7 @@
 - [IPolicyExecutionPointComponent](interfaces/IPolicyExecutionPointComponent.md)
 - [IPolicyInformationPointComponent](interfaces/IPolicyInformationPointComponent.md)
 - [IPolicyManagementPointComponent](interfaces/IPolicyManagementPointComponent.md)
+- [IRightsManagementComponent](interfaces/IRightsManagementComponent.md)
 - [IPapQueryRequest](interfaces/IPapQueryRequest.md)
 - [IPapQueryResponse](interfaces/IPapQueryResponse.md)
 - [IPapRemoveRequest](interfaces/IPapRemoveRequest.md)
@@ -18,3 +19,8 @@
 ## Type Aliases
 
 - [PolicyActionCallback](type-aliases/PolicyActionCallback.md)
+
+## Variables
+
+- [PolicyAdministrationPointComponentFactory](variables/PolicyAdministrationPointComponentFactory.md)
+- [RightsManagementComponentFactory](variables/RightsManagementComponentFactory.md)

@@ -1,12 +1,50 @@
-# Interface: IPolicyAdministrationPointComponent
+# Class: PolicyAdministrationPointComponentEntityStorage
 
-Interface describing a Policy Administration Point (PAP) contract.
-Manages policies for the rights management, policies are also queried by the
-Policy Management Point (PMP) when it handles requests from the Policy Decision Point (PDP).
+Class implementation of Policy Administration Point Component that uses Entity Storage.
 
-## Extends
+## Implements
 
-- `IComponent`
+- `IPolicyAdministrationPointComponent`
+
+## Constructors
+
+### Constructor
+
+> **new PolicyAdministrationPointComponentEntityStorage**(`options`): `PolicyAdministrationPointComponentEntityStorage`
+
+Create a new instance of PolicyAdministrationPointComponent.
+
+#### Parameters
+
+##### options
+
+[`IPolicyAdministrationPointComponentEntityStorageOptions`](../interfaces/IPolicyAdministrationPointComponentEntityStorageOptions.md)
+
+The options for the component.
+
+#### Returns
+
+`PolicyAdministrationPointComponentEntityStorage`
+
+## Properties
+
+### NAMESPACE
+
+> `readonly` `static` **NAMESPACE**: `string` = `"entity-storage"`
+
+The namespace supported by the Policy Administration Point entity storage implementation.
+
+***
+
+### CLASS\_NAME
+
+> `readonly` **CLASS\_NAME**: `string`
+
+The class name of the Policy Administration Point Component.
+
+#### Implementation of
+
+`IPolicyAdministrationPointComponent.CLASS_NAME`
 
 ## Methods
 
@@ -14,7 +52,7 @@ Policy Management Point (PMP) when it handles requests from the Policy Decision 
 
 > **store**(`policy`, `userIdentity?`, `nodeIdentity?`): `Promise`\<`void`\>
 
-Store a policy.
+Store a policy in the entity storage.
 
 #### Parameters
 
@@ -40,7 +78,9 @@ The identity of the node the operation is performed on.
 
 `Promise`\<`void`\>
 
-Nothing.
+#### Implementation of
+
+`IPolicyAdministrationPointComponent.store`
 
 ***
 
@@ -48,7 +88,7 @@ Nothing.
 
 > **retrieve**(`policyId`, `userIdentity?`, `nodeIdentity?`): `Promise`\<`IOdrlPolicy`\>
 
-Retrieve a policy.
+Retrieve a policy from the entity storage.
 
 #### Parameters
 
@@ -56,7 +96,7 @@ Retrieve a policy.
 
 `string`
 
-The id of the policy to retrieve.
+The ID of the policy to retrieve.
 
 ##### userIdentity?
 
@@ -76,13 +116,17 @@ The identity of the node the operation is performed on.
 
 The policy.
 
+#### Implementation of
+
+`IPolicyAdministrationPointComponent.retrieve`
+
 ***
 
 ### remove()
 
 > **remove**(`policyId`, `userIdentity?`, `nodeIdentity?`): `Promise`\<`void`\>
 
-Remove a policy.
+Remove a policy from the entity storage.
 
 #### Parameters
 
@@ -90,7 +134,7 @@ Remove a policy.
 
 `string`
 
-The id of the policy to remove.
+The ID of the policy to remove.
 
 ##### userIdentity?
 
@@ -108,7 +152,9 @@ The identity of the node the operation is performed on.
 
 `Promise`\<`void`\>
 
-Nothing.
+#### Implementation of
+
+`IPolicyAdministrationPointComponent.remove`
 
 ***
 
@@ -116,7 +162,7 @@ Nothing.
 
 > **query**(`conditions?`, `cursor?`, `userIdentity?`, `nodeIdentity?`): `Promise`\<\{ `cursor`: `string`; `policies`: `IOdrlPolicy`[]; \}\>
 
-Query the policies using the specified conditions.
+Query the entity storage for policies.
 
 #### Parameters
 
@@ -124,7 +170,7 @@ Query the policies using the specified conditions.
 
 `EntityCondition`\<`IOdrlPolicy`\>
 
-The conditions to use for the query.
+The conditions to query the entity storage with.
 
 ##### cursor?
 
@@ -148,4 +194,8 @@ The identity of the node the operation is performed on.
 
 `Promise`\<\{ `cursor`: `string`; `policies`: `IOdrlPolicy`[]; \}\>
 
-Cursor for next page of results and the policies matching the query.
+The policies.
+
+#### Implementation of
+
+`IPolicyAdministrationPointComponent.query`

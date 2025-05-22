@@ -1,8 +1,7 @@
-# Interface: IPolicyAdministrationPointComponent
+# Interface: IRightsManagementComponent
 
-Interface describing a Policy Administration Point (PAP) contract.
-Manages policies for the rights management, policies are also queried by the
-Policy Management Point (PMP) when it handles requests from the Policy Decision Point (PDP).
+Interface describing a unified Rights Management Component.
+This serves as a single point of entry for all rights management operations.
 
 ## Extends
 
@@ -10,11 +9,11 @@ Policy Management Point (PMP) when it handles requests from the Policy Decision 
 
 ## Methods
 
-### store()
+### papStore()
 
-> **store**(`policy`, `userIdentity?`, `nodeIdentity?`): `Promise`\<`void`\>
+> **papStore**(`policy`, `userIdentity?`, `nodeIdentity?`): `Promise`\<`void`\>
 
-Store a policy.
+PAP: Store a policy.
 
 #### Parameters
 
@@ -44,11 +43,11 @@ Nothing.
 
 ***
 
-### retrieve()
+### papRetrieve()
 
-> **retrieve**(`policyId`, `userIdentity?`, `nodeIdentity?`): `Promise`\<`IOdrlPolicy`\>
+> **papRetrieve**(`policyId`, `userIdentity?`, `nodeIdentity?`): `Promise`\<`IOdrlPolicy`\>
 
-Retrieve a policy.
+PAP: Retrieve a policy.
 
 #### Parameters
 
@@ -78,11 +77,11 @@ The policy.
 
 ***
 
-### remove()
+### papRemove()
 
-> **remove**(`policyId`, `userIdentity?`, `nodeIdentity?`): `Promise`\<`void`\>
+> **papRemove**(`policyId`, `userIdentity?`, `nodeIdentity?`): `Promise`\<`void`\>
 
-Remove a policy.
+PAP: Remove a policy.
 
 #### Parameters
 
@@ -112,11 +111,11 @@ Nothing.
 
 ***
 
-### query()
+### papQuery()
 
-> **query**(`conditions?`, `cursor?`, `userIdentity?`, `nodeIdentity?`): `Promise`\<\{ `cursor`: `string`; `policies`: `IOdrlPolicy`[]; \}\>
+> **papQuery**(`conditions?`, `cursor?`, `userIdentity?`, `nodeIdentity?`): `Promise`\<\{ `cursor`: `string`; `policies`: `IOdrlPolicy`[]; \}\>
 
-Query the policies using the specified conditions.
+PAP: Query the policies using the specified conditions.
 
 #### Parameters
 

@@ -14,10 +14,10 @@ import {
 	TEST_USER_IDENTITY
 } from "./setupTestEnv";
 import type { OdrlPolicy } from "../src/entities/odrlPolicy";
-import { PolicyAdministrationPointComponent } from "../src/policyAdministrationPointComponent";
+import { PolicyAdministrationPointComponentEntityStorage } from "../src/policyAdministrationPointComponentEntityStorage";
 
 describe("rights-management-pap", () => {
-	let policyAdminPoint: PolicyAdministrationPointComponent;
+	let policyAdminPoint: PolicyAdministrationPointComponentEntityStorage;
 
 	beforeEach(() => {
 		const entityStorageService = new EntityStorageService<OdrlPolicy>({
@@ -28,7 +28,7 @@ describe("rights-management-pap", () => {
 			}
 		});
 
-		policyAdminPoint = new PolicyAdministrationPointComponent({
+		policyAdminPoint = new PolicyAdministrationPointComponentEntityStorage({
 			entityStorage: entityStorageService
 		});
 	});

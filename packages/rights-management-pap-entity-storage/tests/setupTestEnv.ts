@@ -13,7 +13,7 @@ import {
 } from "@twin.org/standards-w3c-odrl";
 import * as dotenv from "dotenv";
 import type { OdrlPolicy } from "../src/entities/odrlPolicy";
-import type { PolicyAdministrationPointComponent } from "../src/policyAdministrationPointComponent";
+import type { PolicyAdministrationPointComponentEntityStorage } from "../src/policyAdministrationPointComponentEntityStorage";
 import { initSchema } from "../src/schema";
 
 console.debug("Setting up test environment from .env and .env.dev files");
@@ -72,7 +72,7 @@ const createTestPolicy = (
 
 // Create multiple policies with different attributes for testing
 export const createTestPolicies = async (
-	policyAdminPoint: PolicyAdministrationPointComponent
+	policyAdminPoint: PolicyAdministrationPointComponentEntityStorage
 ): Promise<void> => {
 	// Store 10 policies with different types and targets
 	for (let i = 1; i <= 10; i++) {
