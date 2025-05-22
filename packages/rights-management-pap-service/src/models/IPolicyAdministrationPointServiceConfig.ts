@@ -17,4 +17,8 @@ export interface IPolicyAdministrationPointServiceConfig {
 	 * Include the node identity when performing storage operations, defaults to true.
 	 */
 	includeNodeIdentity?: boolean;
+	/**
+	 * Maximum number of results to return in a query.
+	 */
+	maxQueryResults?: number;
 }

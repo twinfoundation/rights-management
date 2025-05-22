@@ -4,8 +4,14 @@ import { GeneralError, Guards } from "@twin.org/core";
 import type { EntityCondition } from "@twin.org/entity";
 import { EntityStorageService } from "@twin.org/entity-storage-service";
 import { nameof } from "@twin.org/nameof";
-import type { IPolicyAdministrationPointComponent } from "@twin.org/rights-management-models";
-import { PolicyAdministrationPointComponent } from "@twin.org/rights-management-pap";
+import {
+	PolicyAdministrationPointComponentFactory,
+	type IPolicyAdministrationPointComponent
+} from "@twin.org/rights-management-models";
+import {
+	createEntityStoragePapComponentFactory,
+	PolicyAdministrationPointComponent
+} from "@twin.org/rights-management-pap-entity-storage";
 import type { IOdrlPolicy } from "@twin.org/standards-w3c-odrl";
 import type { IPolicyAdministrationPointServiceConstructorOptions } from "./models/IPolicyAdministrationPointServiceConstructorOptions";
 
@@ -33,7 +39,7 @@ export class RightsManagementPapService implements IPolicyAdministrationPointCom
 	 * The actual PAP component implementation.
 	 * @internal
 	 */
-	private readonly _papComponent: PolicyAdministrationPointComponent;
+	private readonly _papComponent: IPolicyAdministrationPointComponent;
 
 	/**
 	 * Include the user identity when performing storage operations, defaults to true.
@@ -64,13 +70,22 @@ export class RightsManagementPapService implements IPolicyAdministrationPointCom
 			}
 		});
 
-		this._papComponent = new PolicyAdministrationPointComponent({
-			entityStorage: entityStorageService,
-			config: {
-				includeNodeIdentity: this._includeNodeIdentity,
-				includeUserIdentity: this._includeUserIdentity
-			}
-		});
+		// Register the entity storage implementation with the factory if not already registered
+		const componentNamespace = PolicyAdministrationPointComponent.NAMESPACE;
+		const registeredNames = PolicyAdministrationPointComponentFactory.names();
+
+		if (!registeredNames.includes(componentNamespace)) {
+			PolicyAdministrationPointComponentFactory.register(
+				componentNamespace,
+				createEntityStoragePapComponentFactory(
+					entityStorageService,
+					options?.config?.maxQueryResults
+				)
+			);
+		}
+
+		// Get the component from the factory
+		this._papComponent = PolicyAdministrationPointComponentFactory.get(componentNamespace);
 	}
 
 	/**

@@ -1,11 +1,11 @@
 {
-	"name": "@twin.org/rights-management-pap",
+	"name": "@twin.org/rights-management-pap-entity-storage",
 	"version": "0.0.1-next.1",
-	"description": "Policy administration point implementation",
+	"description": "Policy administration point implementation with entity storage",
 	"repository": {
 		"type": "git",
 		"url": "git+https://github.com/twinfoundation/rights-management.git",
-		"directory": "packages/rights-management-pap"
+		"directory": "packages/rights-management-pap-entity-storage"
 	},
 	"author": "cornel.filip@iota.org; adrian.sanchez.sequeira@iota.org",
 	"license": "Apache-2.0",

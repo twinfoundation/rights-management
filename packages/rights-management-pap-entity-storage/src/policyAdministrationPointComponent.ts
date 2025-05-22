@@ -15,6 +15,11 @@ import { convertFromStoragePolicy, convertToStoragePolicy } from "./utils/odrlPo
  */
 export class PolicyAdministrationPointComponent implements IPolicyAdministrationPointComponent {
 	/**
+	 * The namespace supported by the Policy Administration Point entity storage implementation.
+	 */
+	public static readonly NAMESPACE: string = "entity-storage";
+
+	/**
 	 * Default maximum query results.
 	 * @internal
 	 */

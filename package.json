@@ -48,7 +48,7 @@
 	},
 	"workspaces": [
 		"packages/rights-management-models",
-		"packages/rights-management-pap",
+		"packages/rights-management-pap-entity-storage",
 		"packages/rights-management-pap-service"
 	],
 	"type": "module"

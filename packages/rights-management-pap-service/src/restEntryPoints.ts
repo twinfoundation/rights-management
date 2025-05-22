@@ -1,13 +1,24 @@
 // Copyright 2024 IOTA Stiftung.
 // SPDX-License-Identifier: Apache-2.0.
 import type { IRestRouteEntryPoint } from "@twin.org/api-models";
-import { generateRestRoutesPap, tagsPap } from "./rightsManagementPapRoutes";
 
+/**
+ * Tags for the PAP REST API.
+ */
+export const tagsPap = [
+	{
+		name: "Policy Administration Point",
+		description: "Operations for Policy Administration Point"
+	}
+];
+
+/**
+ * Entry points for the REST API.
+ */
 export const restEntryPoints: IRestRouteEntryPoint[] = [
 	{
-		name: "pap",
-		defaultBaseRoute: "pap",
-		tags: tagsPap,
-		generateRoutes: generateRestRoutesPap
+		name: "rights-management-pap",
+		defaultBaseRoute: "rights-management/pap",
+		tags: [tagsPap]
 	}
 ];
