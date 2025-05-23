@@ -165,7 +165,7 @@ Nothing.
 
 ### papQuery()
 
-> **papQuery**(`conditions?`, `cursor?`, `userIdentity?`, `nodeIdentity?`): `Promise`\<\{ `cursor`: `string`; `policies`: `IOdrlPolicy`[]; \}\>
+> **papQuery**(`conditions?`, `cursor?`, `pageSize?`, `userIdentity?`, `nodeIdentity?`): `Promise`\<\{ `cursor`: `string`; `policies`: `IOdrlPolicy`[]; \}\>
 
 PAP: Query the policies using the specified conditions.
 
@@ -173,7 +173,7 @@ PAP: Query the policies using the specified conditions.
 
 ##### conditions?
 
-`EntityCondition`\<`IOdrlPolicy`\>
+`string`
 
 The conditions to use for the query.
 
@@ -182,6 +182,12 @@ The conditions to use for the query.
 `string`
 
 The cursor to use for pagination.
+
+##### pageSize?
+
+`number`
+
+The number of results to return per page.
 
 ##### userIdentity?
 

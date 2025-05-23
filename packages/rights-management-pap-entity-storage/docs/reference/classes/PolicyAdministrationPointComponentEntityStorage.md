@@ -160,7 +160,7 @@ The identity of the node the operation is performed on.
 
 ### query()
 
-> **query**(`conditions?`, `cursor?`, `userIdentity?`, `nodeIdentity?`): `Promise`\<\{ `cursor`: `string`; `policies`: `IOdrlPolicy`[]; \}\>
+> **query**(`conditions?`, `cursor?`, `pageSize?`, `userIdentity?`, `nodeIdentity?`): `Promise`\<\{ `cursor`: `string`; `policies`: `IOdrlPolicy`[]; \}\>
 
 Query the entity storage for policies.
 
@@ -177,6 +177,12 @@ The conditions to query the entity storage with.
 `string`
 
 The cursor to use for pagination.
+
+##### pageSize?
+
+`number`
+
+The number of results to return per page.
 
 ##### userIdentity?
 

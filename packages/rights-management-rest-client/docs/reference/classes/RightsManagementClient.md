@@ -136,7 +136,7 @@ PAP: Query the policies using the specified conditions.
 
 ##### conditions?
 
-`EntityCondition`\<`IOdrlPolicy`\>
+`string`
 
 The conditions to use for the query.
 

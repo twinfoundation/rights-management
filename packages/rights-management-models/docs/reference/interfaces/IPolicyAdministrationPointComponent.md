@@ -114,7 +114,7 @@ Nothing.
 
 ### query()
 
-> **query**(`conditions?`, `cursor?`, `userIdentity?`, `nodeIdentity?`): `Promise`\<\{ `cursor`: `string`; `policies`: `IOdrlPolicy`[]; \}\>
+> **query**(`conditions?`, `cursor?`, `pageSize?`, `userIdentity?`, `nodeIdentity?`): `Promise`\<\{ `cursor`: `string`; `policies`: `IOdrlPolicy`[]; \}\>
 
 Query the policies using the specified conditions.
 
@@ -131,6 +131,12 @@ The conditions to use for the query.
 `string`
 
 The cursor to use for pagination.
+
+##### pageSize?
+
+`number`
+
+The number of results to return per page.
 
 ##### userIdentity?
 

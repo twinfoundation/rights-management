@@ -1,7 +1,7 @@
 {
 	"error": {
-		"papComponent": {
-			"policyNotFound": "Policy not found with id: \"{policyId}\""
+		"policyAdministrationPointComponentEntityStorage": {
+			"policyNotFound": "Policy not found with id: \"{notFoundId}\""
 		}
 	}
 }

@@ -29,22 +29,6 @@ The unique identifier for the policy.
 
 ***
 
-### @context
-
-> **@context**: `string`
-
-The context for the policy.
-
-***
-
-### @type
-
-> **@type**: `string`
-
-The type of policy.
-
-***
-
 ### profile?
 
 > `optional` **profile**: `string` \| `string`[]
@@ -55,7 +39,7 @@ The profile(s) this policy conforms to.
 
 ### assigner?
 
-> `optional` **assigner**: `string`
+> `optional` **assigner**: `string` \| `IOdrlParty`
 
 The assigner of the policy.
 
@@ -63,7 +47,7 @@ The assigner of the policy.
 
 ### assignee?
 
-> `optional` **assignee**: `string`
+> `optional` **assignee**: `string` \| `IOdrlParty`
 
 The assignee of the policy.
 
@@ -71,7 +55,7 @@ The assignee of the policy.
 
 ### target?
 
-> `optional` **target**: `string` \| `string`[]
+> `optional` **target**: `string` \| `IOdrlAsset` \| (`string` \| `IOdrlAsset`)[]
 
 The target asset for the rule.
 
@@ -79,7 +63,7 @@ The target asset for the rule.
 
 ### action?
 
-> `optional` **action**: `string`
+> `optional` **action**: `ActionType` \| `IOdrlAction` \| ActionType \| IOdrlAction[]
 
 The action associated with the rule.
 
@@ -87,7 +71,7 @@ The action associated with the rule.
 
 ### conflict?
 
-> `optional` **conflict**: `string`
+> `optional` **conflict**: `ConflictStrategyType`
 
 The conflict resolution strategy.
 
@@ -95,22 +79,30 @@ The conflict resolution strategy.
 
 ### permission?
 
-> `optional` **permission**: `string`
+> `optional` **permission**: `IOdrlPermission`[]
 
-The permissions in the policy as JSON string.
+The permissions in the policy.
 
 ***
 
 ### prohibition?
 
-> `optional` **prohibition**: `string`
+> `optional` **prohibition**: `IOdrlProhibition`[]
 
-The prohibitions in the policy as JSON string.
+The prohibitions in the policy.
 
 ***
 
 ### obligation?
 
-> `optional` **obligation**: `string`
+> `optional` **obligation**: `IOdrlDuty`[]
 
-The obligations in the policy as JSON string.
+The obligations in the policy.
+
+***
+
+### nodeIdentity?
+
+> `optional` **nodeIdentity**: `string`
+
+The identifier of the node that owns this policy.

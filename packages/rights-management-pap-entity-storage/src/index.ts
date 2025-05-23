@@ -4,4 +4,4 @@ export * from "./entities/odrlPolicy";
 export * from "./policyAdministrationPointComponentEntityStorage";
 export * from "./models/IPolicyAdministrationPointComponentEntityStorageOptions";
 export * from "./utils/odrlPolicyConverters";
-export * from "./registration";
+export * from "./schema";

@@ -1,8 +1,8 @@
-# Function: generateRestRoutesPap()
+# Function: generateRestRoutes()
 
-> **generateRestRoutesPap**(`baseRouteName`, `componentName`): `IRestRoute`\<`any`, `any`\>[]
+> **generateRestRoutes**(`baseRouteName`, `componentName`): `IRestRoute`\<`any`, `any`\>[]
 
-The REST routes for Policy Administration Point.
+The REST routes for the Rights Management.
 
 ## Parameters
 

@@ -12,11 +12,11 @@
 ## Variables
 
 - [restEntryPoints](variables/restEntryPoints.md)
-- [tagsPap](variables/tagsPap.md)
+- [tags](variables/tags.md)
 
 ## Functions
 
-- [generateRestRoutesPap](functions/generateRestRoutesPap.md)
+- [generateRestRoutes](functions/generateRestRoutes.md)
 - [papStore](functions/papStore.md)
 - [papRetrieve](functions/papRetrieve.md)
 - [papRemove](functions/papRemove.md)

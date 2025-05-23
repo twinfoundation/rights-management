@@ -1,7 +1,6 @@
 // Copyright 2024 IOTA Stiftung.
 // SPDX-License-Identifier: Apache-2.0.
 import type { IComponent } from "@twin.org/core";
-import type { EntityCondition } from "@twin.org/entity";
 import type { IOdrlPolicy } from "@twin.org/standards-w3c-odrl";
 
 /**
@@ -40,13 +39,15 @@ export interface IRightsManagementComponent extends IComponent {
 	 * PAP: Query the policies using the specified conditions.
 	 * @param conditions The conditions to use for the query.
 	 * @param cursor The cursor to use for pagination.
+	 * @param pageSize The number of results to return per page.
 	 * @param userIdentity The identity of the user performing the operation.
 	 * @param nodeIdentity The identity of the node the operation is performed on.
 	 * @returns Cursor for next page of results and the policies matching the query.
 	 */
 	papQuery(
-		conditions?: EntityCondition<IOdrlPolicy>,
+		conditions?: string,
 		cursor?: string,
+		pageSize?: number,
 		userIdentity?: string,
 		nodeIdentity?: string
 	): Promise<{

@@ -10,22 +10,20 @@ The request structure for querying policies.
 
 The query parameters of the request.
 
+#### conditions?
+
+> `optional` **conditions**: `string`
+
+The condition for the query.
+
+#### pageSize?
+
+> `optional` **pageSize**: `number`
+
+The number of entries to return per page.
+
 #### cursor?
 
 > `optional` **cursor**: `string`
 
-The cursor for pagination.
-
-***
-
-### body?
-
-> `optional` **body**: `object`
-
-The body of the request.
-
-#### conditions?
-
-> `optional` **conditions**: `EntityCondition`\<`IOdrlPolicy`\>
-
-The conditions to use in the query.
+The cursor to get next chunk of data, returned in previous response.

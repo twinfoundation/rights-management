@@ -8,7 +8,6 @@ import type {
 	ITag
 } from "@twin.org/api-models";
 import { ComponentFactory, Guards } from "@twin.org/core";
-import type { EntityCondition } from "@twin.org/entity";
 import { nameof } from "@twin.org/nameof";
 import type {
 	IPapQueryRequest,
@@ -19,7 +18,6 @@ import type {
 	IPapStoreRequest,
 	IRightsManagementComponent
 } from "@twin.org/rights-management-models";
-import type { IOdrlPolicy } from "@twin.org/standards-w3c-odrl";
 import { HeaderTypes, HttpStatusCode } from "@twin.org/web";
 
 /**
@@ -28,9 +26,9 @@ import { HeaderTypes, HttpStatusCode } from "@twin.org/web";
 const ROUTES_SOURCE = "rightsManagementRoutes";
 
 /**
- * The tag to associate with the PAP routes.
+ * The tag to associate with the routes.
  */
-export const tagsPap: ITag[] = [
+export const tags: ITag[] = [
 	{
 		name: "Policy Administration Point",
 		description: "Endpoints for managing ODRL policies in the Policy Administration Point"
@@ -38,18 +36,18 @@ export const tagsPap: ITag[] = [
 ];
 
 /**
- * The REST routes for Policy Administration Point.
+ * The REST routes for the Rights Management.
  * @param baseRouteName Prefix to prepend to the paths.
  * @param componentName The name of the component to use in the routes stored in the ComponentFactory.
  * @returns The generated routes.
  */
-export function generateRestRoutesPap(baseRouteName: string, componentName: string): IRestRoute[] {
+export function generateRestRoutes(baseRouteName: string, componentName: string): IRestRoute[] {
 	const storeRoute: IRestRoute<IPapStoreRequest, ICreatedResponse> = {
 		operationId: "papStore",
 		summary: "Store a policy",
-		tag: tagsPap[0].name,
+		tag: tags[0].name,
 		method: "POST",
-		path: `${baseRouteName}/`,
+		path: `${baseRouteName}/pap/`,
 		handler: async (httpRequestContext, request) =>
 			papStore(httpRequestContext, componentName, request),
 		requestType: {
@@ -96,9 +94,9 @@ export function generateRestRoutesPap(baseRouteName: string, componentName: stri
 	const retrieveRoute: IRestRoute<IPapRetrieveRequest, IPapRetrieveResponse> = {
 		operationId: "papRetrieve",
 		summary: "Retrieve a policy",
-		tag: tagsPap[0].name,
+		tag: tags[0].name,
 		method: "GET",
-		path: `${baseRouteName}/:id`,
+		path: `${baseRouteName}/pap/:id`,
 		handler: async (httpRequestContext, request) =>
 			papRetrieve(httpRequestContext, componentName, request),
 		requestType: {
@@ -142,9 +140,9 @@ export function generateRestRoutesPap(baseRouteName: string, componentName: stri
 	const removeRoute: IRestRoute<IPapRemoveRequest, INoContentResponse> = {
 		operationId: "papRemove",
 		summary: "Remove a policy",
-		tag: tagsPap[0].name,
+		tag: tags[0].name,
 		method: "DELETE",
-		path: `${baseRouteName}/:id`,
+		path: `${baseRouteName}/pap/:id`,
 		handler: async (httpRequestContext, request) =>
 			papRemove(httpRequestContext, componentName, request),
 		requestType: {
@@ -170,9 +168,9 @@ export function generateRestRoutesPap(baseRouteName: string, componentName: stri
 	const queryRoute: IRestRoute<IPapQueryRequest, IPapQueryResponse> = {
 		operationId: "papQuery",
 		summary: "Query policies",
-		tag: tagsPap[0].name,
+		tag: tags[0].name,
 		method: "POST",
-		path: `${baseRouteName}/query`,
+		path: `${baseRouteName}/pap/query`,
 		handler: async (httpRequestContext, request) =>
 			papQuery(httpRequestContext, componentName, request),
 		requestType: {
@@ -183,13 +181,6 @@ export function generateRestRoutesPap(baseRouteName: string, componentName: stri
 					request: {
 						query: {
 							cursor: "optional-pagination-cursor"
-						},
-						body: {
-							conditions: {
-								property: "@type",
-								value: "Set",
-								comparison: "equals"
-							}
 						}
 					}
 				}
@@ -330,12 +321,20 @@ export async function papQuery(
 ): Promise<IPapQueryResponse> {
 	Guards.object<IPapQueryRequest>(ROUTES_SOURCE, nameof(request), request);
 
-	// Extract conditions and cursor
-	const conditions: EntityCondition<IOdrlPolicy> | undefined = request.body?.conditions;
-	const cursor: string | undefined = request.query?.cursor;
+	// Extract all query parameters
+	const queryParams = request.query || {};
+	const cursor = queryParams.cursor;
+	const pageSize = queryParams.pageSize;
+	const conditions = queryParams.conditions;
 
 	const component = ComponentFactory.get<IRightsManagementComponent>(componentName);
-	const result = await component.papQuery(conditions, cursor, httpRequestContext.userIdentity);
+	const result = await component.papQuery(
+		conditions,
+		cursor,
+		pageSize,
+		httpRequestContext.userIdentity,
+		httpRequestContext.nodeIdentity
+	);
 
 	return {
 		body: {

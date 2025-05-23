@@ -1,7 +1,5 @@
 // Copyright 2024 IOTA Stiftung.
 // SPDX-License-Identifier: Apache-2.0.
-import type { EntityCondition } from "@twin.org/entity";
-import type { IOdrlPolicy } from "@twin.org/standards-w3c-odrl";
 
 /**
  * The request structure for querying policies.
@@ -12,18 +10,18 @@ export interface IPapQueryRequest {
 	 */
 	query?: {
 		/**
-		 * The cursor for pagination.
+		 * The condition for the query.
+		 */
+		conditions?: string;
+
+		/**
+		 * The number of entries to return per page.
+		 */
+		pageSize?: number;
+
+		/**
+		 * The cursor to get next chunk of data, returned in previous response.
 		 */
 		cursor?: string;
-	};
-
-	/**
-	 * The body of the request.
-	 */
-	body?: {
-		/**
-		 * The conditions to use in the query.
-		 */
-		conditions?: EntityCondition<IOdrlPolicy>;
 	};
 }

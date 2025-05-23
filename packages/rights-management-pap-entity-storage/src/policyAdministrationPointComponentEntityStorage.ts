@@ -1,6 +1,6 @@
 // Copyright 2024 IOTA Stiftung.
 // SPDX-License-Identifier: Apache-2.0.
-import { GeneralError, Guards } from "@twin.org/core";
+import { ComponentFactory, Guards, NotFoundError } from "@twin.org/core";
 import type { EntityCondition } from "@twin.org/entity";
 import type { IEntityStorageComponent } from "@twin.org/entity-storage-models";
 import { nameof } from "@twin.org/nameof";
@@ -25,7 +25,7 @@ export class PolicyAdministrationPointComponentEntityStorage
 	 * Default maximum query results.
 	 * @internal
 	 */
-	private static readonly _DEFAULT_MAX_QUERY_RESULTS: number = 100;
+	private static readonly _DEFAULT_MAX_QUERY_RESULTS: number = 10;
 
 	/**
 	 * The class name of the Policy Administration Point Component.
@@ -38,22 +38,16 @@ export class PolicyAdministrationPointComponentEntityStorage
 	private readonly _entityStorage: IEntityStorageComponent<OdrlPolicy>;
 
 	/**
-	 * The maximum number of policies to return in a query.
-	 */
-	private readonly _maxQueryResults: number;
-
-	/**
 	 * Create a new instance of PolicyAdministrationPointComponent.
 	 * @param options The options for the component.
 	 */
 	constructor(options: IPolicyAdministrationPointComponentEntityStorageOptions) {
 		Guards.object(this.CLASS_NAME, nameof(options), options);
-		Guards.object(this.CLASS_NAME, nameof(options.entityStorage), options.entityStorage);
+		Guards.stringValue(this.CLASS_NAME, nameof(options.entityStorage), options.entityStorage);
 
-		this._entityStorage = options.entityStorage as unknown as IEntityStorageComponent<OdrlPolicy>;
-		this._maxQueryResults =
-			options.config?.maxQueryResults ??
-			PolicyAdministrationPointComponentEntityStorage._DEFAULT_MAX_QUERY_RESULTS;
+		this._entityStorage = ComponentFactory.get<IEntityStorageComponent<OdrlPolicy>>(
+			options.entityStorage
+		);
 	}
 
 	/**
@@ -67,6 +61,14 @@ export class PolicyAdministrationPointComponentEntityStorage
 		userIdentity?: string,
 		nodeIdentity?: string
 	): Promise<void> {
+		Guards.object(this.CLASS_NAME, nameof(policy), policy);
+		if (userIdentity !== undefined) {
+			Guards.stringValue(this.CLASS_NAME, nameof(userIdentity), userIdentity);
+		}
+		if (nodeIdentity !== undefined) {
+			Guards.stringValue(this.CLASS_NAME, nameof(nodeIdentity), nodeIdentity);
+		}
+
 		const storagePolicy = convertToStoragePolicy(policy);
 		await this._entityStorage.set(storagePolicy, userIdentity, nodeIdentity);
 	}
@@ -83,6 +85,14 @@ export class PolicyAdministrationPointComponentEntityStorage
 		userIdentity?: string,
 		nodeIdentity?: string
 	): Promise<IOdrlPolicy> {
+		Guards.stringValue(this.CLASS_NAME, nameof(policyId), policyId);
+		if (userIdentity !== undefined) {
+			Guards.stringValue(this.CLASS_NAME, nameof(userIdentity), userIdentity);
+		}
+		if (nodeIdentity !== undefined) {
+			Guards.stringValue(this.CLASS_NAME, nameof(nodeIdentity), nodeIdentity);
+		}
+
 		const storagePolicy = await this._entityStorage.get(
 			policyId,
 			undefined,
@@ -90,9 +100,7 @@ export class PolicyAdministrationPointComponentEntityStorage
 			nodeIdentity
 		);
 		if (!storagePolicy) {
-			throw new GeneralError(this.CLASS_NAME, "policyNotFound", {
-				policyId
-			});
+			throw new NotFoundError(this.CLASS_NAME, "policyNotFound");
 		}
 		return convertFromStoragePolicy(storagePolicy);
 	}
@@ -108,6 +116,14 @@ export class PolicyAdministrationPointComponentEntityStorage
 		userIdentity?: string,
 		nodeIdentity?: string
 	): Promise<void> {
+		Guards.stringValue(this.CLASS_NAME, nameof(policyId), policyId);
+		if (userIdentity !== undefined) {
+			Guards.stringValue(this.CLASS_NAME, nameof(userIdentity), userIdentity);
+		}
+		if (nodeIdentity !== undefined) {
+			Guards.stringValue(this.CLASS_NAME, nameof(nodeIdentity), nodeIdentity);
+		}
+
 		await this._entityStorage.remove(policyId, userIdentity, nodeIdentity);
 	}
 
@@ -115,6 +131,7 @@ export class PolicyAdministrationPointComponentEntityStorage
 	 * Query the entity storage for policies.
 	 * @param conditions The conditions to query the entity storage with.
 	 * @param cursor The cursor to use for pagination.
+	 * @param pageSize The number of results to return per page.
 	 * @param userIdentity The identity of the user performing the operation.
 	 * @param nodeIdentity The identity of the node the operation is performed on.
 	 * @returns The policies.
@@ -122,19 +139,36 @@ export class PolicyAdministrationPointComponentEntityStorage
 	public async query(
 		conditions?: EntityCondition<IOdrlPolicy>,
 		cursor?: string,
+		pageSize?: number,
 		userIdentity?: string,
 		nodeIdentity?: string
 	): Promise<{
 		cursor?: string;
 		policies: IOdrlPolicy[];
 	}> {
+		if (conditions !== undefined) {
+			Guards.object(this.CLASS_NAME, nameof(conditions), conditions);
+		}
+		if (cursor !== undefined) {
+			Guards.stringValue(this.CLASS_NAME, nameof(cursor), cursor);
+		}
+		if (pageSize !== undefined) {
+			Guards.number(this.CLASS_NAME, nameof(pageSize), pageSize);
+		}
+		if (userIdentity !== undefined) {
+			Guards.stringValue(this.CLASS_NAME, nameof(userIdentity), userIdentity);
+		}
+		if (nodeIdentity !== undefined) {
+			Guards.stringValue(this.CLASS_NAME, nameof(nodeIdentity), nodeIdentity);
+		}
+
 		const result = await this._entityStorage.query(
 			conditions as unknown as EntityCondition<OdrlPolicy>,
 			undefined,
 			undefined,
 			undefined,
 			cursor,
-			this._maxQueryResults,
+			pageSize ?? PolicyAdministrationPointComponentEntityStorage._DEFAULT_MAX_QUERY_RESULTS,
 			userIdentity,
 			nodeIdentity
 		);

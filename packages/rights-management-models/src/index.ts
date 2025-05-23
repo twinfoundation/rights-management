@@ -13,6 +13,4 @@ export * from "./models/api/policyAdministrationPoint/IPapRetrieveResponse";
 export * from "./models/api/policyAdministrationPoint/IPapRemoveRequest";
 export * from "./models/api/policyAdministrationPoint/IPapQueryRequest";
 export * from "./models/api/policyAdministrationPoint/IPapQueryResponse";
-export * from "./factories/policyAdministrationPointComponentFactory";
 export * from "./models/IRightsManagementComponent";
-export * from "./factories/rightsManagementComponentFactory";

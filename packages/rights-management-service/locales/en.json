@@ -1,6 +1,6 @@
 {
 	"error": {
-		"papService": {
+		"rightsManagementService": {
 			"storeFailed": "Failed to store policy",
 			"retrieveFailed": "Failed to retrieve policy",
 			"removeFailed": "Failed to remove policy",

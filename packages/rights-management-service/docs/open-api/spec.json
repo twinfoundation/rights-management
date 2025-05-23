@@ -340,8 +340,26 @@
 				],
 				"parameters": [
 					{
+						"name": "conditions",
+						"description": "The condition for the query.",
+						"in": "query",
+						"required": false,
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"name": "pageSize",
+						"description": "The number of entries to return per page.",
+						"in": "query",
+						"required": false,
+						"schema": {
+							"type": "number"
+						}
+					},
+					{
 						"name": "cursor",
-						"description": "The cursor for pagination.",
+						"description": "The cursor to get next chunk of data, returned in previous response.",
 						"in": "query",
 						"required": false,
 						"schema": {
@@ -355,28 +373,6 @@
 						"jwtBearerAuthScheme": []
 					}
 				],
-				"requestBody": {
-					"description": "The request structure for querying policies.",
-					"required": true,
-					"content": {
-						"application/json": {
-							"schema": {
-								"$ref": "#/components/schemas/PapQueryRequest"
-							},
-							"examples": {
-								"papQueryExample": {
-									"value": {
-										"conditions": {
-											"property": "@type",
-											"value": "Set",
-											"comparison": "equals"
-										}
-									}
-								}
-							}
-						}
-					}
-				},
 				"responses": {
 					"200": {
 						"description": "The response structure for querying policies.",
@@ -730,98 +726,6 @@
 					}
 				],
 				"description": "The types for ODRL Actions."
-			},
-			"Comparator": {
-				"type": "object",
-				"properties": {
-					"property": {
-						"type": "string",
-						"description": "The name of the property in the object to check."
-					},
-					"value": {
-						"description": "The value of the property to check."
-					},
-					"comparison": {
-						"$ref": "#/components/schemas/ComparisonOperator"
-					}
-				},
-				"required": [
-					"property",
-					"value",
-					"comparison"
-				],
-				"additionalProperties": false,
-				"description": "Interface defining comparator operator."
-			},
-			"ComparatorGroup%3CIOdrlPolicy%3E": {
-				"type": "object",
-				"properties": {
-					"conditions": {
-						"type": "array",
-						"items": {
-							"$ref": "#/components/schemas/EntityCondition%3CIOdrlPolicy%3E"
-						},
-						"description": "The conditions to join in a group."
-					},
-					"logicalOperator": {
-						"$ref": "#/components/schemas/LogicalOperator"
-					}
-				},
-				"required": [
-					"conditions"
-				],
-				"additionalProperties": false,
-				"description": "Interface defining condition group operator."
-			},
-			"ComparisonOperator": {
-				"anyOf": [
-					{
-						"type": "string",
-						"const": "equals",
-						"description": "Equals."
-					},
-					{
-						"type": "string",
-						"const": "not-equals",
-						"description": "Not Equals."
-					},
-					{
-						"type": "string",
-						"const": "greater-than",
-						"description": "Greater Than."
-					},
-					{
-						"type": "string",
-						"const": "greater-than-or-equal",
-						"description": "Greater Than Or Equal."
-					},
-					{
-						"type": "string",
-						"const": "less-than",
-						"description": "Less Than."
-					},
-					{
-						"type": "string",
-						"const": "less-than-or-equal",
-						"description": "Less Than Or Equal."
-					},
-					{
-						"type": "string",
-						"const": "includes",
-						"description": "Includes. A string in a substring. A set contains an element. A list contains an element."
-					},
-					{
-						"type": "string",
-						"const": "not-includes",
-						"description": "Not Includes. A string not in a substring. A set does not contain an element. A list does not contain an element."
-					},
-					{
-						"type": "string",
-						"const": "in",
-						"description": "In. A element is in a set."
-					}
-				],
-				"description": "The types of comparisons."
 			},
 			"ConflictStrategyType": {
 				"anyOf": [
@@ -2134,21 +2038,6 @@
 					}
 				],
 				"description": "The types for ODRL Data Types."
-			},
-			"LogicalOperator": {
-				"anyOf": [
-					{
-						"type": "string",
-						"const": "and",
-						"description": "Logical operator AND."
-					},
-					{
-						"type": "string",
-						"const": "or",
-						"description": "Logical operator OR."
-					}
-				],
-				"description": "The logical operators for condition combining."
 			},
 			"OdrlAction": {
 				"type": "object",
@@ -4047,16 +3936,6 @@
 				],
 				"description": "The types for ODRL Operators."
 			},
-			"PapQueryRequest": {
-				"type": "object",
-				"properties": {
-					"conditions": {
-						"$ref": "#/components/schemas/EntityCondition%3CIOdrlPolicy%3E"
-					}
-				},
-				"additionalProperties": false,
-				"description": "The body of the request."
-			},
 			"PapQueryResponse": {
 				"type": "object",
 				"properties": {
@@ -4140,17 +4019,6 @@
 					}
 				],
 				"description": "The types for ODRL Status."
-			},
-			"ntityCondition%3CIOdrlPolicy%3E": {
-				"anyOf": [
-					{
-						"$ref": "#/components/schemas/Comparator"
-					},
-					{
-						"$ref": "#/components/schemas/ComparatorGroup%3CIOdrlPolicy%3E"
-					}
-				],
-				"description": "Type defining condition for entities filtering."
 			}
 		},
 		"securitySchemes": {

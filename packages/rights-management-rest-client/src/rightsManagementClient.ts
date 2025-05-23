@@ -3,7 +3,6 @@
 import { BaseRestClient } from "@twin.org/api-core";
 import type { IBaseRestClientConfig } from "@twin.org/api-models";
 import { Guards } from "@twin.org/core";
-import type { EntityCondition } from "@twin.org/entity";
 import { nameof } from "@twin.org/nameof";
 import type {
 	IPapQueryRequest,
@@ -91,21 +90,17 @@ export class RightsManagementClient extends BaseRestClient implements IRightsMan
 	 * @returns Cursor for next page of results and the policies matching the query.
 	 */
 	public async papQuery(
-		conditions?: EntityCondition<IOdrlPolicy>,
+		conditions?: string,
 		cursor?: string
 	): Promise<{
 		cursor?: string;
 		policies: IOdrlPolicy[];
 	}> {
-		// Query parameters for cursor if provided
-		const queryParams: { [key: string]: string } = {};
-		if (cursor) {
-			queryParams.cursor = cursor;
-		}
-
 		const response = await this.fetch<IPapQueryRequest, IPapQueryResponse>("/pap/query", "GET", {
-			query: queryParams,
-			body: conditions ? { conditions } : undefined
+			query: {
+				cursor,
+				conditions
+			}
 		});
 
 		return response.body;

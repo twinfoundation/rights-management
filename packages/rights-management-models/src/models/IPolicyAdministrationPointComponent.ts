@@ -41,6 +41,7 @@ export interface IPolicyAdministrationPointComponent extends IComponent {
 	 * Query the policies using the specified conditions.
 	 * @param conditions The conditions to use for the query.
 	 * @param cursor The cursor to use for pagination.
+	 * @param pageSize The number of results to return per page.
 	 * @param userIdentity The identity of the user performing the operation.
 	 * @param nodeIdentity The identity of the node the operation is performed on.
 	 * @returns Cursor for next page of results and the policies matching the query.
@@ -48,6 +49,7 @@ export interface IPolicyAdministrationPointComponent extends IComponent {
 	query(
 		conditions?: EntityCondition<IOdrlPolicy>,
 		cursor?: string,
+		pageSize?: number,
 		userIdentity?: string,
 		nodeIdentity?: string
 	): Promise<{

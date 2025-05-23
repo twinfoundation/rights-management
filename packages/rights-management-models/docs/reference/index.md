@@ -19,8 +19,3 @@
 ## Type Aliases
 
 - [PolicyActionCallback](type-aliases/PolicyActionCallback.md)
-
-## Variables
-
-- [PolicyAdministrationPointComponentFactory](variables/PolicyAdministrationPointComponentFactory.md)
-- [RightsManagementComponentFactory](variables/RightsManagementComponentFactory.md)

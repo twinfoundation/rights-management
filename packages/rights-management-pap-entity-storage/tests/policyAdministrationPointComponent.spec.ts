@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0.
 import { existsSync } from "node:fs";
 import { rm } from "node:fs/promises";
+import { ComponentFactory } from "@twin.org/core";
 import type { EntityCondition } from "@twin.org/entity";
 import { EntityStorageService } from "@twin.org/entity-storage-service";
 import type { IOdrlPolicy } from "@twin.org/standards-w3c-odrl";
@@ -19,7 +20,10 @@ import { PolicyAdministrationPointComponentEntityStorage } from "../src/policyAd
 describe("rights-management-pap", () => {
 	let policyAdminPoint: PolicyAdministrationPointComponentEntityStorage;
 
+	const testStorageType = "odrl-policy-test";
+
 	beforeEach(() => {
+		// Create and register the entity storage service with the ComponentFactory
 		const entityStorageService = new EntityStorageService<OdrlPolicy>({
 			entityStorageType: "odrl-policy",
 			config: {
@@ -28,8 +32,12 @@ describe("rights-management-pap", () => {
 			}
 		});
 
+		// Register the entity storage service with the ComponentFactory
+		ComponentFactory.register(testStorageType, () => entityStorageService);
+
+		// Create the policy admin point using the registered storage type
 		policyAdminPoint = new PolicyAdministrationPointComponentEntityStorage({
-			entityStorage: entityStorageService
+			entityStorage: testStorageType
 		});
 	});
 
@@ -48,9 +56,11 @@ describe("rights-management-pap", () => {
 			TEST_NODE_IDENTITY
 		);
 
+		// The converter should add @type and @context
 		expect(retrievedPolicy).toBeDefined();
 		expect(retrievedPolicy.uid).toEqual(TEST_POLICY_ID);
 		expect(retrievedPolicy["@type"]).toEqual("Set");
+		expect(retrievedPolicy["@context"]).toBeDefined();
 		expect(Array.isArray(retrievedPolicy.permission)).toBeTruthy();
 	});
 
@@ -112,6 +122,7 @@ describe("rights-management-pap", () => {
 		const result = await policyAdminPoint.query(
 			undefined,
 			undefined,
+			undefined,
 			TEST_USER_IDENTITY,
 			TEST_NODE_IDENTITY
 		);
@@ -123,42 +134,44 @@ describe("rights-management-pap", () => {
 	test("should query policies with specific conditions", async () => {
 		await createTestPolicies(policyAdminPoint);
 
-		const typeCondition: EntityCondition<IOdrlPolicy> = {
-			property: "@type",
-			value: "Offer",
+		// Since @type is no longer stored but added during conversion to IOdrlPolicy,
+		// we should query based on a field that is stored
+		const uidCondition: EntityCondition<IOdrlPolicy> = {
+			property: "uid",
+			value: "http://example.com/policy/1",
 			comparison: "equals"
 		};
 
-		// Query policies with the type condition
+		// Query policies with a simple uid condition
 		const result = await policyAdminPoint.query(
-			typeCondition,
+			uidCondition,
+			undefined,
 			undefined,
 			TEST_USER_IDENTITY,
 			TEST_NODE_IDENTITY
 		);
 
-		// Check only "Offer" policies were returned
+		// Check that we got the matching policy
 		expect(result.policies).toBeDefined();
-		expect(result.policies.length).toEqual(5);
+		expect(result.policies.length).toEqual(1);
 
-		// Validate that only Offer policies were returned
-		for (const policy of result.policies) {
-			expect(policy["@type"]).toEqual("Offer");
-		}
+		// Validate that the returned policy has the expected uid
+		expect(result.policies[0].uid).toEqual("http://example.com/policy/1");
 	});
 
 	test("should return empty result for non-matching conditions", async () => {
 		await createTestPolicies(policyAdminPoint);
 
 		const nonMatchingCondition: EntityCondition<IOdrlPolicy> = {
-			property: "@type",
-			value: "NonExistentType",
+			property: "uid",
+			value: "nonexistent-id",
 			comparison: "equals"
 		};
 
 		// Query with conditions that don't match any policy
 		const result = await policyAdminPoint.query(
 			nonMatchingCondition,
+			undefined,
 			undefined,
 			TEST_USER_IDENTITY,
 			TEST_NODE_IDENTITY
@@ -176,6 +189,7 @@ describe("rights-management-pap", () => {
 		const firstPage = await policyAdminPoint.query(
 			undefined,
 			undefined,
+			undefined,
 			TEST_USER_IDENTITY,
 			TEST_NODE_IDENTITY
 		);
@@ -190,6 +204,7 @@ describe("rights-management-pap", () => {
 			const secondPage = await policyAdminPoint.query(
 				undefined,
 				firstPage.cursor,
+				undefined,
 				TEST_USER_IDENTITY,
 				TEST_NODE_IDENTITY
 			);
@@ -212,7 +227,13 @@ describe("rights-management-pap", () => {
 
 	test("should handle invalid cursor gracefully", async () => {
 		await expect(
-			policyAdminPoint.query(undefined, "invalid-cursor", TEST_USER_IDENTITY, TEST_NODE_IDENTITY)
+			policyAdminPoint.query(
+				undefined,
+				"invalid-cursor",
+				undefined,
+				TEST_USER_IDENTITY,
+				TEST_NODE_IDENTITY
+			)
 		).resolves.toBeDefined();
 	});
 });

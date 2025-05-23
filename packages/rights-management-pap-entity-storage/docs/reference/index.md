@@ -11,7 +11,6 @@
 
 ## Functions
 
-- [registerEntityStoragePolicyAdministrationPointComponent](functions/registerEntityStoragePolicyAdministrationPointComponent.md)
-- [createEntityStoragePolicyAdministrationPointComponentFactory](functions/createEntityStoragePolicyAdministrationPointComponentFactory.md)
+- [initSchema](functions/initSchema.md)
 - [convertToStoragePolicy](functions/convertToStoragePolicy.md)
 - [convertFromStoragePolicy](functions/convertFromStoragePolicy.md)
