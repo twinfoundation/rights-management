@@ -9,7 +9,6 @@ import {
 	type ITag
 } from "@twin.org/api-models";
 import { ComponentFactory, Coerce, Guards } from "@twin.org/core";
-import type { EntityCondition } from "@twin.org/entity";
 import { nameof } from "@twin.org/nameof";
 import type {
 	IPapQueryRequest,
@@ -20,7 +19,6 @@ import type {
 	IPapStoreRequest,
 	IRightsManagementComponent
 } from "@twin.org/rights-management-models";
-import type { IOdrlPolicy } from "@twin.org/standards-w3c-odrl";
 import { HeaderTypes, HttpStatusCode } from "@twin.org/web";
 
 /**
@@ -352,17 +350,14 @@ export async function papQuery(
 		nameof(httpRequestContext.nodeIdentity),
 		httpRequestContext.nodeIdentity
 	);
-	// Extract all query parameters
+
 	const queryParams = request.query || {};
 	const cursor = queryParams.cursor;
 	const pageSize = Coerce.number(queryParams.pageSize);
-	const conditions = HttpParameterHelper.objectFromString<EntityCondition<IOdrlPolicy>>(
-		request.query?.conditions
-	);
 
 	const component = ComponentFactory.get<IRightsManagementComponent>(componentName);
 	const result = await component.papQuery(
-		conditions,
+		HttpParameterHelper.objectFromString(request.query?.conditions),
 		cursor,
 		pageSize,
 		httpRequestContext.userIdentity,
