@@ -29,6 +29,14 @@ The unique identifier for the policy.
 
 ***
 
+### @type
+
+> **@type**: `PolicyType`
+
+The type of policy.
+
+***
+
 ### profile?
 
 > `optional` **profile**: `string` \| `string`[]

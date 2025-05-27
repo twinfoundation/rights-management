@@ -4,6 +4,8 @@ import { existsSync } from "node:fs";
 import { rm } from "node:fs/promises";
 import { ComponentFactory } from "@twin.org/core";
 import type { EntityCondition } from "@twin.org/entity";
+import type { MemoryEntityStorageConnector } from "@twin.org/entity-storage-connector-memory";
+import { EntityStorageConnectorFactory } from "@twin.org/entity-storage-models";
 import { EntityStorageService } from "@twin.org/entity-storage-service";
 import type { IOdrlPolicy } from "@twin.org/standards-w3c-odrl";
 import {
@@ -19,11 +21,12 @@ import { PolicyAdministrationPointComponentEntityStorage } from "../src/policyAd
 
 describe("rights-management-pap", () => {
 	let policyAdminPoint: PolicyAdministrationPointComponentEntityStorage;
-
-	const testStorageType = "odrl-policy-test";
+	let odrlPolicyEntityStorage: MemoryEntityStorageConnector<OdrlPolicy>;
 
 	beforeEach(() => {
-		// Create and register the entity storage service with the ComponentFactory
+		odrlPolicyEntityStorage =
+			EntityStorageConnectorFactory.get<MemoryEntityStorageConnector<OdrlPolicy>>("odrl-policy");
+
 		const entityStorageService = new EntityStorageService<OdrlPolicy>({
 			entityStorageType: "odrl-policy",
 			config: {
@@ -31,14 +34,15 @@ describe("rights-management-pap", () => {
 				includeUserIdentity: false
 			}
 		});
+		ComponentFactory.register("odrl-policy", () => entityStorageService);
 
-		// Register the entity storage service with the ComponentFactory
-		ComponentFactory.register(testStorageType, () => entityStorageService);
-
-		// Create the policy admin point using the registered storage type
 		policyAdminPoint = new PolicyAdministrationPointComponentEntityStorage({
-			entityStorageType: testStorageType
+			entityStorageType: "odrl-policy"
 		});
+	});
+
+	afterEach(() => {
+		ComponentFactory.unregister("odrl-policy");
 	});
 
 	afterAll(async () => {
@@ -50,13 +54,22 @@ describe("rights-management-pap", () => {
 	test("should store a policy in entity storage", async () => {
 		await policyAdminPoint.store(SAMPLE_POLICY, TEST_USER_IDENTITY, TEST_NODE_IDENTITY);
 
+		const store = odrlPolicyEntityStorage.getStore();
+		expect(store).toBeDefined();
+		expect(store.length).toEqual(1);
+
+		const storedPolicy = store[0];
+		expect(storedPolicy).toBeDefined();
+		expect(storedPolicy.uid).toEqual(TEST_POLICY_ID);
+		expect(storedPolicy.nodeIdentity).toEqual(TEST_NODE_IDENTITY);
+		expect(storedPolicy.permission).toBeDefined();
+
 		const retrievedPolicy = await policyAdminPoint.retrieve(
 			TEST_POLICY_ID,
 			TEST_USER_IDENTITY,
 			TEST_NODE_IDENTITY
 		);
 
-		// The converter should add @type and @context
 		expect(retrievedPolicy).toBeDefined();
 		expect(retrievedPolicy.uid).toEqual(TEST_POLICY_ID);
 		expect(retrievedPolicy["@type"]).toEqual("Set");
@@ -77,7 +90,6 @@ describe("rights-management-pap", () => {
 		expect(retrievedPolicy.uid).toEqual(TEST_POLICY_ID);
 		expect(retrievedPolicy["@type"]).toEqual("Set");
 
-		// Ensure permission exists on both objects before comparing
 		expect(retrievedPolicy.permission).toBeDefined();
 		expect(SAMPLE_POLICY.permission).toBeDefined();
 
@@ -97,6 +109,9 @@ describe("rights-management-pap", () => {
 	test("should remove a policy from entity storage", async () => {
 		await policyAdminPoint.store(SAMPLE_POLICY, TEST_USER_IDENTITY, TEST_NODE_IDENTITY);
 
+		let store = odrlPolicyEntityStorage.getStore();
+		expect(store.length).toEqual(1);
+
 		const retrievedPolicy = await policyAdminPoint.retrieve(
 			TEST_POLICY_ID,
 			TEST_USER_IDENTITY,
@@ -104,13 +119,11 @@ describe("rights-management-pap", () => {
 		);
 		expect(retrievedPolicy).toBeDefined();
 
-		const result = await policyAdminPoint.remove(
-			TEST_POLICY_ID,
-			TEST_USER_IDENTITY,
-			TEST_NODE_IDENTITY
-		);
+		await policyAdminPoint.remove(TEST_POLICY_ID, TEST_USER_IDENTITY, TEST_NODE_IDENTITY);
 
-		expect(result).toBeUndefined();
+		store = odrlPolicyEntityStorage.getStore();
+		expect(store.length).toEqual(0);
+
 		await expect(
 			policyAdminPoint.retrieve(TEST_POLICY_ID, TEST_USER_IDENTITY, TEST_NODE_IDENTITY)
 		).rejects.toThrow();
@@ -119,12 +132,15 @@ describe("rights-management-pap", () => {
 	test("should query policies without conditions", async () => {
 		await createTestPolicies(policyAdminPoint);
 
+		const store = odrlPolicyEntityStorage.getStore();
+		expect(store.length).toEqual(10);
+
 		const result = await policyAdminPoint.query(
-			TEST_NODE_IDENTITY,
 			undefined,
 			undefined,
 			undefined,
-			TEST_USER_IDENTITY
+			TEST_USER_IDENTITY,
+			TEST_NODE_IDENTITY
 		);
 
 		expect(result.policies).toBeDefined();
@@ -134,106 +150,89 @@ describe("rights-management-pap", () => {
 	test("should query policies with specific conditions", async () => {
 		await createTestPolicies(policyAdminPoint);
 
-		// Since @type is no longer stored but added during conversion to IOdrlPolicy,
-		// we should query based on a field that is stored
 		const uidCondition: EntityCondition<IOdrlPolicy> = {
 			property: "uid",
 			value: "http://example.com/policy/1",
 			comparison: "equals"
 		};
 
-		// Query policies with a simple uid condition
 		const result = await policyAdminPoint.query(
-			TEST_NODE_IDENTITY,
 			uidCondition,
 			undefined,
 			undefined,
-			TEST_USER_IDENTITY
+			TEST_USER_IDENTITY,
+			TEST_NODE_IDENTITY
 		);
 
-		// Check that we got the matching policy
 		expect(result.policies).toBeDefined();
 		expect(result.policies.length).toEqual(1);
 
-		// Validate that the returned policy has the expected uid
 		expect(result.policies[0].uid).toEqual("http://example.com/policy/1");
 	});
 
 	test("should return empty result for non-matching conditions", async () => {
 		await createTestPolicies(policyAdminPoint);
 
-		const nonMatchingCondition: EntityCondition<IOdrlPolicy> = {
+		const uidCondition: EntityCondition<IOdrlPolicy> = {
 			property: "uid",
-			value: "nonexistent-id",
+			value: "non-existent-policy",
 			comparison: "equals"
 		};
 
-		// Query with conditions that don't match any policy
 		const result = await policyAdminPoint.query(
-			TEST_NODE_IDENTITY,
-			nonMatchingCondition,
+			uidCondition,
 			undefined,
 			undefined,
-			TEST_USER_IDENTITY
+			TEST_USER_IDENTITY,
+			TEST_NODE_IDENTITY
 		);
 
 		expect(result.policies).toBeDefined();
-		expect(result.policies).toEqual([]);
-		expect(result.cursor).toBeUndefined();
+		expect(result.policies.length).toEqual(0);
 	});
 
 	test("should handle pagination with cursor", async () => {
 		await createTestPolicies(policyAdminPoint);
 
-		// Get first page (default max is set in component)
-		const firstPage = await policyAdminPoint.query(
-			TEST_NODE_IDENTITY,
+		const result1 = await policyAdminPoint.query(
 			undefined,
 			undefined,
-			undefined,
-			TEST_USER_IDENTITY
+			5,
+			TEST_USER_IDENTITY,
+			TEST_NODE_IDENTITY
 		);
 
-		// Check first page
-		expect(firstPage.policies).toBeDefined();
-		expect(firstPage.policies.length).toBeGreaterThan(0);
+		expect(result1.policies).toBeDefined();
+		expect(result1.policies.length).toEqual(5);
+		expect(result1.cursor).toBeDefined();
 
-		// If we got all 10 policies in the first page, no pagination is happening
-		if (firstPage.policies.length < 10 && firstPage.cursor) {
-			// Get second page using cursor
-			const secondPage = await policyAdminPoint.query(
-				TEST_NODE_IDENTITY,
-				undefined,
-				firstPage.cursor,
-				undefined,
-				TEST_USER_IDENTITY
-			);
+		const result2 = await policyAdminPoint.query(
+			undefined,
+			result1.cursor,
+			5,
+			TEST_USER_IDENTITY,
+			TEST_NODE_IDENTITY
+		);
 
-			// Check second page
-			expect(secondPage.policies).toBeDefined();
-			expect(secondPage.policies.length).toBeGreaterThan(0);
+		expect(result2.policies).toBeDefined();
+		expect(result2.policies.length).toEqual(5);
 
-			// Combine pages and verify no duplicates
-			const allPolicyIds = [
-				...firstPage.policies.map(p => p.uid),
-				...secondPage.policies.map(p => p.uid)
-			];
-
-			const uniqueIds = new Set(allPolicyIds);
-			expect(uniqueIds.size).toEqual(allPolicyIds.length);
-			expect(uniqueIds.size).toBeGreaterThanOrEqual(10);
-		}
+		const firstPageIds = result1.policies.map(p => p.uid);
+		const secondPageIds = result2.policies.map(p => p.uid);
+		expect(firstPageIds).not.toEqual(secondPageIds);
 	});
 
 	test("should handle invalid cursor gracefully", async () => {
-		await expect(
-			policyAdminPoint.query(
-				TEST_NODE_IDENTITY,
-				undefined,
-				"invalid-cursor",
-				undefined,
-				TEST_USER_IDENTITY
-			)
-		).resolves.toBeDefined();
+		await createTestPolicies(policyAdminPoint);
+
+		const result = await policyAdminPoint.query(
+			undefined,
+			"invalid-cursor",
+			5,
+			TEST_USER_IDENTITY,
+			TEST_NODE_IDENTITY
+		);
+
+		expect(result.policies).toBeDefined();
 	});
 });

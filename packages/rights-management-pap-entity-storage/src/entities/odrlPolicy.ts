@@ -9,7 +9,8 @@ import type {
 	IOdrlDuty,
 	IOdrlParty,
 	IOdrlPermission,
-	IOdrlProhibition
+	IOdrlProhibition,
+	PolicyType
 } from "@twin.org/standards-w3c-odrl";
 
 /**
@@ -29,6 +30,12 @@ export class OdrlPolicy {
 	 */
 	@property({ type: "string", isPrimary: true })
 	public uid!: string;
+
+	/**
+	 * The type of policy.
+	 */
+	@property({ type: "string" })
+	public "@type"!: PolicyType;
 
 	/**
 	 * The profile(s) this policy conforms to.

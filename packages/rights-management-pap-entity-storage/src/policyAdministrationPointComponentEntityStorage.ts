@@ -57,13 +57,13 @@ export class PolicyAdministrationPointComponentEntityStorage
 	/**
 	 * Store a policy in the entity storage.
 	 * @param policy The policy to store.
-	 * @param nodeIdentity The identity of the node the operation is performed on.
 	 * @param userIdentity The identity of the user performing the operation.
+	 * @param nodeIdentity The identity of the node the operation is performed on.
 	 */
 	public async store(
 		policy: IOdrlPolicy,
-		nodeIdentity: string,
-		userIdentity?: string
+		userIdentity: string | undefined,
+		nodeIdentity: string
 	): Promise<void> {
 		Guards.object(this.CLASS_NAME, nameof(policy), policy);
 		Guards.stringValue(this.CLASS_NAME, nameof(nodeIdentity), nodeIdentity);
@@ -78,14 +78,14 @@ export class PolicyAdministrationPointComponentEntityStorage
 	/**
 	 * Retrieve a policy from the entity storage.
 	 * @param policyId The ID of the policy to retrieve.
-	 * @param nodeIdentity The identity of the node the operation is performed on.
 	 * @param userIdentity The identity of the user performing the operation.
+	 * @param nodeIdentity The identity of the node the operation is performed on.
 	 * @returns The policy.
 	 */
 	public async retrieve(
 		policyId: string,
-		nodeIdentity: string,
-		userIdentity?: string
+		userIdentity: string | undefined,
+		nodeIdentity: string
 	): Promise<IOdrlPolicy> {
 		Guards.stringValue(this.CLASS_NAME, nameof(policyId), policyId);
 		Guards.stringValue(this.CLASS_NAME, nameof(nodeIdentity), nodeIdentity);
@@ -108,13 +108,13 @@ export class PolicyAdministrationPointComponentEntityStorage
 	/**
 	 * Remove a policy from the entity storage.
 	 * @param policyId The ID of the policy to remove.
-	 * @param nodeIdentity The identity of the node the operation is performed on.
 	 * @param userIdentity The identity of the user performing the operation.
+	 * @param nodeIdentity The identity of the node the operation is performed on.
 	 */
 	public async remove(
 		policyId: string,
-		nodeIdentity: string,
-		userIdentity?: string
+		userIdentity: string | undefined,
+		nodeIdentity: string
 	): Promise<void> {
 		Guards.stringValue(this.CLASS_NAME, nameof(policyId), policyId);
 		Guards.stringValue(this.CLASS_NAME, nameof(nodeIdentity), nodeIdentity);
@@ -127,19 +127,19 @@ export class PolicyAdministrationPointComponentEntityStorage
 
 	/**
 	 * Query the entity storage for policies.
-	 * @param nodeIdentity The identity of the node the operation is performed on.
 	 * @param conditions The conditions to query the entity storage with.
 	 * @param cursor The cursor to use for pagination.
 	 * @param pageSize The number of results to return per page.
 	 * @param userIdentity The identity of the user performing the operation.
+	 * @param nodeIdentity The identity of the node the operation is performed on.
 	 * @returns The policies.
 	 */
 	public async query(
-		nodeIdentity: string,
 		conditions?: EntityCondition<IOdrlPolicy>,
 		cursor?: string,
 		pageSize?: number,
-		userIdentity?: string
+		userIdentity?: string,
+		nodeIdentity?: string
 	): Promise<{
 		cursor?: string;
 		policies: IOdrlPolicy[];
@@ -170,10 +170,7 @@ export class PolicyAdministrationPointComponentEntityStorage
 		);
 		return {
 			cursor: result.cursor,
-			policies: result.entities.map(entity =>
-				// Check if entity has the required properties
-				convertFromStoragePolicy(entity as OdrlPolicy)
-			)
+			policies: result.entities.map(entity => convertFromStoragePolicy(entity as OdrlPolicy))
 		};
 	}
 }

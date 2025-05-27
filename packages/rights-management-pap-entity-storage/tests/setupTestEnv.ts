@@ -74,7 +74,6 @@ const createTestPolicy = (
 export const createTestPolicies = async (
 	policyAdminPoint: PolicyAdministrationPointComponentEntityStorage
 ): Promise<void> => {
-	// Store 10 policies with different types and targets
 	for (let i = 1; i <= 10; i++) {
 		const policyType = i % 2 === 0 ? ("Set" as PolicyType) : ("Offer" as PolicyType);
 		const assetId = `http://example.com/asset/${Math.ceil(i / 2)}`;

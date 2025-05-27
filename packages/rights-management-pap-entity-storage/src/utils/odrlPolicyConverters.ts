@@ -1,6 +1,6 @@
 // Copyright 2024 IOTA Stiftung.
 // SPDX-License-Identifier: Apache-2.0.
-import type { IOdrlPolicy, PolicyType } from "@twin.org/standards-w3c-odrl";
+import type { IOdrlPolicy } from "@twin.org/standards-w3c-odrl";
 import { OdrlContexts } from "@twin.org/standards-w3c-odrl";
 import { OdrlPolicy } from "../entities/odrlPolicy";
 
@@ -14,6 +14,7 @@ export function convertToStoragePolicy(policy: IOdrlPolicy, nodeIdentity: string
 	const storagePolicy = new OdrlPolicy();
 	storagePolicy.uid = policy.uid;
 	storagePolicy.nodeIdentity = nodeIdentity;
+	storagePolicy["@type"] = policy["@type"];
 
 	storagePolicy.profile = policy.profile;
 	storagePolicy.assigner = policy.assigner;
@@ -36,7 +37,7 @@ export function convertToStoragePolicy(policy: IOdrlPolicy, nodeIdentity: string
 export function convertFromStoragePolicy(storagePolicy: OdrlPolicy): IOdrlPolicy {
 	const policy: IOdrlPolicy = {
 		uid: storagePolicy.uid,
-		"@type": "Set" as PolicyType,
+		"@type": storagePolicy["@type"] ?? "Set",
 		"@context": OdrlContexts.Context
 	};
 

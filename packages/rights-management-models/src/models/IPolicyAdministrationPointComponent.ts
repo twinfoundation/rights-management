@@ -13,45 +13,49 @@ export interface IPolicyAdministrationPointComponent extends IComponent {
 	/**
 	 * Store a policy.
 	 * @param policy The policy to store.
-	 * @param nodeIdentity The identity of the node the operation is performed on.
 	 * @param userIdentity The identity of the user performing the operation.
+	 * @param nodeIdentity The identity of the node the operation is performed on.
 	 * @returns Nothing.
 	 */
-	store(policy: IOdrlPolicy, nodeIdentity: string, userIdentity?: string): Promise<void>;
+	store(policy: IOdrlPolicy, userIdentity: string | undefined, nodeIdentity: string): Promise<void>;
 
 	/**
 	 * Retrieve a policy.
 	 * @param policyId The id of the policy to retrieve.
-	 * @param nodeIdentity The identity of the node the operation is performed on.
 	 * @param userIdentity The identity of the user performing the operation.
+	 * @param nodeIdentity The identity of the node the operation is performed on.
 	 * @returns The policy.
 	 */
-	retrieve(policyId: string, nodeIdentity: string, userIdentity?: string): Promise<IOdrlPolicy>;
+	retrieve(
+		policyId: string,
+		userIdentity: string | undefined,
+		nodeIdentity: string
+	): Promise<IOdrlPolicy>;
 
 	/**
 	 * Remove a policy.
 	 * @param policyId The id of the policy to remove.
-	 * @param nodeIdentity The identity of the node the operation is performed on.
 	 * @param userIdentity The identity of the user performing the operation.
+	 * @param nodeIdentity The identity of the node the operation is performed on.
 	 * @returns Nothing.
 	 */
-	remove(policyId: string, nodeIdentity: string, userIdentity?: string): Promise<void>;
+	remove(policyId: string, userIdentity: string | undefined, nodeIdentity: string): Promise<void>;
 
 	/**
 	 * Query the policies using the specified conditions.
-	 * @param nodeIdentity The identity of the node the operation is performed on.
 	 * @param conditions The conditions to use for the query.
 	 * @param cursor The cursor to use for pagination.
 	 * @param pageSize The number of results to return per page.
 	 * @param userIdentity The identity of the user performing the operation.
+	 * @param nodeIdentity The identity of the node the operation is performed on.
 	 * @returns Cursor for next page of results and the policies matching the query.
 	 */
 	query(
-		nodeIdentity: string,
 		conditions?: EntityCondition<IOdrlPolicy>,
 		cursor?: string,
 		pageSize?: number,
-		userIdentity?: string
+		userIdentity?: string,
+		nodeIdentity?: string
 	): Promise<{
 		/**
 		 * The cursor for the next page of results.

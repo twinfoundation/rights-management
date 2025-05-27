@@ -1,8 +1,9 @@
 // Copyright 2024 IOTA Stiftung.
 // SPDX-License-Identifier: Apache-2.0.
 import { BaseRestClient } from "@twin.org/api-core";
-import type { IBaseRestClientConfig } from "@twin.org/api-models";
-import { Guards } from "@twin.org/core";
+import { HttpParameterHelper, type IBaseRestClientConfig } from "@twin.org/api-models";
+import { Coerce, Guards } from "@twin.org/core";
+import type { EntityCondition } from "@twin.org/entity";
 import { nameof } from "@twin.org/nameof";
 import type {
 	IPapQueryRequest,
@@ -10,14 +11,15 @@ import type {
 	IPapRemoveRequest,
 	IPapRetrieveRequest,
 	IPapRetrieveResponse,
-	IPapStoreRequest
+	IPapStoreRequest,
+	IRightsManagementComponent
 } from "@twin.org/rights-management-models";
 import type { IOdrlPolicy } from "@twin.org/standards-w3c-odrl";
 
 /**
  * Client for performing Rights Management through to REST endpoints.
  */
-export class RightsManagementClient extends BaseRestClient {
+export class RightsManagementClient extends BaseRestClient implements IRightsManagementComponent {
 	/**
 	 * Runtime name for the class.
 	 */
@@ -90,7 +92,7 @@ export class RightsManagementClient extends BaseRestClient {
 	 * @returns Cursor for next page of results and the policies matching the query.
 	 */
 	public async papQuery(
-		conditions?: string,
+		conditions?: EntityCondition<IOdrlPolicy>,
 		cursor?: string,
 		pageSize?: number
 	): Promise<{
@@ -100,8 +102,8 @@ export class RightsManagementClient extends BaseRestClient {
 		const response = await this.fetch<IPapQueryRequest, IPapQueryResponse>("/pap/query", "GET", {
 			query: {
 				cursor,
-				conditions,
-				pageSize: pageSize !== undefined ? pageSize.toString() : undefined
+				conditions: conditions ? HttpParameterHelper.objectToString(conditions) : undefined,
+				pageSize: Coerce.string(pageSize)
 			}
 		});
 

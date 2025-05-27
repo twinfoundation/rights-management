@@ -6,6 +6,10 @@ Client for performing Rights Management through to REST endpoints.
 
 - `BaseRestClient`
 
+## Implements
+
+- `IRightsManagementComponent`
+
 ## Constructors
 
 ### Constructor
@@ -38,6 +42,10 @@ The configuration for the client.
 
 Runtime name for the class.
 
+#### Implementation of
+
+`IRightsManagementComponent.CLASS_NAME`
+
 ## Methods
 
 ### papStore()
@@ -59,6 +67,10 @@ The policy to store.
 `Promise`\<`void`\>
 
 Nothing.
+
+#### Implementation of
+
+`IRightsManagementComponent.papStore`
 
 ***
 
@@ -82,6 +94,10 @@ The id of the policy to retrieve.
 
 The policy.
 
+#### Implementation of
+
+`IRightsManagementComponent.papRetrieve`
+
 ***
 
 ### papRemove()
@@ -104,6 +120,10 @@ The id of the policy to remove.
 
 Nothing.
 
+#### Implementation of
+
+`IRightsManagementComponent.papRemove`
+
 ***
 
 ### papQuery()
@@ -116,7 +136,7 @@ PAP: Query the policies using the specified conditions.
 
 ##### conditions?
 
-`string`
+`EntityCondition`\<`IOdrlPolicy`\>
 
 The conditions to use for the query.
 
@@ -137,3 +157,7 @@ The number of results to return per page.
 `Promise`\<\{ `cursor`: `string`; `policies`: `IOdrlPolicy`[]; \}\>
 
 Cursor for next page of results and the policies matching the query.
+
+#### Implementation of
+
+`IRightsManagementComponent.papQuery`

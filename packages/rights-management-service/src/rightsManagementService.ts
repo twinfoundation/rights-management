@@ -49,14 +49,14 @@ export class RightsManagementService implements IRightsManagementComponent {
 	/**
 	 * PAP: Store a policy.
 	 * @param policy The policy to store.
-	 * @param nodeIdentity The identity of the node the operation is performed on.
 	 * @param userIdentity The identity of the user performing the operation.
+	 * @param nodeIdentity The identity of the node the operation is performed on.
 	 * @returns Nothing.
 	 */
 	public async papStore(
 		policy: IOdrlPolicy,
-		nodeIdentity: string,
-		userIdentity?: string
+		userIdentity: string | undefined,
+		nodeIdentity: string
 	): Promise<void> {
 		try {
 			Guards.object(this.CLASS_NAME, nameof(policy), policy);
@@ -65,7 +65,7 @@ export class RightsManagementService implements IRightsManagementComponent {
 				Guards.stringValue(this.CLASS_NAME, nameof(userIdentity), userIdentity);
 			}
 
-			await this._papComponent.store(policy, nodeIdentity, userIdentity);
+			await this._papComponent.store(policy, userIdentity, nodeIdentity);
 		} catch (error) {
 			throw new GeneralError(this.CLASS_NAME, "papStoreFailed", undefined, error);
 		}
@@ -74,14 +74,14 @@ export class RightsManagementService implements IRightsManagementComponent {
 	/**
 	 * PAP: Retrieve a policy.
 	 * @param policyId The id of the policy to retrieve.
-	 * @param nodeIdentity The identity of the node the operation is performed on.
 	 * @param userIdentity The identity of the user performing the operation.
+	 * @param nodeIdentity The identity of the node the operation is performed on.
 	 * @returns The policy.
 	 */
 	public async papRetrieve(
 		policyId: string,
-		nodeIdentity: string,
-		userIdentity?: string
+		userIdentity: string | undefined,
+		nodeIdentity: string
 	): Promise<IOdrlPolicy> {
 		try {
 			Guards.stringValue(this.CLASS_NAME, nameof(policyId), policyId);
@@ -90,7 +90,7 @@ export class RightsManagementService implements IRightsManagementComponent {
 				Guards.stringValue(this.CLASS_NAME, nameof(userIdentity), userIdentity);
 			}
 
-			const policy = await this._papComponent.retrieve(policyId, nodeIdentity, userIdentity);
+			const policy = await this._papComponent.retrieve(policyId, userIdentity, nodeIdentity);
 			return policy;
 		} catch (error) {
 			throw new GeneralError(this.CLASS_NAME, "papRetrieveFailed", undefined, error);
@@ -100,14 +100,14 @@ export class RightsManagementService implements IRightsManagementComponent {
 	/**
 	 * PAP: Remove a policy.
 	 * @param policyId The id of the policy to remove.
-	 * @param nodeIdentity The identity of the node the operation is performed on.
 	 * @param userIdentity The identity of the user performing the operation.
+	 * @param nodeIdentity The identity of the node the operation is performed on.
 	 * @returns Nothing.
 	 */
 	public async papRemove(
 		policyId: string,
-		nodeIdentity: string,
-		userIdentity?: string
+		userIdentity: string | undefined,
+		nodeIdentity: string
 	): Promise<void> {
 		try {
 			Guards.stringValue(this.CLASS_NAME, nameof(policyId), policyId);
@@ -116,7 +116,7 @@ export class RightsManagementService implements IRightsManagementComponent {
 				Guards.stringValue(this.CLASS_NAME, nameof(userIdentity), userIdentity);
 			}
 
-			await this._papComponent.remove(policyId, nodeIdentity, userIdentity);
+			await this._papComponent.remove(policyId, userIdentity, nodeIdentity);
 		} catch (error) {
 			throw new GeneralError(this.CLASS_NAME, "papRemoveFailed", undefined, error);
 		}
@@ -124,19 +124,19 @@ export class RightsManagementService implements IRightsManagementComponent {
 
 	/**
 	 * PAP: Query the policies using the specified conditions.
-	 * @param nodeIdentity The identity of the node the operation is performed on.
 	 * @param conditions The conditions to use for the query.
 	 * @param cursor The cursor to use for pagination.
 	 * @param pageSize The number of results to return per page.
 	 * @param userIdentity The identity of the user performing the operation.
+	 * @param nodeIdentity The identity of the node the operation is performed on.
 	 * @returns Cursor for next page of results and the policies matching the query.
 	 */
 	public async papQuery(
-		nodeIdentity: string,
-		conditions?: string,
+		conditions?: EntityCondition<IOdrlPolicy>,
 		cursor?: string,
 		pageSize?: number,
-		userIdentity?: string
+		userIdentity?: string,
+		nodeIdentity?: string
 	): Promise<{
 		cursor?: string;
 		policies: IOdrlPolicy[];
@@ -164,11 +164,11 @@ export class RightsManagementService implements IRightsManagementComponent {
 				}
 			}
 			const result = await this._papComponent.query(
-				nodeIdentity,
 				conditionsObj,
 				cursor,
 				pageSize,
-				userIdentity
+				userIdentity,
+				nodeIdentity
 			);
 			return result;
 		} catch (error) {
