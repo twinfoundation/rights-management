@@ -102,7 +102,7 @@ export class RightsManagementClient extends BaseRestClient implements IRightsMan
 		const response = await this.fetch<IPapQueryRequest, IPapQueryResponse>("/pap/query", "GET", {
 			query: {
 				cursor,
-				conditions: conditions ? HttpParameterHelper.objectToString(conditions) : undefined,
+				conditions: HttpParameterHelper.objectToString(conditions),
 				pageSize: Coerce.string(pageSize)
 			}
 		});

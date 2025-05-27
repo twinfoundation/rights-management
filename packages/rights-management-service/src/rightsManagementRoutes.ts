@@ -356,7 +356,7 @@ export async function papQuery(
 	const queryParams = request.query || {};
 	const cursor = queryParams.cursor;
 	const pageSize = Coerce.number(queryParams.pageSize);
-	const conditions: EntityCondition<IOdrlPolicy> | undefined = HttpParameterHelper.objectFromString(
+	const conditions = HttpParameterHelper.objectFromString<EntityCondition<IOdrlPolicy>>(
 		request.query?.conditions
 	);
 
