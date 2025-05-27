@@ -8,5 +8,5 @@ export interface IPolicyAdministrationPointComponentEntityStorageOptions {
 	/**
 	 * The entity storage component for storing policies.
 	 */
-	entityStorage: string;
+	entityStorageType?: string;
 }

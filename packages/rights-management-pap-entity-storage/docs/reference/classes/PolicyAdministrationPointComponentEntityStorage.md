@@ -50,7 +50,7 @@ The class name of the Policy Administration Point Component.
 
 ### store()
 
-> **store**(`policy`, `userIdentity?`, `nodeIdentity?`): `Promise`\<`void`\>
+> **store**(`policy`, `nodeIdentity`, `userIdentity?`): `Promise`\<`void`\>
 
 Store a policy in the entity storage.
 
@@ -62,17 +62,17 @@ Store a policy in the entity storage.
 
 The policy to store.
 
+##### nodeIdentity
+
+`string`
+
+The identity of the node the operation is performed on.
+
 ##### userIdentity?
 
 `string`
 
 The identity of the user performing the operation.
-
-##### nodeIdentity?
-
-`string`
-
-The identity of the node the operation is performed on.
 
 #### Returns
 
@@ -86,7 +86,7 @@ The identity of the node the operation is performed on.
 
 ### retrieve()
 
-> **retrieve**(`policyId`, `userIdentity?`, `nodeIdentity?`): `Promise`\<`IOdrlPolicy`\>
+> **retrieve**(`policyId`, `nodeIdentity`, `userIdentity?`): `Promise`\<`IOdrlPolicy`\>
 
 Retrieve a policy from the entity storage.
 
@@ -98,17 +98,17 @@ Retrieve a policy from the entity storage.
 
 The ID of the policy to retrieve.
 
+##### nodeIdentity
+
+`string`
+
+The identity of the node the operation is performed on.
+
 ##### userIdentity?
 
 `string`
 
 The identity of the user performing the operation.
-
-##### nodeIdentity?
-
-`string`
-
-The identity of the node the operation is performed on.
 
 #### Returns
 
@@ -124,7 +124,7 @@ The policy.
 
 ### remove()
 
-> **remove**(`policyId`, `userIdentity?`, `nodeIdentity?`): `Promise`\<`void`\>
+> **remove**(`policyId`, `nodeIdentity`, `userIdentity?`): `Promise`\<`void`\>
 
 Remove a policy from the entity storage.
 
@@ -136,17 +136,17 @@ Remove a policy from the entity storage.
 
 The ID of the policy to remove.
 
+##### nodeIdentity
+
+`string`
+
+The identity of the node the operation is performed on.
+
 ##### userIdentity?
 
 `string`
 
 The identity of the user performing the operation.
-
-##### nodeIdentity?
-
-`string`
-
-The identity of the node the operation is performed on.
 
 #### Returns
 
@@ -160,11 +160,17 @@ The identity of the node the operation is performed on.
 
 ### query()
 
-> **query**(`conditions?`, `cursor?`, `pageSize?`, `userIdentity?`, `nodeIdentity?`): `Promise`\<\{ `cursor`: `string`; `policies`: `IOdrlPolicy`[]; \}\>
+> **query**(`nodeIdentity`, `conditions?`, `cursor?`, `pageSize?`, `userIdentity?`): `Promise`\<\{ `cursor`: `string`; `policies`: `IOdrlPolicy`[]; \}\>
 
 Query the entity storage for policies.
 
 #### Parameters
+
+##### nodeIdentity
+
+`string`
+
+The identity of the node the operation is performed on.
 
 ##### conditions?
 
@@ -189,12 +195,6 @@ The number of results to return per page.
 `string`
 
 The identity of the user performing the operation.
-
-##### nodeIdentity?
-
-`string`
-
-The identity of the node the operation is performed on.
 
 #### Returns
 

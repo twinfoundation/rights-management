@@ -11,45 +11,45 @@ export interface IRightsManagementComponent extends IComponent {
 	/**
 	 * PAP: Store a policy.
 	 * @param policy The policy to store.
-	 * @param userIdentity The identity of the user performing the operation.
 	 * @param nodeIdentity The identity of the node the operation is performed on.
+	 * @param userIdentity The identity of the user performing the operation.
 	 * @returns Nothing.
 	 */
-	papStore(policy: IOdrlPolicy, userIdentity?: string, nodeIdentity?: string): Promise<void>;
+	papStore(policy: IOdrlPolicy, nodeIdentity: string, userIdentity?: string): Promise<void>;
 
 	/**
 	 * PAP: Retrieve a policy.
 	 * @param policyId The id of the policy to retrieve.
-	 * @param userIdentity The identity of the user performing the operation.
 	 * @param nodeIdentity The identity of the node the operation is performed on.
+	 * @param userIdentity The identity of the user performing the operation.
 	 * @returns The policy.
 	 */
-	papRetrieve(policyId: string, userIdentity?: string, nodeIdentity?: string): Promise<IOdrlPolicy>;
+	papRetrieve(policyId: string, nodeIdentity: string, userIdentity?: string): Promise<IOdrlPolicy>;
 
 	/**
 	 * PAP: Remove a policy.
 	 * @param policyId The id of the policy to remove.
-	 * @param userIdentity The identity of the user performing the operation.
 	 * @param nodeIdentity The identity of the node the operation is performed on.
+	 * @param userIdentity The identity of the user performing the operation.
 	 * @returns Nothing.
 	 */
-	papRemove(policyId: string, userIdentity?: string, nodeIdentity?: string): Promise<void>;
+	papRemove(policyId: string, nodeIdentity: string, userIdentity?: string): Promise<void>;
 
 	/**
 	 * PAP: Query the policies using the specified conditions.
+	 * @param nodeIdentity The identity of the node the operation is performed on.
 	 * @param conditions The conditions to use for the query.
 	 * @param cursor The cursor to use for pagination.
 	 * @param pageSize The number of results to return per page.
 	 * @param userIdentity The identity of the user performing the operation.
-	 * @param nodeIdentity The identity of the node the operation is performed on.
 	 * @returns Cursor for next page of results and the policies matching the query.
 	 */
 	papQuery(
+		nodeIdentity: string,
 		conditions?: string,
 		cursor?: string,
 		pageSize?: number,
-		userIdentity?: string,
-		nodeIdentity?: string
+		userIdentity?: string
 	): Promise<{
 		cursor?: string;
 		policies: IOdrlPolicy[];

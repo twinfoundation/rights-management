@@ -11,7 +11,7 @@ This serves as a single point of entry for all rights management operations.
 
 ### papStore()
 
-> **papStore**(`policy`, `userIdentity?`, `nodeIdentity?`): `Promise`\<`void`\>
+> **papStore**(`policy`, `nodeIdentity`, `userIdentity?`): `Promise`\<`void`\>
 
 PAP: Store a policy.
 
@@ -23,17 +23,17 @@ PAP: Store a policy.
 
 The policy to store.
 
+##### nodeIdentity
+
+`string`
+
+The identity of the node the operation is performed on.
+
 ##### userIdentity?
 
 `string`
 
 The identity of the user performing the operation.
-
-##### nodeIdentity?
-
-`string`
-
-The identity of the node the operation is performed on.
 
 #### Returns
 
@@ -45,7 +45,7 @@ Nothing.
 
 ### papRetrieve()
 
-> **papRetrieve**(`policyId`, `userIdentity?`, `nodeIdentity?`): `Promise`\<`IOdrlPolicy`\>
+> **papRetrieve**(`policyId`, `nodeIdentity`, `userIdentity?`): `Promise`\<`IOdrlPolicy`\>
 
 PAP: Retrieve a policy.
 
@@ -57,17 +57,17 @@ PAP: Retrieve a policy.
 
 The id of the policy to retrieve.
 
+##### nodeIdentity
+
+`string`
+
+The identity of the node the operation is performed on.
+
 ##### userIdentity?
 
 `string`
 
 The identity of the user performing the operation.
-
-##### nodeIdentity?
-
-`string`
-
-The identity of the node the operation is performed on.
 
 #### Returns
 
@@ -79,7 +79,7 @@ The policy.
 
 ### papRemove()
 
-> **papRemove**(`policyId`, `userIdentity?`, `nodeIdentity?`): `Promise`\<`void`\>
+> **papRemove**(`policyId`, `nodeIdentity`, `userIdentity?`): `Promise`\<`void`\>
 
 PAP: Remove a policy.
 
@@ -91,17 +91,17 @@ PAP: Remove a policy.
 
 The id of the policy to remove.
 
+##### nodeIdentity
+
+`string`
+
+The identity of the node the operation is performed on.
+
 ##### userIdentity?
 
 `string`
 
 The identity of the user performing the operation.
-
-##### nodeIdentity?
-
-`string`
-
-The identity of the node the operation is performed on.
 
 #### Returns
 
@@ -113,11 +113,17 @@ Nothing.
 
 ### papQuery()
 
-> **papQuery**(`conditions?`, `cursor?`, `pageSize?`, `userIdentity?`, `nodeIdentity?`): `Promise`\<\{ `cursor`: `string`; `policies`: `IOdrlPolicy`[]; \}\>
+> **papQuery**(`nodeIdentity`, `conditions?`, `cursor?`, `pageSize?`, `userIdentity?`): `Promise`\<\{ `cursor`: `string`; `policies`: `IOdrlPolicy`[]; \}\>
 
 PAP: Query the policies using the specified conditions.
 
 #### Parameters
+
+##### nodeIdentity
+
+`string`
+
+The identity of the node the operation is performed on.
 
 ##### conditions?
 
@@ -142,12 +148,6 @@ The number of results to return per page.
 `string`
 
 The identity of the user performing the operation.
-
-##### nodeIdentity?
-
-`string`
-
-The identity of the node the operation is performed on.
 
 #### Returns
 

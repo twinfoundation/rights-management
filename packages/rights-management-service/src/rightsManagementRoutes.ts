@@ -7,7 +7,7 @@ import type {
 	IRestRoute,
 	ITag
 } from "@twin.org/api-models";
-import { ComponentFactory, Guards } from "@twin.org/core";
+import { ComponentFactory, Coerce, Guards } from "@twin.org/core";
 import { nameof } from "@twin.org/nameof";
 import type {
 	IPapQueryRequest,
@@ -234,11 +234,20 @@ export async function papStore(
 	Guards.object<IPapStoreRequest>(ROUTES_SOURCE, nameof(request), request);
 	Guards.object<IPapStoreRequest["body"]>(ROUTES_SOURCE, nameof(request.body), request.body);
 	Guards.object(ROUTES_SOURCE, nameof(request.body.policy), request.body.policy);
+	Guards.stringValue(
+		ROUTES_SOURCE,
+		nameof(httpRequestContext.nodeIdentity),
+		httpRequestContext.nodeIdentity
+	);
 
 	const component = ComponentFactory.get<IRightsManagementComponent>(componentName);
 
 	const policy = request.body.policy;
-	await component.papStore(policy, httpRequestContext.userIdentity);
+	await component.papStore(
+		policy,
+		httpRequestContext.nodeIdentity,
+		httpRequestContext.userIdentity
+	);
 
 	return {
 		statusCode: HttpStatusCode.created,
@@ -267,10 +276,16 @@ export async function papRetrieve(
 		request.pathParams
 	);
 	Guards.stringValue(ROUTES_SOURCE, nameof(request.pathParams.id), request.pathParams.id);
+	Guards.stringValue(
+		ROUTES_SOURCE,
+		nameof(httpRequestContext.nodeIdentity),
+		httpRequestContext.nodeIdentity
+	);
 
 	const component = ComponentFactory.get<IRightsManagementComponent>(componentName);
 	const policy = await component.papRetrieve(
 		request.pathParams.id,
+		httpRequestContext.nodeIdentity,
 		httpRequestContext.userIdentity
 	);
 
@@ -298,9 +313,18 @@ export async function papRemove(
 		request.pathParams
 	);
 	Guards.stringValue(ROUTES_SOURCE, nameof(request.pathParams.id), request.pathParams.id);
+	Guards.stringValue(
+		ROUTES_SOURCE,
+		nameof(httpRequestContext.nodeIdentity),
+		httpRequestContext.nodeIdentity
+	);
 
 	const component = ComponentFactory.get<IRightsManagementComponent>(componentName);
-	await component.papRemove(request.pathParams.id, httpRequestContext.userIdentity);
+	await component.papRemove(
+		request.pathParams.id,
+		httpRequestContext.nodeIdentity,
+		httpRequestContext.userIdentity
+	);
 
 	return {
 		statusCode: HttpStatusCode.noContent
@@ -320,20 +344,25 @@ export async function papQuery(
 	request: IPapQueryRequest
 ): Promise<IPapQueryResponse> {
 	Guards.object<IPapQueryRequest>(ROUTES_SOURCE, nameof(request), request);
+	Guards.stringValue(
+		ROUTES_SOURCE,
+		nameof(httpRequestContext.nodeIdentity),
+		httpRequestContext.nodeIdentity
+	);
 
 	// Extract all query parameters
 	const queryParams = request.query || {};
 	const cursor = queryParams.cursor;
-	const pageSize = queryParams.pageSize;
+	const pageSize = Coerce.number(queryParams.pageSize);
 	const conditions = queryParams.conditions;
 
 	const component = ComponentFactory.get<IRightsManagementComponent>(componentName);
 	const result = await component.papQuery(
+		httpRequestContext.nodeIdentity,
 		conditions,
 		cursor,
 		pageSize,
-		httpRequestContext.userIdentity,
-		httpRequestContext.nodeIdentity
+		httpRequestContext.userIdentity
 	);
 
 	return {

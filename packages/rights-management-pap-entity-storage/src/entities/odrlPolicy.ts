@@ -87,6 +87,6 @@ export class OdrlPolicy {
 	/**
 	 * The identifier of the node that owns this policy.
 	 */
-	@property({ type: "string", optional: true, isSecondary: true })
-	public nodeIdentity?: string;
+	@property({ type: "string", isSecondary: true })
+	public nodeIdentity!: string;
 }

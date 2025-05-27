@@ -17,7 +17,7 @@ export interface IPapQueryRequest {
 		/**
 		 * The number of entries to return per page.
 		 */
-		pageSize?: number;
+		pageSize?: string;
 
 		/**
 		 * The cursor to get next chunk of data, returned in previous response.

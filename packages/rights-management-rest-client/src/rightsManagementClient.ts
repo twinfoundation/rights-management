@@ -10,15 +10,14 @@ import type {
 	IPapRemoveRequest,
 	IPapRetrieveRequest,
 	IPapRetrieveResponse,
-	IPapStoreRequest,
-	IRightsManagementComponent
+	IPapStoreRequest
 } from "@twin.org/rights-management-models";
 import type { IOdrlPolicy } from "@twin.org/standards-w3c-odrl";
 
 /**
  * Client for performing Rights Management through to REST endpoints.
  */
-export class RightsManagementClient extends BaseRestClient implements IRightsManagementComponent {
+export class RightsManagementClient extends BaseRestClient {
 	/**
 	 * Runtime name for the class.
 	 */
@@ -87,11 +86,13 @@ export class RightsManagementClient extends BaseRestClient implements IRightsMan
 	 * PAP: Query the policies using the specified conditions.
 	 * @param conditions The conditions to use for the query.
 	 * @param cursor The cursor to use for pagination.
+	 * @param pageSize The number of results to return per page.
 	 * @returns Cursor for next page of results and the policies matching the query.
 	 */
 	public async papQuery(
 		conditions?: string,
-		cursor?: string
+		cursor?: string,
+		pageSize?: number
 	): Promise<{
 		cursor?: string;
 		policies: IOdrlPolicy[];
@@ -99,7 +100,8 @@ export class RightsManagementClient extends BaseRestClient implements IRightsMan
 		const response = await this.fetch<IPapQueryRequest, IPapQueryResponse>("/pap/query", "GET", {
 			query: {
 				cursor,
-				conditions
+				conditions,
+				pageSize: pageSize !== undefined ? pageSize.toString() : undefined
 			}
 		});
 

@@ -4,8 +4,8 @@ Options for the Policy Administration Point Component.
 
 ## Properties
 
-### entityStorage
+### entityStorageType?
 
-> **entityStorage**: `string`
+> `optional` **entityStorageType**: `string`
 
 The entity storage component for storing policies.

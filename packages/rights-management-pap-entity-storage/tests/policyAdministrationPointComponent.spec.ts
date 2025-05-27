@@ -37,7 +37,7 @@ describe("rights-management-pap", () => {
 
 		// Create the policy admin point using the registered storage type
 		policyAdminPoint = new PolicyAdministrationPointComponentEntityStorage({
-			entityStorage: testStorageType
+			entityStorageType: testStorageType
 		});
 	});
 
@@ -120,11 +120,11 @@ describe("rights-management-pap", () => {
 		await createTestPolicies(policyAdminPoint);
 
 		const result = await policyAdminPoint.query(
+			TEST_NODE_IDENTITY,
 			undefined,
 			undefined,
 			undefined,
-			TEST_USER_IDENTITY,
-			TEST_NODE_IDENTITY
+			TEST_USER_IDENTITY
 		);
 
 		expect(result.policies).toBeDefined();
@@ -144,11 +144,11 @@ describe("rights-management-pap", () => {
 
 		// Query policies with a simple uid condition
 		const result = await policyAdminPoint.query(
+			TEST_NODE_IDENTITY,
 			uidCondition,
 			undefined,
 			undefined,
-			TEST_USER_IDENTITY,
-			TEST_NODE_IDENTITY
+			TEST_USER_IDENTITY
 		);
 
 		// Check that we got the matching policy
@@ -170,11 +170,11 @@ describe("rights-management-pap", () => {
 
 		// Query with conditions that don't match any policy
 		const result = await policyAdminPoint.query(
+			TEST_NODE_IDENTITY,
 			nonMatchingCondition,
 			undefined,
 			undefined,
-			TEST_USER_IDENTITY,
-			TEST_NODE_IDENTITY
+			TEST_USER_IDENTITY
 		);
 
 		expect(result.policies).toBeDefined();
@@ -187,11 +187,11 @@ describe("rights-management-pap", () => {
 
 		// Get first page (default max is set in component)
 		const firstPage = await policyAdminPoint.query(
+			TEST_NODE_IDENTITY,
 			undefined,
 			undefined,
 			undefined,
-			TEST_USER_IDENTITY,
-			TEST_NODE_IDENTITY
+			TEST_USER_IDENTITY
 		);
 
 		// Check first page
@@ -202,11 +202,11 @@ describe("rights-management-pap", () => {
 		if (firstPage.policies.length < 10 && firstPage.cursor) {
 			// Get second page using cursor
 			const secondPage = await policyAdminPoint.query(
+				TEST_NODE_IDENTITY,
 				undefined,
 				firstPage.cursor,
 				undefined,
-				TEST_USER_IDENTITY,
-				TEST_NODE_IDENTITY
+				TEST_USER_IDENTITY
 			);
 
 			// Check second page
@@ -228,11 +228,11 @@ describe("rights-management-pap", () => {
 	test("should handle invalid cursor gracefully", async () => {
 		await expect(
 			policyAdminPoint.query(
+				TEST_NODE_IDENTITY,
 				undefined,
 				"invalid-cursor",
 				undefined,
-				TEST_USER_IDENTITY,
-				TEST_NODE_IDENTITY
+				TEST_USER_IDENTITY
 			)
 		).resolves.toBeDefined();
 	});

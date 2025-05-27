@@ -1,6 +1,6 @@
 // Copyright 2024 IOTA Stiftung.
 // SPDX-License-Identifier: Apache-2.0.
-import { ComponentFactory, Guards, NotFoundError } from "@twin.org/core";
+import { ComponentFactory, Guards, Is, NotFoundError } from "@twin.org/core";
 import type { EntityCondition } from "@twin.org/entity";
 import type { IEntityStorageComponent } from "@twin.org/entity-storage-models";
 import { nameof } from "@twin.org/nameof";
@@ -43,54 +43,54 @@ export class PolicyAdministrationPointComponentEntityStorage
 	 */
 	constructor(options: IPolicyAdministrationPointComponentEntityStorageOptions) {
 		Guards.object(this.CLASS_NAME, nameof(options), options);
-		Guards.stringValue(this.CLASS_NAME, nameof(options.entityStorage), options.entityStorage);
+		Guards.stringValue(
+			this.CLASS_NAME,
+			nameof(options.entityStorageType),
+			options.entityStorageType
+		);
 
 		this._entityStorage = ComponentFactory.get<IEntityStorageComponent<OdrlPolicy>>(
-			options.entityStorage
+			options.entityStorageType ?? "odrl-policy"
 		);
 	}
 
 	/**
 	 * Store a policy in the entity storage.
 	 * @param policy The policy to store.
-	 * @param userIdentity The identity of the user performing the operation.
 	 * @param nodeIdentity The identity of the node the operation is performed on.
+	 * @param userIdentity The identity of the user performing the operation.
 	 */
 	public async store(
 		policy: IOdrlPolicy,
-		userIdentity?: string,
-		nodeIdentity?: string
+		nodeIdentity: string,
+		userIdentity?: string
 	): Promise<void> {
 		Guards.object(this.CLASS_NAME, nameof(policy), policy);
-		if (userIdentity !== undefined) {
+		Guards.stringValue(this.CLASS_NAME, nameof(nodeIdentity), nodeIdentity);
+		if (!Is.empty(userIdentity)) {
 			Guards.stringValue(this.CLASS_NAME, nameof(userIdentity), userIdentity);
 		}
-		if (nodeIdentity !== undefined) {
-			Guards.stringValue(this.CLASS_NAME, nameof(nodeIdentity), nodeIdentity);
-		}
 
-		const storagePolicy = convertToStoragePolicy(policy);
-		await this._entityStorage.set(storagePolicy, userIdentity, nodeIdentity);
+		const storagePolicy = convertToStoragePolicy(policy, nodeIdentity);
+		await this._entityStorage.set(storagePolicy, nodeIdentity, userIdentity);
 	}
 
 	/**
 	 * Retrieve a policy from the entity storage.
 	 * @param policyId The ID of the policy to retrieve.
-	 * @param userIdentity The identity of the user performing the operation.
 	 * @param nodeIdentity The identity of the node the operation is performed on.
+	 * @param userIdentity The identity of the user performing the operation.
 	 * @returns The policy.
 	 */
 	public async retrieve(
 		policyId: string,
-		userIdentity?: string,
-		nodeIdentity?: string
+		nodeIdentity: string,
+		userIdentity?: string
 	): Promise<IOdrlPolicy> {
 		Guards.stringValue(this.CLASS_NAME, nameof(policyId), policyId);
-		if (userIdentity !== undefined) {
+		Guards.stringValue(this.CLASS_NAME, nameof(nodeIdentity), nodeIdentity);
+		if (!Is.empty(userIdentity)) {
 			Guards.stringValue(this.CLASS_NAME, nameof(userIdentity), userIdentity);
-		}
-		if (nodeIdentity !== undefined) {
-			Guards.stringValue(this.CLASS_NAME, nameof(nodeIdentity), nodeIdentity);
 		}
 
 		const storagePolicy = await this._entityStorage.get(
@@ -108,20 +108,18 @@ export class PolicyAdministrationPointComponentEntityStorage
 	/**
 	 * Remove a policy from the entity storage.
 	 * @param policyId The ID of the policy to remove.
-	 * @param userIdentity The identity of the user performing the operation.
 	 * @param nodeIdentity The identity of the node the operation is performed on.
+	 * @param userIdentity The identity of the user performing the operation.
 	 */
 	public async remove(
 		policyId: string,
-		userIdentity?: string,
-		nodeIdentity?: string
+		nodeIdentity: string,
+		userIdentity?: string
 	): Promise<void> {
 		Guards.stringValue(this.CLASS_NAME, nameof(policyId), policyId);
-		if (userIdentity !== undefined) {
+		Guards.stringValue(this.CLASS_NAME, nameof(nodeIdentity), nodeIdentity);
+		if (!Is.empty(userIdentity)) {
 			Guards.stringValue(this.CLASS_NAME, nameof(userIdentity), userIdentity);
-		}
-		if (nodeIdentity !== undefined) {
-			Guards.stringValue(this.CLASS_NAME, nameof(nodeIdentity), nodeIdentity);
 		}
 
 		await this._entityStorage.remove(policyId, userIdentity, nodeIdentity);
@@ -129,37 +127,35 @@ export class PolicyAdministrationPointComponentEntityStorage
 
 	/**
 	 * Query the entity storage for policies.
+	 * @param nodeIdentity The identity of the node the operation is performed on.
 	 * @param conditions The conditions to query the entity storage with.
 	 * @param cursor The cursor to use for pagination.
 	 * @param pageSize The number of results to return per page.
 	 * @param userIdentity The identity of the user performing the operation.
-	 * @param nodeIdentity The identity of the node the operation is performed on.
 	 * @returns The policies.
 	 */
 	public async query(
+		nodeIdentity: string,
 		conditions?: EntityCondition<IOdrlPolicy>,
 		cursor?: string,
 		pageSize?: number,
-		userIdentity?: string,
-		nodeIdentity?: string
+		userIdentity?: string
 	): Promise<{
 		cursor?: string;
 		policies: IOdrlPolicy[];
 	}> {
+		Guards.stringValue(this.CLASS_NAME, nameof(nodeIdentity), nodeIdentity);
 		if (conditions !== undefined) {
 			Guards.object(this.CLASS_NAME, nameof(conditions), conditions);
 		}
-		if (cursor !== undefined) {
+		if (!Is.empty(cursor)) {
 			Guards.stringValue(this.CLASS_NAME, nameof(cursor), cursor);
 		}
 		if (pageSize !== undefined) {
 			Guards.number(this.CLASS_NAME, nameof(pageSize), pageSize);
 		}
-		if (userIdentity !== undefined) {
+		if (!Is.empty(userIdentity)) {
 			Guards.stringValue(this.CLASS_NAME, nameof(userIdentity), userIdentity);
-		}
-		if (nodeIdentity !== undefined) {
-			Guards.stringValue(this.CLASS_NAME, nameof(nodeIdentity), nodeIdentity);
 		}
 
 		const result = await this._entityStorage.query(

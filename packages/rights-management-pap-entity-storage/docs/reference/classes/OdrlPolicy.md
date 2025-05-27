@@ -101,8 +101,8 @@ The obligations in the policy.
 
 ***
 
-### nodeIdentity?
+### nodeIdentity
 
-> `optional` **nodeIdentity**: `string`
+> **nodeIdentity**: `string`
 
 The identifier of the node that owns this policy.

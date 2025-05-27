@@ -354,7 +354,7 @@
 						"in": "query",
 						"required": false,
 						"schema": {
-							"type": "number"
+							"type": "string"
 						}
 					},
 					{

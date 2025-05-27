@@ -7,41 +7,23 @@ import { OdrlPolicy } from "../entities/odrlPolicy";
 /**
  * Converts an IOdrlPolicy to an OdrlPolicy for storage.
  * @param policy The policy to convert.
+ * @param nodeIdentity The identity of the node that owns this policy.
  * @returns The converted policy.
  */
-export function convertToStoragePolicy(policy: IOdrlPolicy): OdrlPolicy {
-	// Create a new policy with the required field
+export function convertToStoragePolicy(policy: IOdrlPolicy, nodeIdentity: string): OdrlPolicy {
 	const storagePolicy = new OdrlPolicy();
 	storagePolicy.uid = policy.uid;
+	storagePolicy.nodeIdentity = nodeIdentity;
 
-	// Copy all optional fields directly (we don't need @context or @type)
-	if (policy.profile) {
-		storagePolicy.profile = policy.profile;
-	}
-	if (policy.assigner) {
-		storagePolicy.assigner = policy.assigner;
-	}
-	if (policy.assignee) {
-		storagePolicy.assignee = policy.assignee;
-	}
-	if (policy.target) {
-		storagePolicy.target = policy.target;
-	}
-	if (policy.action) {
-		storagePolicy.action = policy.action;
-	}
-	if (policy.conflict) {
-		storagePolicy.conflict = policy.conflict;
-	}
-	if (policy.permission) {
-		storagePolicy.permission = policy.permission;
-	}
-	if (policy.prohibition) {
-		storagePolicy.prohibition = policy.prohibition;
-	}
-	if (policy.obligation) {
-		storagePolicy.obligation = policy.obligation;
-	}
+	storagePolicy.profile = policy.profile;
+	storagePolicy.assigner = policy.assigner;
+	storagePolicy.assignee = policy.assignee;
+	storagePolicy.target = policy.target;
+	storagePolicy.action = policy.action;
+	storagePolicy.conflict = policy.conflict;
+	storagePolicy.permission = policy.permission;
+	storagePolicy.prohibition = policy.prohibition;
+	storagePolicy.obligation = policy.obligation;
 
 	return storagePolicy;
 }
@@ -52,41 +34,21 @@ export function convertToStoragePolicy(policy: IOdrlPolicy): OdrlPolicy {
  * @returns The converted IOdrlPolicy.
  */
 export function convertFromStoragePolicy(storagePolicy: OdrlPolicy): IOdrlPolicy {
-	// Create policy with required fields and standard values
 	const policy: IOdrlPolicy = {
 		uid: storagePolicy.uid,
-		"@type": "Set" as PolicyType, // Default policy type
+		"@type": "Set" as PolicyType,
 		"@context": OdrlContexts.Context
 	};
 
-	// Copy all optional fields directly
-	if (storagePolicy.profile) {
-		policy.profile = storagePolicy.profile;
-	}
-	if (storagePolicy.assigner) {
-		policy.assigner = storagePolicy.assigner;
-	}
-	if (storagePolicy.assignee) {
-		policy.assignee = storagePolicy.assignee;
-	}
-	if (storagePolicy.target) {
-		policy.target = storagePolicy.target;
-	}
-	if (storagePolicy.action) {
-		policy.action = storagePolicy.action;
-	}
-	if (storagePolicy.conflict) {
-		policy.conflict = storagePolicy.conflict;
-	}
-	if (storagePolicy.permission) {
-		policy.permission = storagePolicy.permission;
-	}
-	if (storagePolicy.prohibition) {
-		policy.prohibition = storagePolicy.prohibition;
-	}
-	if (storagePolicy.obligation) {
-		policy.obligation = storagePolicy.obligation;
-	}
+	policy.profile = storagePolicy.profile;
+	policy.assigner = storagePolicy.assigner;
+	policy.assignee = storagePolicy.assignee;
+	policy.target = storagePolicy.target;
+	policy.action = storagePolicy.action;
+	policy.conflict = storagePolicy.conflict;
+	policy.permission = storagePolicy.permission;
+	policy.prohibition = storagePolicy.prohibition;
+	policy.obligation = storagePolicy.obligation;
 
 	return policy;
 }

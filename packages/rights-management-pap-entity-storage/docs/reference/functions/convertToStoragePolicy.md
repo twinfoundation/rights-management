@@ -1,6 +1,6 @@
 # Function: convertToStoragePolicy()
 
-> **convertToStoragePolicy**(`policy`): [`OdrlPolicy`](../classes/OdrlPolicy.md)
+> **convertToStoragePolicy**(`policy`, `nodeIdentity`): [`OdrlPolicy`](../classes/OdrlPolicy.md)
 
 Converts an IOdrlPolicy to an OdrlPolicy for storage.
 
@@ -11,6 +11,12 @@ Converts an IOdrlPolicy to an OdrlPolicy for storage.
 `IOdrlPolicy`
 
 The policy to convert.
+
+### nodeIdentity
+
+`string`
+
+The identity of the node that owns this policy.
 
 ## Returns
 
