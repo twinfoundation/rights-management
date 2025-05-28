@@ -1,5 +1,19 @@
 # @twin.org/rights-management-pap - Changelog
 
+## [0.0.1-next.4](https://github.com/twinfoundation/rights-management/compare/rights-management-pap-entity-storage-v0.0.1-next.3...rights-management-pap-entity-storage-v0.0.1-next.4) (2025-05-28)
+
+
+### Bug Fixes
+
+* modifying the function name for the rest routes ([#6](https://github.com/twinfoundation/rights-management/issues/6)) ([7915111](https://github.com/twinfoundation/rights-management/commit/7915111ac608c9d69bcaa819c85b553fc9bace6a))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @twin.org/rights-management-models bumped from 0.0.1-next.3 to 0.0.1-next.4
+
 ## [0.0.1-next.3](https://github.com/twinfoundation/rights-management/compare/rights-management-pap-entity-storage-v0.0.1-next.2...rights-management-pap-entity-storage-v0.0.1-next.3) (2025-05-28)
 
 
