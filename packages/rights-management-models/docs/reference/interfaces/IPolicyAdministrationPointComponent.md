@@ -12,7 +12,7 @@ Policy Management Point (PMP) when it handles requests from the Policy Decision 
 
 ### store()
 
-> **store**(`policy`): `Promise`\<`void`\>
+> **store**(`policy`, `userIdentity`, `nodeIdentity`): `Promise`\<`void`\>
 
 Store a policy.
 
@@ -24,6 +24,18 @@ Store a policy.
 
 The policy to store.
 
+##### userIdentity
+
+The identity of the user performing the operation.
+
+`undefined` | `string`
+
+##### nodeIdentity
+
+`string`
+
+The identity of the node the operation is performed on.
+
 #### Returns
 
 `Promise`\<`void`\>
@@ -34,7 +46,7 @@ Nothing.
 
 ### retrieve()
 
-> **retrieve**(`policyId`): `Promise`\<`IOdrlPolicy`\>
+> **retrieve**(`policyId`, `userIdentity`, `nodeIdentity`): `Promise`\<`IOdrlPolicy`\>
 
 Retrieve a policy.
 
@@ -46,6 +58,18 @@ Retrieve a policy.
 
 The id of the policy to retrieve.
 
+##### userIdentity
+
+The identity of the user performing the operation.
+
+`undefined` | `string`
+
+##### nodeIdentity
+
+`string`
+
+The identity of the node the operation is performed on.
+
 #### Returns
 
 `Promise`\<`IOdrlPolicy`\>
@@ -56,7 +80,7 @@ The policy.
 
 ### remove()
 
-> **remove**(`policyId`): `Promise`\<`void`\>
+> **remove**(`policyId`, `userIdentity`, `nodeIdentity`): `Promise`\<`void`\>
 
 Remove a policy.
 
@@ -68,6 +92,18 @@ Remove a policy.
 
 The id of the policy to remove.
 
+##### userIdentity
+
+The identity of the user performing the operation.
+
+`undefined` | `string`
+
+##### nodeIdentity
+
+`string`
+
+The identity of the node the operation is performed on.
+
 #### Returns
 
 `Promise`\<`void`\>
@@ -78,7 +114,7 @@ Nothing.
 
 ### query()
 
-> **query**(`conditions?`, `cursor?`): `Promise`\<\{ `cursor`: `string`; `policies`: `IOdrlPolicy`[]; \}\>
+> **query**(`conditions?`, `cursor?`, `pageSize?`, `userIdentity?`, `nodeIdentity?`): `Promise`\<\{ `cursor`: `string`; `policies`: `IOdrlPolicy`[]; \}\>
 
 Query the policies using the specified conditions.
 
@@ -95,6 +131,24 @@ The conditions to use for the query.
 `string`
 
 The cursor to use for pagination.
+
+##### pageSize?
+
+`number`
+
+The number of results to return per page.
+
+##### userIdentity?
+
+`string`
+
+The identity of the user performing the operation.
+
+##### nodeIdentity?
+
+`string`
+
+The identity of the node the operation is performed on.
 
 #### Returns
 

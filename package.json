@@ -47,7 +47,10 @@
 		"release-please": "17.0.0"
 	},
 	"workspaces": [
-		"packages/rights-management-models"
+		"packages/rights-management-models",
+		"packages/rights-management-pap-entity-storage",
+		"packages/rights-management-service",
+		"packages/rights-management-rest-client"
 	],
 	"type": "module"
 }
