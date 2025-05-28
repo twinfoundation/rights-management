@@ -42,7 +42,10 @@ export const tags: ITag[] = [
  * @param componentName The name of the component to use in the routes stored in the ComponentFactory.
  * @returns The generated routes.
  */
-export function generateRestRoutes(baseRouteName: string, componentName: string): IRestRoute[] {
+export function generateRestRoutesRightsManagement(
+	baseRouteName: string,
+	componentName: string
+): IRestRoute[] {
 	const storeRoute: IRestRoute<IPapStoreRequest, ICreatedResponse> = {
 		operationId: "papStore",
 		summary: "Store a policy",

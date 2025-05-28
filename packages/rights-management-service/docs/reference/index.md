@@ -16,7 +16,7 @@
 
 ## Functions
 
-- [generateRestRoutes](functions/generateRestRoutes.md)
+- [generateRestRoutesRightsManagement](functions/generateRestRoutesRightsManagement.md)
 - [papStore](functions/papStore.md)
 - [papRetrieve](functions/papRetrieve.md)
 - [papRemove](functions/papRemove.md)

@@ -1,6 +1,6 @@
-# Function: generateRestRoutes()
+# Function: generateRestRoutesRightsManagement()
 
-> **generateRestRoutes**(`baseRouteName`, `componentName`): `IRestRoute`\<`any`, `any`\>[]
+> **generateRestRoutesRightsManagement**(`baseRouteName`, `componentName`): `IRestRoute`\<`any`, `any`\>[]
 
 The REST routes for the Rights Management.
 
