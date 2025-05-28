@@ -1,13 +1,6 @@
 # Class: OdrlPolicy
 
 Class describing an ODRL policy for entity storage.
-This class represents the storage model for Open Digital Rights Language (ODRL) policies
-in the Policy Administration Point (PAP) component. It is used as the database model
-by the entityStorage configuration in IPolicyAdministrationPointComponentOptions.
-
-The entity storage component uses this class to persist ODRL policies with their
-permissions, prohibitions, and obligations in a structured format that can be
-efficiently queried and managed by the Policy Administration Point.
 
 ## Constructors
 

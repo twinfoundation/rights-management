@@ -12,30 +12,22 @@
 		"packages/rights-management-models": {
 			"package-name": "rights-management-models",
 			"changelog-path": "docs/changelog.md",
-			"extra-files": [
-				"src/index.ts"
-			]
+			"extra-files": ["src/index.ts"]
 		},
 		"packages/rights-management-pap-entity-storage": {
 			"package-name": "rights-management-pap-entity-storage",
 			"changelog-path": "docs/changelog.md",
-			"extra-files": [
-				"src/index.ts"
-			]
+			"extra-files": ["src/index.ts"]
 		},
 		"packages/rights-management-service": {
 			"package-name": "rights-management-service",
 			"changelog-path": "docs/changelog.md",
-			"extra-files": [
-				"src/index.ts"
-			]
+			"extra-files": ["src/index.ts"]
 		},
 		"packages/rights-management-rest-client": {
 			"package-name": "rights-management-rest-client",
 			"changelog-path": "docs/changelog.md",
-			"extra-files": [
-				"src/index.ts"
-			]
+			"extra-files": ["src/index.ts"]
 		}
 	},
 	"plugins": [
