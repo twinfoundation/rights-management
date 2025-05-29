@@ -1,5 +1,12 @@
 # @twin.org/rights-management-models - Changelog
 
+## [0.0.1-next.5](https://github.com/twinfoundation/rights-management/compare/rights-management-models-v0.0.1-next.4...rights-management-models-v0.0.1-next.5) (2025-05-29)
+
+
+### Features
+
+* rename pap entity storage to pap service ([38a2c14](https://github.com/twinfoundation/rights-management/commit/38a2c14d8f63a86e398820166c83437be5aca1b8))
+
 ## [0.0.1-next.4](https://github.com/twinfoundation/rights-management/compare/rights-management-models-v0.0.1-next.3...rights-management-models-v0.0.1-next.4) (2025-05-28)
 
 
