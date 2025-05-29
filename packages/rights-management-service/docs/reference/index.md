@@ -6,7 +6,6 @@
 
 ## Interfaces
 
-- [IRightsManagementServiceConfig](interfaces/IRightsManagementServiceConfig.md)
 - [IRightsManagementServiceConstructorOptions](interfaces/IRightsManagementServiceConstructorOptions.md)
 
 ## Variables

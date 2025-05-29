@@ -15,11 +15,3 @@ The type of the Policy Administration Point (PAP) component.
 ```ts
 pap
 ```
-
-***
-
-### config?
-
-> `optional` **config**: [`IRightsManagementServiceConfig`](IRightsManagementServiceConfig.md)
-
-The configuration for the service.
