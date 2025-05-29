@@ -99,11 +99,3 @@ The prohibitions in the policy.
 > `optional` **obligation**: `IOdrlDuty`[]
 
 The obligations in the policy.
-
-***
-
-### nodeIdentity
-
-> **nodeIdentity**: `string`
-
-The identifier of the node that owns this policy.

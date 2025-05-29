@@ -13,7 +13,7 @@
 * The following workspace dependencies were updated
   * dependencies
     * @twin.org/rights-management-models bumped from 0.0.1-next.3 to 0.0.1-next.4
-    * @twin.org/rights-management-pap-entity-storage bumped from 0.0.1-next.3 to 0.0.1-next.4
+    * @twin.org/rights-management-pap-service bumped from 0.0.1-next.3 to 0.0.1-next.4
 
 ## [0.0.1-next.3](https://github.com/twinfoundation/rights-management/compare/rights-management-service-v0.0.1-next.2...rights-management-service-v0.0.1-next.3) (2025-05-28)
 
@@ -28,7 +28,7 @@
 * The following workspace dependencies were updated
   * dependencies
     * @twin.org/rights-management-models bumped from 0.0.1-next.2 to 0.0.1-next.3
-    * @twin.org/rights-management-pap-entity-storage bumped from 0.0.1-next.2 to 0.0.1-next.3
+    * @twin.org/rights-management-pap-service bumped from 0.0.1-next.2 to 0.0.1-next.3
 
 ## 0.0.1-next.1
 

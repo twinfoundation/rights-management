@@ -4,9 +4,9 @@
 /**
  * Options for the Policy Administration Point Component.
  */
-export interface IPolicyAdministrationPointComponentEntityStorageOptions {
+export interface IPolicyAdministrationPointServiceOptions {
 	/**
 	 * The entity storage component for storing policies.
 	 */
-	entityStorageType?: string;
+	odrlPolicyEntityStorageType?: string;
 }

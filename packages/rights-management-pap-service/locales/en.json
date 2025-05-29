@@ -1,6 +1,6 @@
 {
 	"error": {
-		"policyAdministrationPointComponentEntityStorage": {
+		"policyAdministrationPointService": {
 			"policyNotFound": "Policy not found with id: \"{notFoundId}\""
 		}
 	}

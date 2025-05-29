@@ -2,47 +2,30 @@
 // SPDX-License-Identifier: Apache-2.0.
 import { existsSync } from "node:fs";
 import { rm } from "node:fs/promises";
-import { ComponentFactory } from "@twin.org/core";
 import type { EntityCondition } from "@twin.org/entity";
 import type { MemoryEntityStorageConnector } from "@twin.org/entity-storage-connector-memory";
 import { EntityStorageConnectorFactory } from "@twin.org/entity-storage-models";
-import { EntityStorageService } from "@twin.org/entity-storage-service";
 import type { IOdrlPolicy } from "@twin.org/standards-w3c-odrl";
 import {
 	createTestPolicies,
 	SAMPLE_POLICY,
 	TEST_DIRECTORY_ROOT,
-	TEST_NODE_IDENTITY,
-	TEST_POLICY_ID,
-	TEST_USER_IDENTITY
+	TEST_POLICY_ID
 } from "./setupTestEnv";
 import type { OdrlPolicy } from "../src/entities/odrlPolicy";
-import { PolicyAdministrationPointComponentEntityStorage } from "../src/policyAdministrationPointComponentEntityStorage";
+import { PolicyAdministrationPointService } from "../src/policyAdministrationPointService";
 
 describe("rights-management-pap", () => {
-	let policyAdminPoint: PolicyAdministrationPointComponentEntityStorage;
+	let policyAdminPoint: PolicyAdministrationPointService;
 	let odrlPolicyEntityStorage: MemoryEntityStorageConnector<OdrlPolicy>;
 
 	beforeEach(() => {
 		odrlPolicyEntityStorage =
 			EntityStorageConnectorFactory.get<MemoryEntityStorageConnector<OdrlPolicy>>("odrl-policy");
 
-		const entityStorageService = new EntityStorageService<OdrlPolicy>({
-			entityStorageType: "odrl-policy",
-			config: {
-				includeNodeIdentity: false,
-				includeUserIdentity: false
-			}
+		policyAdminPoint = new PolicyAdministrationPointService({
+			odrlPolicyEntityStorageType: "odrl-policy"
 		});
-		ComponentFactory.register("odrl-policy", () => entityStorageService);
-
-		policyAdminPoint = new PolicyAdministrationPointComponentEntityStorage({
-			entityStorageType: "odrl-policy"
-		});
-	});
-
-	afterEach(() => {
-		ComponentFactory.unregister("odrl-policy");
 	});
 
 	afterAll(async () => {
@@ -52,7 +35,7 @@ describe("rights-management-pap", () => {
 	});
 
 	test("should store a policy in entity storage", async () => {
-		await policyAdminPoint.store(SAMPLE_POLICY, TEST_USER_IDENTITY, TEST_NODE_IDENTITY);
+		await policyAdminPoint.store(SAMPLE_POLICY);
 
 		const store = odrlPolicyEntityStorage.getStore();
 		expect(store).toBeDefined();
@@ -61,14 +44,9 @@ describe("rights-management-pap", () => {
 		const storedPolicy = store[0];
 		expect(storedPolicy).toBeDefined();
 		expect(storedPolicy.uid).toEqual(TEST_POLICY_ID);
-		expect(storedPolicy.nodeIdentity).toEqual(TEST_NODE_IDENTITY);
 		expect(storedPolicy.permission).toBeDefined();
 
-		const retrievedPolicy = await policyAdminPoint.retrieve(
-			TEST_POLICY_ID,
-			TEST_USER_IDENTITY,
-			TEST_NODE_IDENTITY
-		);
+		const retrievedPolicy = await policyAdminPoint.retrieve(TEST_POLICY_ID);
 
 		expect(retrievedPolicy).toBeDefined();
 		expect(retrievedPolicy.uid).toEqual(TEST_POLICY_ID);
@@ -78,13 +56,9 @@ describe("rights-management-pap", () => {
 	});
 
 	test("should retrieve a policy from entity storage", async () => {
-		await policyAdminPoint.store(SAMPLE_POLICY, TEST_USER_IDENTITY, TEST_NODE_IDENTITY);
+		await policyAdminPoint.store(SAMPLE_POLICY);
 
-		const retrievedPolicy = await policyAdminPoint.retrieve(
-			TEST_POLICY_ID,
-			TEST_USER_IDENTITY,
-			TEST_NODE_IDENTITY
-		);
+		const retrievedPolicy = await policyAdminPoint.retrieve(TEST_POLICY_ID);
 
 		expect(retrievedPolicy).toBeDefined();
 		expect(retrievedPolicy.uid).toEqual(TEST_POLICY_ID);
@@ -101,32 +75,24 @@ describe("rights-management-pap", () => {
 	});
 
 	test("should throw error when retrieving non-existent policy", async () => {
-		await expect(
-			policyAdminPoint.retrieve("non-existent-policy", TEST_USER_IDENTITY, TEST_NODE_IDENTITY)
-		).rejects.toThrow();
+		await expect(policyAdminPoint.retrieve("non-existent-policy")).rejects.toThrow();
 	});
 
 	test("should remove a policy from entity storage", async () => {
-		await policyAdminPoint.store(SAMPLE_POLICY, TEST_USER_IDENTITY, TEST_NODE_IDENTITY);
+		await policyAdminPoint.store(SAMPLE_POLICY);
 
 		let store = odrlPolicyEntityStorage.getStore();
 		expect(store.length).toEqual(1);
 
-		const retrievedPolicy = await policyAdminPoint.retrieve(
-			TEST_POLICY_ID,
-			TEST_USER_IDENTITY,
-			TEST_NODE_IDENTITY
-		);
+		const retrievedPolicy = await policyAdminPoint.retrieve(TEST_POLICY_ID);
 		expect(retrievedPolicy).toBeDefined();
 
-		await policyAdminPoint.remove(TEST_POLICY_ID, TEST_USER_IDENTITY, TEST_NODE_IDENTITY);
+		await policyAdminPoint.remove(TEST_POLICY_ID);
 
 		store = odrlPolicyEntityStorage.getStore();
 		expect(store.length).toEqual(0);
 
-		await expect(
-			policyAdminPoint.retrieve(TEST_POLICY_ID, TEST_USER_IDENTITY, TEST_NODE_IDENTITY)
-		).rejects.toThrow();
+		await expect(policyAdminPoint.retrieve(TEST_POLICY_ID)).rejects.toThrow();
 	});
 
 	test("should query policies without conditions", async () => {
@@ -135,13 +101,7 @@ describe("rights-management-pap", () => {
 		const store = odrlPolicyEntityStorage.getStore();
 		expect(store.length).toEqual(10);
 
-		const result = await policyAdminPoint.query(
-			undefined,
-			undefined,
-			undefined,
-			TEST_USER_IDENTITY,
-			TEST_NODE_IDENTITY
-		);
+		const result = await policyAdminPoint.query();
 
 		expect(result.policies).toBeDefined();
 		expect(result.policies.length).toEqual(10);
@@ -156,13 +116,7 @@ describe("rights-management-pap", () => {
 			comparison: "equals"
 		};
 
-		const result = await policyAdminPoint.query(
-			uidCondition,
-			undefined,
-			undefined,
-			TEST_USER_IDENTITY,
-			TEST_NODE_IDENTITY
-		);
+		const result = await policyAdminPoint.query(uidCondition);
 
 		expect(result.policies).toBeDefined();
 		expect(result.policies.length).toEqual(1);
@@ -179,13 +133,7 @@ describe("rights-management-pap", () => {
 			comparison: "equals"
 		};
 
-		const result = await policyAdminPoint.query(
-			uidCondition,
-			undefined,
-			undefined,
-			TEST_USER_IDENTITY,
-			TEST_NODE_IDENTITY
-		);
+		const result = await policyAdminPoint.query(uidCondition);
 
 		expect(result.policies).toBeDefined();
 		expect(result.policies.length).toEqual(0);
@@ -194,25 +142,13 @@ describe("rights-management-pap", () => {
 	test("should handle pagination with cursor", async () => {
 		await createTestPolicies(policyAdminPoint);
 
-		const result1 = await policyAdminPoint.query(
-			undefined,
-			undefined,
-			5,
-			TEST_USER_IDENTITY,
-			TEST_NODE_IDENTITY
-		);
+		const result1 = await policyAdminPoint.query(undefined, undefined, 5);
 
 		expect(result1.policies).toBeDefined();
 		expect(result1.policies.length).toEqual(5);
 		expect(result1.cursor).toBeDefined();
 
-		const result2 = await policyAdminPoint.query(
-			undefined,
-			result1.cursor,
-			5,
-			TEST_USER_IDENTITY,
-			TEST_NODE_IDENTITY
-		);
+		const result2 = await policyAdminPoint.query(undefined, result1.cursor, 5);
 
 		expect(result2.policies).toBeDefined();
 		expect(result2.policies.length).toEqual(5);
@@ -225,13 +161,7 @@ describe("rights-management-pap", () => {
 	test("should handle invalid cursor gracefully", async () => {
 		await createTestPolicies(policyAdminPoint);
 
-		const result = await policyAdminPoint.query(
-			undefined,
-			"invalid-cursor",
-			5,
-			TEST_USER_IDENTITY,
-			TEST_NODE_IDENTITY
-		);
+		const result = await policyAdminPoint.query(undefined, "invalid-cursor", 5);
 
 		expect(result.policies).toBeDefined();
 	});

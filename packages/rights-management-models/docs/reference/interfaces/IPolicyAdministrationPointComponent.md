@@ -12,7 +12,7 @@ Policy Management Point (PMP) when it handles requests from the Policy Decision 
 
 ### store()
 
-> **store**(`policy`, `userIdentity`, `nodeIdentity`): `Promise`\<`void`\>
+> **store**(`policy`): `Promise`\<`void`\>
 
 Store a policy.
 
@@ -24,18 +24,6 @@ Store a policy.
 
 The policy to store.
 
-##### userIdentity
-
-The identity of the user performing the operation.
-
-`undefined` | `string`
-
-##### nodeIdentity
-
-`string`
-
-The identity of the node the operation is performed on.
-
 #### Returns
 
 `Promise`\<`void`\>
@@ -46,7 +34,7 @@ Nothing.
 
 ### retrieve()
 
-> **retrieve**(`policyId`, `userIdentity`, `nodeIdentity`): `Promise`\<`IOdrlPolicy`\>
+> **retrieve**(`policyId`): `Promise`\<`IOdrlPolicy`\>
 
 Retrieve a policy.
 
@@ -58,18 +46,6 @@ Retrieve a policy.
 
 The id of the policy to retrieve.
 
-##### userIdentity
-
-The identity of the user performing the operation.
-
-`undefined` | `string`
-
-##### nodeIdentity
-
-`string`
-
-The identity of the node the operation is performed on.
-
 #### Returns
 
 `Promise`\<`IOdrlPolicy`\>
@@ -80,7 +56,7 @@ The policy.
 
 ### remove()
 
-> **remove**(`policyId`, `userIdentity`, `nodeIdentity`): `Promise`\<`void`\>
+> **remove**(`policyId`): `Promise`\<`void`\>
 
 Remove a policy.
 
@@ -92,18 +68,6 @@ Remove a policy.
 
 The id of the policy to remove.
 
-##### userIdentity
-
-The identity of the user performing the operation.
-
-`undefined` | `string`
-
-##### nodeIdentity
-
-`string`
-
-The identity of the node the operation is performed on.
-
 #### Returns
 
 `Promise`\<`void`\>
@@ -114,7 +78,7 @@ Nothing.
 
 ### query()
 
-> **query**(`conditions?`, `cursor?`, `pageSize?`, `userIdentity?`, `nodeIdentity?`): `Promise`\<\{ `cursor`: `string`; `policies`: `IOdrlPolicy`[]; \}\>
+> **query**(`conditions?`, `cursor?`, `pageSize?`): `Promise`\<\{ `cursor`: `string`; `policies`: `IOdrlPolicy`[]; \}\>
 
 Query the policies using the specified conditions.
 
@@ -137,18 +101,6 @@ The cursor to use for pagination.
 `number`
 
 The number of results to return per page.
-
-##### userIdentity?
-
-`string`
-
-The identity of the user performing the operation.
-
-##### nodeIdentity?
-
-`string`
-
-The identity of the node the operation is performed on.
 
 #### Returns
 

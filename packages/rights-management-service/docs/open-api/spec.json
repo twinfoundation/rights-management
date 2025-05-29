@@ -1014,22 +1014,33 @@
 				"type": "object",
 				"properties": {
 					"@base": {
-						"$ref": "#/components/schemas/JsonLdKeyword"
+						"type": [
+							"string",
+							"null"
+						]
 					},
 					"@direction": {
-						"$ref": "#/components/schemas/JsonLdKeyword"
+						"type": [
+							"string",
+							"null"
+						],
+						"enum": [
+							"ltr",
+							"rtl",
+							null
+						]
 					},
 					"@import": {
-						"$ref": "#/components/schemas/JsonLdKeyword"
+						"type": "string"
 					},
 					"@language": {
-						"$ref": "#/components/schemas/JsonLdKeyword"
+						"type": "string"
 					},
 					"@propagate": {
-						"$ref": "#/components/schemas/JsonLdKeyword"
+						"type": "boolean"
 					},
 					"@protected": {
-						"$ref": "#/components/schemas/JsonLdKeyword"
+						"type": "boolean"
 					},
 					"@type": {
 						"type": "object",
@@ -1039,7 +1050,7 @@
 								"const": "@set"
 							},
 							"@protected": {
-								"$ref": "#/components/schemas/JsonLdKeyword"
+								"type": "boolean"
 							}
 						},
 						"required": [
@@ -1048,10 +1059,14 @@
 						"additionalProperties": false
 					},
 					"@version": {
-						"$ref": "#/components/schemas/JsonLdKeyword"
+						"type": "string",
+						"const": "1.1"
 					},
 					"@vocab": {
-						"$ref": "#/components/schemas/JsonLdKeyword"
+						"type": [
+							"string",
+							"null"
+						]
 					}
 				},
 				"additionalProperties": {
@@ -1106,7 +1121,13 @@
 							"@id": {
 								"anyOf": [
 									{
-										"$ref": "#/components/schemas/JsonLdKeyword"
+										"type": "string"
+									},
+									{
+										"type": "array",
+										"items": {
+											"type": "string"
+										}
 									},
 									{
 										"type": "null"
@@ -1117,28 +1138,64 @@
 								"type": "string"
 							},
 							"@container": {
-								"$ref": "#/components/schemas/JsonLdKeyword"
+								"anyOf": [
+									{
+										"type": "string",
+										"const": "@list"
+									},
+									{
+										"type": "string",
+										"const": "@set"
+									},
+									{
+										"$ref": "#/components/schemas/JsonLdContainerType"
+									},
+									{
+										"type": "array",
+										"items": {
+											"anyOf": [
+												{
+													"type": "string",
+													"const": "@list"
+												},
+												{
+													"type": "string",
+													"const": "@set"
+												},
+												{
+													"$ref": "#/components/schemas/JsonLdContainerType"
+												}
+											]
+										}
+									},
+									{
+										"$ref": "#/components/schemas/JsonLdContainerTypeArray"
+									},
+									{
+										"type": "null"
+									}
+								]
 							},
 							"@type": {
 								"type": "string"
 							},
 							"@language": {
-								"$ref": "#/components/schemas/JsonLdKeyword"
+								"type": "string"
 							},
 							"@index": {
-								"$ref": "#/components/schemas/JsonLdKeyword"
+								"type": "string"
 							},
 							"@context": {
 								"$ref": "#/components/schemas/JsonLdContextDefinition"
 							},
 							"@prefix": {
-								"$ref": "#/components/schemas/JsonLdKeyword"
+								"type": "boolean"
 							},
 							"@propagate": {
-								"$ref": "#/components/schemas/JsonLdKeyword"
+								"type": "boolean"
 							},
 							"@protected": {
-								"$ref": "#/components/schemas/JsonLdKeyword"
+								"type": "boolean"
 							}
 						}
 					},
@@ -1147,7 +1204,7 @@
 						"additionalProperties": false,
 						"properties": {
 							"@reverse": {
-								"$ref": "#/components/schemas/JsonLdKeyword"
+								"type": "string"
 							},
 							"@container": {
 								"type": [
@@ -1164,22 +1221,22 @@
 								"type": "string"
 							},
 							"@language": {
-								"$ref": "#/components/schemas/JsonLdKeyword"
+								"type": "string"
 							},
 							"@index": {
-								"$ref": "#/components/schemas/JsonLdKeyword"
+								"type": "string"
 							},
 							"@context": {
 								"$ref": "#/components/schemas/JsonLdContextDefinition"
 							},
 							"@prefix": {
-								"$ref": "#/components/schemas/JsonLdKeyword"
+								"type": "boolean"
 							},
 							"@propagate": {
-								"$ref": "#/components/schemas/JsonLdKeyword"
+								"type": "boolean"
 							},
 							"@protected": {
-								"$ref": "#/components/schemas/JsonLdKeyword"
+								"type": "boolean"
 							}
 						},
 						"required": [
@@ -1206,23 +1263,13 @@
 						]
 					},
 					"@index": {
-						"type": "string"
+						"$ref": "#/components/schemas/JsonLdKeyword"
 					},
 					"@id": {
-						"anyOf": [
-							{
-								"type": "string"
-							},
-							{
-								"type": "array",
-								"items": {
-									"type": "string"
-								}
-							}
-						]
+						"$ref": "#/components/schemas/JsonLdKeyword"
 					},
 					"@context": {
-						"$ref": "#/components/schemas/JsonLdContextDefinitionRoot"
+						"$ref": "#/components/schemas/JsonLdKeyword"
 					}
 				},
 				"required": [
@@ -1575,20 +1622,10 @@
 				"type": "object",
 				"properties": {
 					"@list": {
-						"anyOf": [
-							{
-								"$ref": "#/components/schemas/JsonLdListOrSetItem"
-							},
-							{
-								"type": "array",
-								"items": {
-									"$ref": "#/components/schemas/JsonLdListOrSetItem"
-								}
-							}
-						]
+						"$ref": "#/components/schemas/JsonLdKeyword"
 					},
 					"@index": {
-						"type": "string"
+						"$ref": "#/components/schemas/JsonLdKeyword"
 					}
 				},
 				"required": [
@@ -1649,23 +1686,13 @@
 				},
 				"properties": {
 					"@context": {
-						"$ref": "#/components/schemas/JsonLdContextDefinitionRoot"
+						"$ref": "#/components/schemas/JsonLdKeyword"
 					},
 					"@id": {
-						"anyOf": [
-							{
-								"type": "string"
-							},
-							{
-								"type": "array",
-								"items": {
-									"type": "string"
-								}
-							}
-						]
+						"$ref": "#/components/schemas/JsonLdKeyword"
 					},
 					"@included": {
-						"$ref": "#/components/schemas/JsonLdIncludedBlock"
+						"$ref": "#/components/schemas/JsonLdKeyword"
 					},
 					"@graph": {
 						"anyOf": [
@@ -1696,12 +1723,12 @@
 					"@type": {
 						"anyOf": [
 							{
-								"type": "string"
+								"$ref": "#/components/schemas/JsonLdKeyword"
 							},
 							{
 								"type": "array",
 								"items": {
-									"type": "string"
+									"$ref": "#/components/schemas/JsonLdKeyword"
 								}
 							}
 						]
@@ -1709,11 +1736,11 @@
 					"@reverse": {
 						"type": "object",
 						"additionalProperties": {
-							"type": "string"
+							"$ref": "#/components/schemas/JsonLdKeyword"
 						}
 					},
 					"@index": {
-						"type": "string"
+						"$ref": "#/components/schemas/JsonLdKeyword"
 					}
 				},
 				"description": "A node object represents zero or more properties of a node in the graph serialized by the JSON-LD document."
@@ -1754,20 +1781,10 @@
 				"type": "object",
 				"properties": {
 					"@set": {
-						"anyOf": [
-							{
-								"$ref": "#/components/schemas/JsonLdListOrSetItem"
-							},
-							{
-								"type": "array",
-								"items": {
-									"$ref": "#/components/schemas/JsonLdListOrSetItem"
-								}
-							}
-						]
+						"$ref": "#/components/schemas/JsonLdKeyword"
 					},
 					"@index": {
-						"type": "string"
+						"$ref": "#/components/schemas/JsonLdKeyword"
 					}
 				},
 				"required": [
@@ -2043,14 +2060,14 @@
 				"type": "object",
 				"properties": {
 					"@context": {
-						"$ref": "#/components/schemas/JsonLdContextDefinitionRoot"
+						"$ref": "#/components/schemas/JsonLdKeyword"
 					},
 					"@id": {
 						"type": "string",
 						"description": "Direct action identifier. Used in simple action references."
 					},
 					"@included": {
-						"$ref": "#/components/schemas/JsonLdIncludedBlock"
+						"$ref": "#/components/schemas/JsonLdKeyword"
 					},
 					"@graph": {
 						"anyOf": [
@@ -2081,12 +2098,12 @@
 					"@type": {
 						"anyOf": [
 							{
-								"type": "string"
+								"$ref": "#/components/schemas/JsonLdKeyword"
 							},
 							{
 								"type": "array",
 								"items": {
-									"type": "string"
+									"$ref": "#/components/schemas/JsonLdKeyword"
 								}
 							}
 						]
@@ -2094,11 +2111,11 @@
 					"@reverse": {
 						"type": "object",
 						"additionalProperties": {
-							"type": "string"
+							"$ref": "#/components/schemas/JsonLdKeyword"
 						}
 					},
 					"@index": {
-						"type": "string"
+						"$ref": "#/components/schemas/JsonLdKeyword"
 					},
 					"rdf:value": {
 						"type": "object",
@@ -2179,23 +2196,13 @@
 				"type": "object",
 				"properties": {
 					"@context": {
-						"$ref": "#/components/schemas/JsonLdContextDefinitionRoot"
+						"$ref": "#/components/schemas/JsonLdKeyword"
 					},
 					"@id": {
-						"anyOf": [
-							{
-								"type": "string"
-							},
-							{
-								"type": "array",
-								"items": {
-									"type": "string"
-								}
-							}
-						]
+						"$ref": "#/components/schemas/JsonLdKeyword"
 					},
 					"@included": {
-						"$ref": "#/components/schemas/JsonLdIncludedBlock"
+						"$ref": "#/components/schemas/JsonLdKeyword"
 					},
 					"@graph": {
 						"anyOf": [
@@ -2230,11 +2237,11 @@
 					"@reverse": {
 						"type": "object",
 						"additionalProperties": {
-							"type": "string"
+							"$ref": "#/components/schemas/JsonLdKeyword"
 						}
 					},
 					"@index": {
-						"type": "string"
+						"$ref": "#/components/schemas/JsonLdKeyword"
 					},
 					"uid": {
 						"type": "string",
@@ -2287,23 +2294,13 @@
 				"type": "object",
 				"properties": {
 					"@context": {
-						"$ref": "#/components/schemas/JsonLdContextDefinitionRoot"
+						"$ref": "#/components/schemas/JsonLdKeyword"
 					},
 					"@id": {
-						"anyOf": [
-							{
-								"type": "string"
-							},
-							{
-								"type": "array",
-								"items": {
-									"type": "string"
-								}
-							}
-						]
+						"$ref": "#/components/schemas/JsonLdKeyword"
 					},
 					"@included": {
-						"$ref": "#/components/schemas/JsonLdIncludedBlock"
+						"$ref": "#/components/schemas/JsonLdKeyword"
 					},
 					"@graph": {
 						"anyOf": [
@@ -2338,11 +2335,11 @@
 					"@reverse": {
 						"type": "object",
 						"additionalProperties": {
-							"type": "string"
+							"$ref": "#/components/schemas/JsonLdKeyword"
 						}
 					},
 					"@index": {
-						"type": "string"
+						"$ref": "#/components/schemas/JsonLdKeyword"
 					},
 					"uid": {
 						"type": "string",
@@ -2409,23 +2406,13 @@
 				"type": "object",
 				"properties": {
 					"@context": {
-						"$ref": "#/components/schemas/JsonLdContextDefinitionRoot"
+						"$ref": "#/components/schemas/JsonLdKeyword"
 					},
 					"@id": {
-						"anyOf": [
-							{
-								"type": "string"
-							},
-							{
-								"type": "array",
-								"items": {
-									"type": "string"
-								}
-							}
-						]
+						"$ref": "#/components/schemas/JsonLdKeyword"
 					},
 					"@included": {
-						"$ref": "#/components/schemas/JsonLdIncludedBlock"
+						"$ref": "#/components/schemas/JsonLdKeyword"
 					},
 					"@graph": {
 						"anyOf": [
@@ -2456,12 +2443,12 @@
 					"@type": {
 						"anyOf": [
 							{
-								"type": "string"
+								"$ref": "#/components/schemas/JsonLdKeyword"
 							},
 							{
 								"type": "array",
 								"items": {
-									"type": "string"
+									"$ref": "#/components/schemas/JsonLdKeyword"
 								}
 							}
 						]
@@ -2469,11 +2456,11 @@
 					"@reverse": {
 						"type": "object",
 						"additionalProperties": {
-							"type": "string"
+							"$ref": "#/components/schemas/JsonLdKeyword"
 						}
 					},
 					"@index": {
-						"type": "string"
+						"$ref": "#/components/schemas/JsonLdKeyword"
 					},
 					"uid": {
 						"type": "string",
@@ -2574,27 +2561,71 @@
 				},
 				"description": "Interface for ODRL Constraints."
 			},
+			"OdrlContextType": {
+				"anyOf": [
+					{
+						"type": "string",
+						"const": "https://www.w3.org/ns/odrl.jsonld"
+					},
+					{
+						"type": "array",
+						"minItems": 1,
+						"items": [
+							{
+								"type": "string",
+								"const": "https://www.w3.org/ns/odrl.jsonld"
+							}
+						],
+						"additionalItems": {
+							"$ref": "#/components/schemas/JsonLdContextDefinitionElement"
+						}
+					},
+					{
+						"type": "array",
+						"minItems": 2,
+						"items": [
+							{
+								"type": "string",
+								"const": "https://www.w3.org/ns/odrl.jsonld"
+							},
+							{
+								"$ref": "#/components/schemas/JsonLdContextDefinitionElement"
+							}
+						],
+						"additionalItems": {
+							"$ref": "#/components/schemas/JsonLdContextDefinitionElement"
+						}
+					},
+					{
+						"type": "array",
+						"minItems": 2,
+						"items": [
+							{
+								"$ref": "#/components/schemas/JsonLdContextDefinitionElement"
+							},
+							{
+								"type": "string",
+								"const": "https://www.w3.org/ns/odrl.jsonld"
+							}
+						],
+						"additionalItems": {
+							"$ref": "#/components/schemas/JsonLdContextDefinitionElement"
+						}
+					}
+				],
+				"description": "The ODRL JSON-LD context type."
+			},
 			"OdrlDuty": {
 				"type": "object",
 				"properties": {
 					"@context": {
-						"$ref": "#/components/schemas/JsonLdContextDefinitionRoot"
+						"$ref": "#/components/schemas/JsonLdKeyword"
 					},
 					"@id": {
-						"anyOf": [
-							{
-								"type": "string"
-							},
-							{
-								"type": "array",
-								"items": {
-									"type": "string"
-								}
-							}
-						]
+						"$ref": "#/components/schemas/JsonLdKeyword"
 					},
 					"@included": {
-						"$ref": "#/components/schemas/JsonLdIncludedBlock"
+						"$ref": "#/components/schemas/JsonLdKeyword"
 					},
 					"@graph": {
 						"anyOf": [
@@ -2625,12 +2656,12 @@
 					"@type": {
 						"anyOf": [
 							{
-								"type": "string"
+								"$ref": "#/components/schemas/JsonLdKeyword"
 							},
 							{
 								"type": "array",
 								"items": {
-									"type": "string"
+									"$ref": "#/components/schemas/JsonLdKeyword"
 								}
 							}
 						]
@@ -2638,11 +2669,11 @@
 					"@reverse": {
 						"type": "object",
 						"additionalProperties": {
-							"type": "string"
+							"$ref": "#/components/schemas/JsonLdKeyword"
 						}
 					},
 					"@index": {
-						"type": "string"
+						"$ref": "#/components/schemas/JsonLdKeyword"
 					},
 					"uid": {
 						"type": "string",
@@ -2787,23 +2818,13 @@
 				"type": "object",
 				"properties": {
 					"@context": {
-						"$ref": "#/components/schemas/JsonLdContextDefinitionRoot"
+						"$ref": "#/components/schemas/JsonLdKeyword"
 					},
 					"@id": {
-						"anyOf": [
-							{
-								"type": "string"
-							},
-							{
-								"type": "array",
-								"items": {
-									"type": "string"
-								}
-							}
-						]
+						"$ref": "#/components/schemas/JsonLdKeyword"
 					},
 					"@included": {
-						"$ref": "#/components/schemas/JsonLdIncludedBlock"
+						"$ref": "#/components/schemas/JsonLdKeyword"
 					},
 					"@graph": {
 						"anyOf": [
@@ -2834,12 +2855,12 @@
 					"@type": {
 						"anyOf": [
 							{
-								"type": "string"
+								"$ref": "#/components/schemas/JsonLdKeyword"
 							},
 							{
 								"type": "array",
 								"items": {
-									"type": "string"
+									"$ref": "#/components/schemas/JsonLdKeyword"
 								}
 							}
 						]
@@ -2847,11 +2868,11 @@
 					"@reverse": {
 						"type": "object",
 						"additionalProperties": {
-							"type": "string"
+							"$ref": "#/components/schemas/JsonLdKeyword"
 						}
 					},
 					"@index": {
-						"type": "string"
+						"$ref": "#/components/schemas/JsonLdKeyword"
 					},
 					"uid": {
 						"type": "string",
@@ -2989,23 +3010,13 @@
 				"type": "object",
 				"properties": {
 					"@context": {
-						"$ref": "#/components/schemas/JsonLdContextDefinitionRoot"
+						"$ref": "#/components/schemas/JsonLdKeyword"
 					},
 					"@id": {
-						"anyOf": [
-							{
-								"type": "string"
-							},
-							{
-								"type": "array",
-								"items": {
-									"type": "string"
-								}
-							}
-						]
+						"$ref": "#/components/schemas/JsonLdKeyword"
 					},
 					"@included": {
-						"$ref": "#/components/schemas/JsonLdIncludedBlock"
+						"$ref": "#/components/schemas/JsonLdKeyword"
 					},
 					"@graph": {
 						"anyOf": [
@@ -3050,11 +3061,11 @@
 					"@reverse": {
 						"type": "object",
 						"additionalProperties": {
-							"type": "string"
+							"$ref": "#/components/schemas/JsonLdKeyword"
 						}
 					},
 					"@index": {
-						"type": "string"
+						"$ref": "#/components/schemas/JsonLdKeyword"
 					},
 					"uid": {
 						"type": "string",
@@ -3111,23 +3122,13 @@
 				"type": "object",
 				"properties": {
 					"@context": {
-						"$ref": "#/components/schemas/JsonLdContextDefinitionRoot"
+						"$ref": "#/components/schemas/JsonLdKeyword"
 					},
 					"@id": {
-						"anyOf": [
-							{
-								"type": "string"
-							},
-							{
-								"type": "array",
-								"items": {
-									"type": "string"
-								}
-							}
-						]
+						"$ref": "#/components/schemas/JsonLdKeyword"
 					},
 					"@included": {
-						"$ref": "#/components/schemas/JsonLdIncludedBlock"
+						"$ref": "#/components/schemas/JsonLdKeyword"
 					},
 					"@graph": {
 						"anyOf": [
@@ -3172,11 +3173,11 @@
 					"@reverse": {
 						"type": "object",
 						"additionalProperties": {
-							"type": "string"
+							"$ref": "#/components/schemas/JsonLdKeyword"
 						}
 					},
 					"@index": {
-						"type": "string"
+						"$ref": "#/components/schemas/JsonLdKeyword"
 					},
 					"uid": {
 						"type": "string",
@@ -3247,23 +3248,13 @@
 				"type": "object",
 				"properties": {
 					"@context": {
-						"$ref": "#/components/schemas/JsonLdContextDefinitionRoot"
+						"$ref": "#/components/schemas/JsonLdKeyword"
 					},
 					"@id": {
-						"anyOf": [
-							{
-								"type": "string"
-							},
-							{
-								"type": "array",
-								"items": {
-									"type": "string"
-								}
-							}
-						]
+						"$ref": "#/components/schemas/JsonLdKeyword"
 					},
 					"@included": {
-						"$ref": "#/components/schemas/JsonLdIncludedBlock"
+						"$ref": "#/components/schemas/JsonLdKeyword"
 					},
 					"@graph": {
 						"anyOf": [
@@ -3294,12 +3285,12 @@
 					"@type": {
 						"anyOf": [
 							{
-								"type": "string"
+								"$ref": "#/components/schemas/JsonLdKeyword"
 							},
 							{
 								"type": "array",
 								"items": {
-									"type": "string"
+									"$ref": "#/components/schemas/JsonLdKeyword"
 								}
 							}
 						]
@@ -3307,11 +3298,11 @@
 					"@reverse": {
 						"type": "object",
 						"additionalProperties": {
-							"type": "string"
+							"$ref": "#/components/schemas/JsonLdKeyword"
 						}
 					},
 					"@index": {
-						"type": "string"
+						"$ref": "#/components/schemas/JsonLdKeyword"
 					},
 					"uid": {
 						"type": "string",
@@ -3437,42 +3428,13 @@
 				"type": "object",
 				"properties": {
 					"@context": {
-						"anyOf": [
-							{
-								"type": "string",
-								"const": "https://www.w3.org/ns/odrl.jsonld"
-							},
-							{
-								"type": "array",
-								"minItems": 1,
-								"items": [
-									{
-										"type": "string",
-										"const": "https://www.w3.org/ns/odrl.jsonld"
-									}
-								],
-								"additionalItems": {
-									"$ref": "#/components/schemas/JsonLdContextDefinitionElement"
-								}
-							}
-						],
-						"description": "The context for the policy. Must include \"https://www.w3.org/ns/odrl.jsonld\""
+						"$ref": "#/components/schemas/OdrlContextType"
 					},
 					"@id": {
-						"anyOf": [
-							{
-								"type": "string"
-							},
-							{
-								"type": "array",
-								"items": {
-									"type": "string"
-								}
-							}
-						]
+						"$ref": "#/components/schemas/JsonLdKeyword"
 					},
 					"@included": {
-						"$ref": "#/components/schemas/JsonLdIncludedBlock"
+						"$ref": "#/components/schemas/JsonLdKeyword"
 					},
 					"@graph": {
 						"anyOf": [
@@ -3506,11 +3468,11 @@
 					"@reverse": {
 						"type": "object",
 						"additionalProperties": {
-							"type": "string"
+							"$ref": "#/components/schemas/JsonLdKeyword"
 						}
 					},
 					"@index": {
-						"type": "string"
+						"$ref": "#/components/schemas/JsonLdKeyword"
 					},
 					"uid": {
 						"type": "string",
@@ -3675,23 +3637,13 @@
 				"type": "object",
 				"properties": {
 					"@context": {
-						"$ref": "#/components/schemas/JsonLdContextDefinitionRoot"
+						"$ref": "#/components/schemas/JsonLdKeyword"
 					},
 					"@id": {
-						"anyOf": [
-							{
-								"type": "string"
-							},
-							{
-								"type": "array",
-								"items": {
-									"type": "string"
-								}
-							}
-						]
+						"$ref": "#/components/schemas/JsonLdKeyword"
 					},
 					"@included": {
-						"$ref": "#/components/schemas/JsonLdIncludedBlock"
+						"$ref": "#/components/schemas/JsonLdKeyword"
 					},
 					"@graph": {
 						"anyOf": [
@@ -3722,12 +3674,12 @@
 					"@type": {
 						"anyOf": [
 							{
-								"type": "string"
+								"$ref": "#/components/schemas/JsonLdKeyword"
 							},
 							{
 								"type": "array",
 								"items": {
-									"type": "string"
+									"$ref": "#/components/schemas/JsonLdKeyword"
 								}
 							}
 						]
@@ -3735,11 +3687,11 @@
 					"@reverse": {
 						"type": "object",
 						"additionalProperties": {
-							"type": "string"
+							"$ref": "#/components/schemas/JsonLdKeyword"
 						}
 					},
 					"@index": {
-						"type": "string"
+						"$ref": "#/components/schemas/JsonLdKeyword"
 					},
 					"uid": {
 						"type": "string",

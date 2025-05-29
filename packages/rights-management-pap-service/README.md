@@ -1,11 +1,11 @@
-# TWIN Rights Management Policy Administration Point using Entity Storage
+# TWIN Rights Management Policy Administration Service
 
-Policy administration point implementation using entity storage.
+Policy administration point implementation implementation.
 
 ## Installation
 
 ```shell
-npm install @twin.org/rights-management-pap-entity-storage
+npm install @twin.org/rights-management-pap-service
 ```
 
 ## Examples

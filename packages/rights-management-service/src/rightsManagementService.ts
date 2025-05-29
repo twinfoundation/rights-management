@@ -1,14 +1,12 @@
 // Copyright 2024 IOTA Stiftung.
 // SPDX-License-Identifier: Apache-2.0.
-import { HttpParameterHelper } from "@twin.org/api-models";
 import { ComponentFactory, GeneralError, Guards, Is } from "@twin.org/core";
 import type { EntityCondition } from "@twin.org/entity";
 import { nameof } from "@twin.org/nameof";
 import type {
-	IRightsManagementComponent,
-	IPolicyAdministrationPointComponent
+	IPolicyAdministrationPointComponent,
+	IRightsManagementComponent
 } from "@twin.org/rights-management-models";
-import { PolicyAdministrationPointComponentEntityStorage } from "@twin.org/rights-management-pap-entity-storage";
 import type { IOdrlPolicy } from "@twin.org/standards-w3c-odrl";
 import type { IRightsManagementServiceConstructorOptions } from "./models/IRightsManagementServiceConstructorOptions";
 
@@ -38,34 +36,21 @@ export class RightsManagementService implements IRightsManagementComponent {
 	 * @param options The options for the service.
 	 */
 	constructor(options?: IRightsManagementServiceConstructorOptions) {
-		// Initialize PAP component
-		const papNamespace =
-			options?.config?.papNamespace ?? PolicyAdministrationPointComponentEntityStorage.NAMESPACE;
-
-		// Get the component from the factory
-		this._papComponent = ComponentFactory.get<IPolicyAdministrationPointComponent>(papNamespace);
+		this._papComponent = ComponentFactory.get<IPolicyAdministrationPointComponent>(
+			options?.papComponentType ?? "pap"
+		);
 	}
 
 	/**
 	 * PAP: Store a policy.
 	 * @param policy The policy to store.
-	 * @param userIdentity The identity of the user performing the operation.
-	 * @param nodeIdentity The identity of the node the operation is performed on.
 	 * @returns Nothing.
 	 */
-	public async papStore(
-		policy: IOdrlPolicy,
-		userIdentity: string | undefined,
-		nodeIdentity: string
-	): Promise<void> {
+	public async papStore(policy: IOdrlPolicy): Promise<void> {
 		try {
 			Guards.object(this.CLASS_NAME, nameof(policy), policy);
-			Guards.stringValue(this.CLASS_NAME, nameof(nodeIdentity), nodeIdentity);
-			if (userIdentity !== undefined) {
-				Guards.stringValue(this.CLASS_NAME, nameof(userIdentity), userIdentity);
-			}
 
-			await this._papComponent.store(policy, userIdentity, nodeIdentity);
+			await this._papComponent.store(policy);
 		} catch (error) {
 			throw new GeneralError(this.CLASS_NAME, "papStoreFailed", undefined, error);
 		}
@@ -74,23 +59,13 @@ export class RightsManagementService implements IRightsManagementComponent {
 	/**
 	 * PAP: Retrieve a policy.
 	 * @param policyId The id of the policy to retrieve.
-	 * @param userIdentity The identity of the user performing the operation.
-	 * @param nodeIdentity The identity of the node the operation is performed on.
 	 * @returns The policy.
 	 */
-	public async papRetrieve(
-		policyId: string,
-		userIdentity: string | undefined,
-		nodeIdentity: string
-	): Promise<IOdrlPolicy> {
+	public async papRetrieve(policyId: string): Promise<IOdrlPolicy> {
 		try {
 			Guards.stringValue(this.CLASS_NAME, nameof(policyId), policyId);
-			Guards.stringValue(this.CLASS_NAME, nameof(nodeIdentity), nodeIdentity);
-			if (userIdentity !== undefined) {
-				Guards.stringValue(this.CLASS_NAME, nameof(userIdentity), userIdentity);
-			}
 
-			const policy = await this._papComponent.retrieve(policyId, userIdentity, nodeIdentity);
+			const policy = await this._papComponent.retrieve(policyId);
 			return policy;
 		} catch (error) {
 			throw new GeneralError(this.CLASS_NAME, "papRetrieveFailed", undefined, error);
@@ -100,23 +75,13 @@ export class RightsManagementService implements IRightsManagementComponent {
 	/**
 	 * PAP: Remove a policy.
 	 * @param policyId The id of the policy to remove.
-	 * @param userIdentity The identity of the user performing the operation.
-	 * @param nodeIdentity The identity of the node the operation is performed on.
 	 * @returns Nothing.
 	 */
-	public async papRemove(
-		policyId: string,
-		userIdentity: string | undefined,
-		nodeIdentity: string
-	): Promise<void> {
+	public async papRemove(policyId: string): Promise<void> {
 		try {
 			Guards.stringValue(this.CLASS_NAME, nameof(policyId), policyId);
-			Guards.stringValue(this.CLASS_NAME, nameof(nodeIdentity), nodeIdentity);
-			if (userIdentity !== undefined) {
-				Guards.stringValue(this.CLASS_NAME, nameof(userIdentity), userIdentity);
-			}
 
-			await this._papComponent.remove(policyId, userIdentity, nodeIdentity);
+			await this._papComponent.remove(policyId);
 		} catch (error) {
 			throw new GeneralError(this.CLASS_NAME, "papRemoveFailed", undefined, error);
 		}
@@ -127,49 +92,28 @@ export class RightsManagementService implements IRightsManagementComponent {
 	 * @param conditions The conditions to use for the query.
 	 * @param cursor The cursor to use for pagination.
 	 * @param pageSize The number of results to return per page.
-	 * @param userIdentity The identity of the user performing the operation.
-	 * @param nodeIdentity The identity of the node the operation is performed on.
 	 * @returns Cursor for next page of results and the policies matching the query.
 	 */
 	public async papQuery(
 		conditions?: EntityCondition<IOdrlPolicy>,
 		cursor?: string,
-		pageSize?: number,
-		userIdentity?: string,
-		nodeIdentity?: string
+		pageSize?: number
 	): Promise<{
 		cursor?: string;
 		policies: IOdrlPolicy[];
 	}> {
 		try {
-			Guards.stringValue(this.CLASS_NAME, nameof(nodeIdentity), nodeIdentity);
-			if (conditions !== undefined) {
-				Guards.stringValue(this.CLASS_NAME, nameof(conditions), conditions);
+			if (!Is.empty(conditions)) {
+				Guards.object(this.CLASS_NAME, nameof(conditions), conditions);
 			}
-			if (cursor !== undefined) {
+			if (!Is.empty(cursor)) {
 				Guards.stringValue(this.CLASS_NAME, nameof(cursor), cursor);
 			}
-			if (pageSize !== undefined) {
-				Guards.number(this.CLASS_NAME, nameof(pageSize), pageSize);
-			}
-			if (userIdentity !== undefined) {
-				Guards.stringValue(this.CLASS_NAME, nameof(userIdentity), userIdentity);
+			if (!Is.empty(pageSize)) {
+				Guards.integer(this.CLASS_NAME, nameof(pageSize), pageSize);
 			}
 
-			let conditionsObj: EntityCondition<IOdrlPolicy> | undefined;
-			if (conditions) {
-				conditionsObj = HttpParameterHelper.objectFromString(conditions);
-				if (Is.object(conditionsObj)) {
-					conditionsObj = conditionsObj as unknown as EntityCondition<IOdrlPolicy>;
-				}
-			}
-			const result = await this._papComponent.query(
-				conditionsObj,
-				cursor,
-				pageSize,
-				userIdentity,
-				nodeIdentity
-			);
+			const result = await this._papComponent.query(conditions, cursor, pageSize);
 			return result;
 		} catch (error) {
 			throw new GeneralError(this.CLASS_NAME, "papQueryFailed", undefined, error);

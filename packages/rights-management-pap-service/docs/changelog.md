@@ -1,6 +1,6 @@
-# @twin.org/rights-management-pap - Changelog
+# @twin.org/rights-management-pap-service - Changelog
 
-## [0.0.1-next.4](https://github.com/twinfoundation/rights-management/compare/rights-management-pap-entity-storage-v0.0.1-next.3...rights-management-pap-entity-storage-v0.0.1-next.4) (2025-05-28)
+## [0.0.1-next.4](https://github.com/twinfoundation/rights-management/compare/rights-management-pap-service-v0.0.1-next.3...rights-management-pap-service-v0.0.1-next.4) (2025-05-28)
 
 
 ### Bug Fixes
@@ -14,7 +14,7 @@
   * dependencies
     * @twin.org/rights-management-models bumped from 0.0.1-next.3 to 0.0.1-next.4
 
-## [0.0.1-next.3](https://github.com/twinfoundation/rights-management/compare/rights-management-pap-entity-storage-v0.0.1-next.2...rights-management-pap-entity-storage-v0.0.1-next.3) (2025-05-28)
+## [0.0.1-next.3](https://github.com/twinfoundation/rights-management/compare/rights-management-pap-service-v0.0.1-next.2...rights-management-pap-service-v0.0.1-next.3) (2025-05-28)
 
 
 ### Features

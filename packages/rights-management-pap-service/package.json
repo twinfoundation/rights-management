@@ -1,11 +1,11 @@
 {
-	"name": "@twin.org/rights-management-pap-entity-storage",
+	"name": "@twin.org/rights-management-pap-service",
 	"version": "0.0.1-next.4",
-	"description": "Policy administration point implementation with entity storage",
+	"description": "Policy administration point implementation",
 	"repository": {
 		"type": "git",
 		"url": "git+https://github.com/twinfoundation/rights-management.git",
-		"directory": "packages/rights-management-pap-entity-storage"
+		"directory": "packages/rights-management-pap-service"
 	},
 	"author": "cornel.filip@iota.org; adrian.sanchez.sequeira@iota.org",
 	"license": "Apache-2.0",
@@ -39,13 +39,12 @@
 		"@twin.org/nameof": "next"
 	},
 	"devDependencies": {
+		"@twin.org/entity-storage-connector-memory": "next",
 		"@twin.org/nameof-transformer": "next",
 		"@twin.org/nameof-vitest-plugin": "next",
 		"@rollup/plugin-json": "6.1.0",
 		"@vitest/coverage-v8": "3.1.1",
 		"copyfiles": "2.4.1",
-		"@twin.org/entity-storage-connector-memory": "next",
-		"@twin.org/entity-storage-service": "next",
 		"dotenv": "16.5.0",
 		"nodemon": "3.1.9",
 		"rimraf": "6.0.1",

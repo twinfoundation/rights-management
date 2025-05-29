@@ -7,13 +7,11 @@ import { OdrlPolicy } from "../entities/odrlPolicy";
 /**
  * Converts an IOdrlPolicy to an OdrlPolicy for storage.
  * @param policy The policy to convert.
- * @param nodeIdentity The identity of the node that owns this policy.
  * @returns The converted policy.
  */
-export function convertToStoragePolicy(policy: IOdrlPolicy, nodeIdentity: string): OdrlPolicy {
+export function convertToStoragePolicy(policy: IOdrlPolicy): OdrlPolicy {
 	const storagePolicy = new OdrlPolicy();
 	storagePolicy.uid = policy.uid;
-	storagePolicy.nodeIdentity = nodeIdentity;
 	storagePolicy["@type"] = policy["@type"];
 
 	storagePolicy.profile = policy.profile;

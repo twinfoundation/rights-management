@@ -83,10 +83,4 @@ export class OdrlPolicy {
 	 */
 	@property({ type: "array", optional: true })
 	public obligation?: IOdrlDuty[];
-
-	/**
-	 * The identifier of the node that owns this policy.
-	 */
-	@property({ type: "string", isSecondary: true })
-	public nodeIdentity!: string;
 }

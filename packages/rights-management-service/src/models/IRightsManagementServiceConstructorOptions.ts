@@ -7,6 +7,12 @@ import type { IRightsManagementServiceConfig } from "./IRightsManagementServiceC
  */
 export interface IRightsManagementServiceConstructorOptions {
 	/**
+	 * The type of the Policy Administration Point (PAP) component.
+	 * @default pap
+	 */
+	papComponentType?: string;
+
+	/**
 	 * The configuration for the service.
 	 */
 	config?: IRightsManagementServiceConfig;

@@ -14,8 +14,8 @@
 			"changelog-path": "docs/changelog.md",
 			"extra-files": ["src/index.ts"]
 		},
-		"packages/rights-management-pap-entity-storage": {
-			"package-name": "rights-management-pap-entity-storage",
+		"packages/rights-management-pap-service": {
+			"package-name": "rights-management-pap-service",
 			"changelog-path": "docs/changelog.md",
 			"extra-files": ["src/index.ts"]
 		},
@@ -37,7 +37,7 @@
 			"groupName": "repo",
 			"components": [
 				"rights-management-models",
-				"rights-management-pap-entity-storage",
+				"rights-management-pap-service",
 				"rights-management-service",
 				"rights-management-rest-client"
 			]

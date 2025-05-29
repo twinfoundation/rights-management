@@ -247,11 +247,7 @@ export async function papStore(
 	const component = ComponentFactory.get<IRightsManagementComponent>(componentName);
 
 	const policy = request.body.policy;
-	await component.papStore(
-		policy,
-		httpRequestContext.userIdentity,
-		httpRequestContext.nodeIdentity
-	);
+	await component.papStore(policy);
 
 	return {
 		statusCode: HttpStatusCode.created,
@@ -287,11 +283,7 @@ export async function papRetrieve(
 	);
 
 	const component = ComponentFactory.get<IRightsManagementComponent>(componentName);
-	const policy = await component.papRetrieve(
-		request.pathParams.id,
-		httpRequestContext.userIdentity,
-		httpRequestContext.nodeIdentity
-	);
+	const policy = await component.papRetrieve(request.pathParams.id);
 
 	return {
 		body: policy
@@ -317,18 +309,9 @@ export async function papRemove(
 		request.pathParams
 	);
 	Guards.stringValue(ROUTES_SOURCE, nameof(request.pathParams.id), request.pathParams.id);
-	Guards.stringValue(
-		ROUTES_SOURCE,
-		nameof(httpRequestContext.nodeIdentity),
-		httpRequestContext.nodeIdentity
-	);
 
 	const component = ComponentFactory.get<IRightsManagementComponent>(componentName);
-	await component.papRemove(
-		request.pathParams.id,
-		httpRequestContext.userIdentity,
-		httpRequestContext.nodeIdentity
-	);
+	await component.papRemove(request.pathParams.id);
 
 	return {
 		statusCode: HttpStatusCode.noContent
@@ -348,23 +331,12 @@ export async function papQuery(
 	request: IPapQueryRequest
 ): Promise<IPapQueryResponse> {
 	Guards.object<IPapQueryRequest>(ROUTES_SOURCE, nameof(request), request);
-	Guards.stringValue(
-		ROUTES_SOURCE,
-		nameof(httpRequestContext.nodeIdentity),
-		httpRequestContext.nodeIdentity
-	);
-
-	const queryParams = request.query || {};
-	const cursor = queryParams.cursor;
-	const pageSize = Coerce.number(queryParams.pageSize);
 
 	const component = ComponentFactory.get<IRightsManagementComponent>(componentName);
 	const result = await component.papQuery(
 		HttpParameterHelper.objectFromString(request.query?.conditions),
-		cursor,
-		pageSize,
-		httpRequestContext.userIdentity,
-		httpRequestContext.nodeIdentity
+		request.query?.cursor,
+		Coerce.integer(request.query?.pageSize)
 	);
 
 	return {
