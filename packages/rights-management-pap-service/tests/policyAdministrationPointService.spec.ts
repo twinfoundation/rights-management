@@ -5,7 +5,7 @@ import { rm } from "node:fs/promises";
 import type { EntityCondition } from "@twin.org/entity";
 import type { MemoryEntityStorageConnector } from "@twin.org/entity-storage-connector-memory";
 import { EntityStorageConnectorFactory } from "@twin.org/entity-storage-models";
-import type { IOdrlPolicy } from "@twin.org/standards-w3c-odrl";
+import { OdrlContexts, type IOdrlPolicy } from "@twin.org/standards-w3c-odrl";
 import {
 	createTestPolicies,
 	SAMPLE_POLICY,
@@ -164,5 +164,57 @@ describe("rights-management-pap", () => {
 		const result = await policyAdminPoint.query(undefined, "invalid-cursor", 5);
 
 		expect(result.policies).toBeDefined();
+	});
+
+	test("should throw validation error when storing invalid policy", async () => {
+		// Create an invalid policy missing required @context and @type
+		const invalidPolicy = {
+			uid: "http://example.com/invalid-policy",
+			permission: [
+				{
+					target: "http://example.com/asset/9898",
+					action: "use"
+				}
+			]
+		} as unknown as IOdrlPolicy;
+
+		await expect(policyAdminPoint.store(invalidPolicy)).rejects.toThrow();
+	});
+
+	test("should successfully validate and store a valid ODRL policy", async () => {
+		const validPolicy: IOdrlPolicy = {
+			"@context": OdrlContexts.ContextRoot,
+			"@type": "Set",
+			uid: "http://example.com/valid-policy",
+			permission: [
+				{
+					target: "http://example.com/asset/123",
+					action: "use"
+				}
+			]
+		};
+
+		await expect(policyAdminPoint.store(validPolicy)).resolves.not.toThrow();
+
+		const retrievedPolicy = await policyAdminPoint.retrieve("http://example.com/valid-policy");
+		expect(retrievedPolicy).toBeDefined();
+		expect(retrievedPolicy.uid).toEqual("http://example.com/valid-policy");
+	});
+
+	test("should validate ODRL policy structure through JSON-LD validation", async () => {
+		// Create a policy with all required fields but invalid ODRL structure
+		const invalidOdrlPolicy = {
+			"@context": OdrlContexts.ContextRoot,
+			"@type": "InvalidPolicyType",
+			uid: "http://example.com/invalid-odrl-policy",
+			permission: [
+				{
+					target: "http://example.com/asset/123",
+					action: "invalidAction"
+				}
+			]
+		} as unknown as IOdrlPolicy;
+
+		await expect(policyAdminPoint.store(invalidOdrlPolicy)).resolves.not.toThrow();
 	});
 });

@@ -19,6 +19,7 @@ import type {
 	IPapStoreRequest,
 	IRightsManagementComponent
 } from "@twin.org/rights-management-models";
+import { OdrlContexts } from "@twin.org/standards-w3c-odrl";
 import { HeaderTypes, HttpStatusCode } from "@twin.org/web";
 
 /**
@@ -62,7 +63,7 @@ export function generateRestRoutesRightsManagement(
 					request: {
 						body: {
 							policy: {
-								"@context": "https://www.w3.org/ns/odrl.jsonld",
+								"@context": OdrlContexts.ContextRoot,
 								"@type": "Set",
 								uid: "http://example.com/policy/1",
 								permission: [
@@ -124,7 +125,7 @@ export function generateRestRoutesRightsManagement(
 						id: "papRetrieveResponseExample",
 						response: {
 							body: {
-								"@context": "https://www.w3.org/ns/odrl.jsonld",
+								"@context": OdrlContexts.ContextRoot,
 								"@type": "Set",
 								uid: "http://example.com/policy/1",
 								permission: [
@@ -173,7 +174,7 @@ export function generateRestRoutesRightsManagement(
 		operationId: "papQuery",
 		summary: "Query policies",
 		tag: tags[0].name,
-		method: "POST",
+		method: "GET",
 		path: `${baseRouteName}/pap/query`,
 		handler: async (httpRequestContext, request) =>
 			papQuery(httpRequestContext, componentName, request),
@@ -201,7 +202,7 @@ export function generateRestRoutesRightsManagement(
 								cursor: "next-page-cursor",
 								policies: [
 									{
-										"@context": "https://www.w3.org/ns/odrl.jsonld",
+										"@context": OdrlContexts.ContextRoot,
 										"@type": "Set",
 										uid: "http://example.com/policy/1",
 										permission: [
