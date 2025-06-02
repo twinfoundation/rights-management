@@ -41,7 +41,7 @@ export class PolicyAdministrationPointService implements IPolicyAdministrationPo
 	private readonly _odrlPolicyEntityStorage: IEntityStorageConnector<OdrlPolicy>;
 
 	/**
-	 * Create a new instance of PolicyAdministrationPointService.
+	 * Create a new instance of PolicyAdministrationPointService (PAP).
 	 * @param options The options for the component.
 	 */
 	constructor(options?: IPolicyAdministrationPointServiceOptions) {
