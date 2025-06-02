@@ -1,5 +1,19 @@
 # @twin.org/rights-management-pap-service - Changelog
 
+## [0.0.1-next.7](https://github.com/twinfoundation/rights-management/compare/rights-management-pap-service-v0.0.1-next.6...rights-management-pap-service-v0.0.1-next.7) (2025-06-02)
+
+
+### Bug Fixes
+
+* bump versions ([#11](https://github.com/twinfoundation/rights-management/issues/11)) ([ed7691f](https://github.com/twinfoundation/rights-management/commit/ed7691f29c0dab54421ef273892f1d33c230b040))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @twin.org/rights-management-models bumped from 0.0.1-next.6 to 0.0.1-next.7
+
 ## [0.0.1-next.6](https://github.com/twinfoundation/rights-management/compare/rights-management-pap-service-v0.0.1-next.5...rights-management-pap-service-v0.0.1-next.6) (2025-05-29)
 
 
