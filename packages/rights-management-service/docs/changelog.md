@@ -1,5 +1,20 @@
 # @twin.org/rights-management-pap-service - Changelog
 
+## [0.0.1-next.7](https://github.com/twinfoundation/rights-management/compare/rights-management-service-v0.0.1-next.6...rights-management-service-v0.0.1-next.7) (2025-06-02)
+
+
+### Miscellaneous Chores
+
+* **rights-management-service:** Synchronize repo versions
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @twin.org/rights-management-models bumped from 0.0.1-next.6 to 0.0.1-next.7
+    * @twin.org/rights-management-pap-service bumped from 0.0.1-next.6 to 0.0.1-next.7
+
 ## [0.0.1-next.6](https://github.com/twinfoundation/rights-management/compare/rights-management-service-v0.0.1-next.5...rights-management-service-v0.0.1-next.6) (2025-05-29)
 
 

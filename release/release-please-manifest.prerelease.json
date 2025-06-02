@@ -1,6 +1,6 @@
 {
-	"packages/rights-management-models": "0.0.1-next.6",
-	"packages/rights-management-pap-service": "0.0.1-next.6",
-	"packages/rights-management-service": "0.0.1-next.6",
-	"packages/rights-management-rest-client": "0.0.1-next.6"
+	"packages/rights-management-models": "0.0.1-next.7",
+	"packages/rights-management-pap-service": "0.0.1-next.7",
+	"packages/rights-management-service": "0.0.1-next.7",
+	"packages/rights-management-rest-client": "0.0.1-next.7"
 }
