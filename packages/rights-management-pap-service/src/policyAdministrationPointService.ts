@@ -1,6 +1,7 @@
 // Copyright 2024 IOTA Stiftung.
 // SPDX-License-Identifier: Apache-2.0.
-import { Guards, Is, NotFoundError } from "@twin.org/core";
+import { Guards, Is, NotFoundError, Validation, type IValidationFailure } from "@twin.org/core";
+import { JsonLdHelper } from "@twin.org/data-json-ld";
 import type { EntityCondition } from "@twin.org/entity";
 import {
 	EntityStorageConnectorFactory,
@@ -8,7 +9,7 @@ import {
 } from "@twin.org/entity-storage-models";
 import { nameof } from "@twin.org/nameof";
 import type { IPolicyAdministrationPointComponent } from "@twin.org/rights-management-models";
-import type { IOdrlPolicy } from "@twin.org/standards-w3c-odrl";
+import { OdrlDataTypes, type IOdrlPolicy } from "@twin.org/standards-w3c-odrl";
 import type { OdrlPolicy } from "./entities/odrlPolicy";
 import type { IPolicyAdministrationPointServiceOptions } from "./models/IPolicyAdministrationPointServiceOptions";
 import { convertFromStoragePolicy, convertToStoragePolicy } from "./utils/odrlPolicyConverters";
@@ -44,6 +45,9 @@ export class PolicyAdministrationPointService implements IPolicyAdministrationPo
 	 * @param options The options for the component.
 	 */
 	constructor(options?: IPolicyAdministrationPointServiceOptions) {
+		OdrlDataTypes.registerRedirects();
+		OdrlDataTypes.registerTypes();
+
 		this._odrlPolicyEntityStorage = EntityStorageConnectorFactory.get(
 			options?.odrlPolicyEntityStorageType ?? "odrl-policy"
 		);
@@ -55,6 +59,12 @@ export class PolicyAdministrationPointService implements IPolicyAdministrationPo
 	 */
 	public async store(policy: IOdrlPolicy): Promise<void> {
 		Guards.object(this.CLASS_NAME, nameof(policy), policy);
+		Guards.stringValue(this.CLASS_NAME, nameof(policy.uid), policy.uid);
+
+		// Validate the policy as JSON-LD
+		const validationFailures: IValidationFailure[] = [];
+		await JsonLdHelper.validate(policy, validationFailures);
+		Validation.asValidationError(this.CLASS_NAME, nameof(policy), validationFailures);
 
 		const storagePolicy = convertToStoragePolicy(policy);
 		await this._odrlPolicyEntityStorage.set(storagePolicy);

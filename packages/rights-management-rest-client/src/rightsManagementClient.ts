@@ -41,7 +41,7 @@ export class RightsManagementClient extends BaseRestClient implements IRightsMan
 	public async papStore(policy: IOdrlPolicy): Promise<void> {
 		Guards.object(this.CLASS_NAME, nameof(policy), policy);
 
-		await this.fetch<IPapStoreRequest, never>("/pap/", "POST", {
+		await this.fetch<IPapStoreRequest, never>("/pap", "POST", {
 			body: {
 				policy
 			}
