@@ -12,7 +12,7 @@ Class implementation of Policy Administration Point Component.
 
 > **new PolicyAdministrationPointService**(`options?`): `PolicyAdministrationPointService`
 
-Create a new instance of PolicyAdministrationPointService.
+Create a new instance of PolicyAdministrationPointService (PAP).
 
 #### Parameters
 
