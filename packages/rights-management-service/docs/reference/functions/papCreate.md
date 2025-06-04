@@ -1,8 +1,8 @@
-# Function: papStore()
+# Function: papCreate()
 
-> **papStore**(`httpRequestContext`, `componentName`, `request`): `Promise`\<`ICreatedResponse`\>
+> **papCreate**(`httpRequestContext`, `componentName`, `request`): `Promise`\<`IPapCreateResponse`\>
 
-PAP: Store a policy.
+PAP: Create a policy.
 
 ## Parameters
 
@@ -20,12 +20,12 @@ The name of the component to use in the routes.
 
 ### request
 
-`IPapStoreRequest`
+`IPapCreateRequest`
 
 The request.
 
 ## Returns
 
-`Promise`\<`ICreatedResponse`\>
+`Promise`\<`IPapCreateResponse`\>
 
 The response object with additional http response properties.

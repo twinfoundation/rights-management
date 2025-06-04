@@ -11,11 +11,19 @@ import type { IOdrlPolicy } from "@twin.org/standards-w3c-odrl";
  */
 export interface IPolicyAdministrationPointComponent extends IComponent {
 	/**
-	 * Store a policy.
-	 * @param policy The policy to store.
-	 * @returns Nothing.
+	 * Create a new policy with optional UID.
+	 * @param policy The policy to create (uid is optional and will be auto-generated if not provided).
+	 * @returns The UID of the created policy.
 	 */
-	store(policy: IOdrlPolicy): Promise<void>;
+	create(policy: Omit<IOdrlPolicy, "uid"> & { uid?: string }): Promise<{ uid: string }>;
+
+	/**
+	 * Update an existing policy.
+	 * @param policyId The id of the policy to update.
+	 * @param updates The policy updates to apply.
+	 * @returns The updated policy.
+	 */
+	update(policyId: string, updates: IOdrlPolicy): Promise<IOdrlPolicy>;
 
 	/**
 	 * Retrieve a policy.

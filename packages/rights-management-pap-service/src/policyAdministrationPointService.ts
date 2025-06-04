@@ -1,6 +1,16 @@
 // Copyright 2024 IOTA Stiftung.
 // SPDX-License-Identifier: Apache-2.0.
-import { Guards, Is, NotFoundError, Validation, type IValidationFailure } from "@twin.org/core";
+import {
+	Guards,
+	Is,
+	NotFoundError,
+	Validation,
+	type IValidationFailure,
+	GeneralError,
+	Converter,
+	RandomHelper,
+	ObjectHelper
+} from "@twin.org/core";
 import { JsonLdHelper } from "@twin.org/data-json-ld";
 import type { EntityCondition } from "@twin.org/entity";
 import {
@@ -54,20 +64,75 @@ export class PolicyAdministrationPointService implements IPolicyAdministrationPo
 	}
 
 	/**
-	 * Store a policy in the entity storage.
-	 * @param policy The policy to store.
+	 * Create a new policy with optional UID.
+	 * @param policy The policy to create (uid is optional and will be auto-generated if not provided).
+	 * @returns The UID of the created policy.
 	 */
-	public async store(policy: IOdrlPolicy): Promise<void> {
+	public async create(
+		policy: Omit<IOdrlPolicy, "uid"> & { uid?: string }
+	): Promise<{ uid: string }> {
 		Guards.object(this.CLASS_NAME, nameof(policy), policy);
-		Guards.stringValue(this.CLASS_NAME, nameof(policy.uid), policy.uid);
 
-		// Validate the policy as JSON-LD
+		let uid = policy.uid;
+
+		if (uid) {
+			const existingPolicy = await this._odrlPolicyEntityStorage.get(uid);
+			if (existingPolicy) {
+				throw new GeneralError(this.CLASS_NAME, "policyAlreadyExists", { uid });
+			}
+		} else {
+			uid = `urn:rights-management:${Converter.bytesToHex(RandomHelper.generate(32))}`;
+		}
+
+		const completePolicy: IOdrlPolicy = {
+			...policy,
+			uid
+		} as IOdrlPolicy;
+
 		const validationFailures: IValidationFailure[] = [];
-		await JsonLdHelper.validate(policy, validationFailures);
-		Validation.asValidationError(this.CLASS_NAME, nameof(policy), validationFailures);
+		await JsonLdHelper.validate(completePolicy, validationFailures);
+		Validation.asValidationError(this.CLASS_NAME, nameof(completePolicy), validationFailures);
 
-		const storagePolicy = convertToStoragePolicy(policy);
+		const storagePolicy = convertToStoragePolicy(completePolicy);
 		await this._odrlPolicyEntityStorage.set(storagePolicy);
+
+		return { uid };
+	}
+
+	/**
+	 * Update an existing policy.
+	 * @param policyId The ID of the policy to update.
+	 * @param updates The policy updates to apply.
+	 * @returns The updated policy.
+	 */
+	public async update(policyId: string, updates: IOdrlPolicy): Promise<IOdrlPolicy> {
+		Guards.stringValue(this.CLASS_NAME, nameof(policyId), policyId);
+		Guards.object(this.CLASS_NAME, nameof(updates), updates);
+
+		const existingStoragePolicy = await this._odrlPolicyEntityStorage.get(policyId);
+		if (!existingStoragePolicy) {
+			throw new NotFoundError(this.CLASS_NAME, "policyNotFound");
+		}
+
+		const existingPolicy = convertFromStoragePolicy(existingStoragePolicy);
+
+		if (updates.uid && updates.uid !== policyId) {
+			throw new GeneralError(this.CLASS_NAME, "cannotUpdateUid");
+		}
+
+		const updatedPolicy: IOdrlPolicy = ObjectHelper.merge(existingPolicy, {
+			...updates,
+			uid: policyId // Ensure UID cannot be changed
+		});
+
+		const validationFailures: IValidationFailure[] = [];
+		await JsonLdHelper.validate(updatedPolicy, validationFailures);
+		Validation.asValidationError(this.CLASS_NAME, nameof(updatedPolicy), validationFailures);
+
+		const storagePolicy = convertToStoragePolicy(updatedPolicy);
+		await this._odrlPolicyEntityStorage.set(storagePolicy);
+
+		return updatedPolicy;
 	}
 
 	/**

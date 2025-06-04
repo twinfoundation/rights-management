@@ -6,12 +6,14 @@ import { Coerce, Guards } from "@twin.org/core";
 import type { EntityCondition } from "@twin.org/entity";
 import { nameof } from "@twin.org/nameof";
 import type {
+	IPapCreateRequest,
+	IPapCreateResponse,
 	IPapQueryRequest,
 	IPapQueryResponse,
 	IPapRemoveRequest,
 	IPapRetrieveRequest,
 	IPapRetrieveResponse,
-	IPapStoreRequest,
+	IPapUpdateRequest,
 	IRightsManagementComponent
 } from "@twin.org/rights-management-models";
 import type { IOdrlPolicy } from "@twin.org/standards-w3c-odrl";
@@ -34,18 +36,44 @@ export class RightsManagementClient extends BaseRestClient implements IRightsMan
 	}
 
 	/**
-	 * PAP: Store a policy.
-	 * @param policy The policy to store.
-	 * @returns Nothing.
+	 * PAP: Create a new policy with optional UID.
+	 * @param policy The policy to create (uid is optional and will be auto-generated if not provided).
+	 * @returns The UID of the created policy.
 	 */
-	public async papStore(policy: IOdrlPolicy): Promise<void> {
+	public async papCreate(
+		policy: Omit<IOdrlPolicy, "uid"> & { uid?: string }
+	): Promise<{ uid: string }> {
 		Guards.object(this.CLASS_NAME, nameof(policy), policy);
 
-		await this.fetch<IPapStoreRequest, never>("/pap", "POST", {
+		const response = await this.fetch<IPapCreateRequest, IPapCreateResponse>("/pap", "POST", {
 			body: {
 				policy
 			}
 		});
+
+		return response.body;
+	}
+
+	/**
+	 * PAP: Update an existing policy.
+	 * @param policyId The id of the policy to update.
+	 * @param updates The policy updates to apply.
+	 * @returns The updated policy.
+	 */
+	public async papUpdate(policyId: string, updates: IOdrlPolicy): Promise<IOdrlPolicy> {
+		Guards.stringValue(this.CLASS_NAME, nameof(policyId), policyId);
+		Guards.object(this.CLASS_NAME, nameof(updates), updates);
+
+		const response = await this.fetch<IPapUpdateRequest, IPapRetrieveResponse>("/pap/:id", "PUT", {
+			pathParams: {
+				id: policyId
+			},
+			body: {
+				policy: updates
+			}
+		});
+
+		return response.body;
 	}
 
 	/**

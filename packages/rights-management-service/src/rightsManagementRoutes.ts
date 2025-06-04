@@ -2,7 +2,6 @@
 // SPDX-License-Identifier: Apache-2.0.
 import {
 	HttpParameterHelper,
-	type ICreatedResponse,
 	type IHttpRequestContext,
 	type INoContentResponse,
 	type IRestRoute,
@@ -11,16 +10,18 @@ import {
 import { ComponentFactory, Coerce, Guards } from "@twin.org/core";
 import { nameof } from "@twin.org/nameof";
 import type {
+	IPapCreateRequest,
+	IPapCreateResponse,
 	IPapQueryRequest,
 	IPapQueryResponse,
 	IPapRemoveRequest,
 	IPapRetrieveRequest,
 	IPapRetrieveResponse,
-	IPapStoreRequest,
+	IPapUpdateRequest,
 	IRightsManagementComponent
 } from "@twin.org/rights-management-models";
 import { OdrlContexts } from "@twin.org/standards-w3c-odrl";
-import { HeaderTypes, HttpStatusCode } from "@twin.org/web";
+import { HttpStatusCode } from "@twin.org/web";
 
 /**
  * The source used when communicating about these routes.
@@ -47,19 +48,36 @@ export function generateRestRoutesRightsManagement(
 	baseRouteName: string,
 	componentName: string
 ): IRestRoute[] {
-	const storeRoute: IRestRoute<IPapStoreRequest, ICreatedResponse> = {
-		operationId: "papStore",
-		summary: "Store a policy",
+	const createRoute: IRestRoute<IPapCreateRequest, IPapCreateResponse> = {
+		operationId: "papCreate",
+		summary: "Create a policy",
 		tag: tags[0].name,
 		method: "POST",
 		path: `${baseRouteName}/pap/`,
 		handler: async (httpRequestContext, request) =>
-			papStore(httpRequestContext, componentName, request),
+			papCreate(httpRequestContext, componentName, request),
 		requestType: {
-			type: nameof<IPapStoreRequest>(),
+			type: nameof<IPapCreateRequest>(),
 			examples: [
 				{
-					id: "papStoreExample",
+					id: "papCreateExample",
+					request: {
+						body: {
+							policy: {
+								"@context": OdrlContexts.ContextRoot,
+								"@type": "Set",
+								permission: [
+									{
+										target: "http://example.com/asset/1",
+										action: "use"
+									}
+								]
+							}
+						}
+					}
+				},
+				{
+					id: "papCreateWithUidExample",
 					request: {
 						body: {
 							policy: {
@@ -80,14 +98,72 @@ export function generateRestRoutesRightsManagement(
 		},
 		responseType: [
 			{
-				type: nameof<ICreatedResponse>(),
+				type: nameof<IPapCreateResponse>(),
 				examples: [
 					{
-						id: "papStoreResponseExample",
+						id: "papCreateResponseExample",
 						response: {
-							statusCode: HttpStatusCode.created,
-							headers: {
-								[HeaderTypes.Location]: "http://example.com/policy/1"
+							body: {
+								uid: "urn:rights-management:abc123def456"
+							}
+						}
+					}
+				]
+			}
+		]
+	};
+
+	const updateRoute: IRestRoute<IPapUpdateRequest, IPapRetrieveResponse> = {
+		operationId: "papUpdate",
+		summary: "Update a policy",
+		tag: tags[0].name,
+		method: "PUT",
+		path: `${baseRouteName}/pap/:id`,
+		handler: async (httpRequestContext, request) =>
+			papUpdate(httpRequestContext, componentName, request),
+		requestType: {
+			type: nameof<IPapUpdateRequest>(),
+			examples: [
+				{
+					id: "papUpdateExample",
+					request: {
+						pathParams: {
+							id: "http://example.com/policy/1"
+						},
+						body: {
+							policy: {
+								"@context": OdrlContexts.ContextRoot,
+								"@type": "Set",
+								uid: "http://example.com/policy/1",
+								permission: [
+									{
+										target: "http://example.com/asset/2",
+										action: "read"
+									}
+								]
+							}
+						}
+					}
+				}
+			]
+		},
+		responseType: [
+			{
+				type: nameof<IPapRetrieveResponse>(),
+				examples: [
+					{
+						id: "papUpdateResponseExample",
+						response: {
+							body: {
+								"@context": OdrlContexts.ContextRoot,
+								"@type": "Set",
+								uid: "http://example.com/policy/1",
+								permission: [
+									{
+										target: "http://example.com/asset/2",
+										action: "read"
+									}
+								]
 							}
 						}
 					}
@@ -221,23 +297,23 @@ export function generateRestRoutesRightsManagement(
 		]
 	};
 
-	return [storeRoute, retrieveRoute, removeRoute, queryRoute];
+	return [createRoute, updateRoute, retrieveRoute, removeRoute, queryRoute];
 }
 
 /**
- * PAP: Store a policy.
+ * PAP: Create a policy.
  * @param httpRequestContext The request context for the API.
  * @param componentName The name of the component to use in the routes.
  * @param request The request.
  * @returns The response object with additional http response properties.
  */
-export async function papStore(
+export async function papCreate(
 	httpRequestContext: IHttpRequestContext,
 	componentName: string,
-	request: IPapStoreRequest
-): Promise<ICreatedResponse> {
-	Guards.object<IPapStoreRequest>(ROUTES_SOURCE, nameof(request), request);
-	Guards.object<IPapStoreRequest["body"]>(ROUTES_SOURCE, nameof(request.body), request.body);
+	request: IPapCreateRequest
+): Promise<IPapCreateResponse> {
+	Guards.object<IPapCreateRequest>(ROUTES_SOURCE, nameof(request), request);
+	Guards.object<IPapCreateRequest["body"]>(ROUTES_SOURCE, nameof(request.body), request.body);
 	Guards.object(ROUTES_SOURCE, nameof(request.body.policy), request.body.policy);
 	Guards.stringValue(
 		ROUTES_SOURCE,
@@ -248,13 +324,41 @@ export async function papStore(
 	const component = ComponentFactory.get<IRightsManagementComponent>(componentName);
 
 	const policy = request.body.policy;
-	await component.papStore(policy);
+	const result = await component.papCreate(policy);
 
 	return {
-		statusCode: HttpStatusCode.created,
-		headers: {
-			[HeaderTypes.Location]: policy.uid ?? ""
-		}
+		body: result
+	};
+}
+
+/**
+ * PAP: Update a policy.
+ * @param httpRequestContext The request context for the API.
+ * @param componentName The name of the component to use in the routes.
+ * @param request The request.
+ * @returns The response object with additional http response properties.
+ */
+export async function papUpdate(
+	httpRequestContext: IHttpRequestContext,
+	componentName: string,
+	request: IPapUpdateRequest
+): Promise<IPapRetrieveResponse> {
+	Guards.object(ROUTES_SOURCE, nameof(request), request);
+	Guards.object(ROUTES_SOURCE, nameof(request.pathParams), request.pathParams);
+	Guards.stringValue(ROUTES_SOURCE, nameof(request.pathParams.id), request.pathParams.id);
+	Guards.object(ROUTES_SOURCE, nameof(request.body), request.body);
+	Guards.object(ROUTES_SOURCE, nameof(request.body.policy), request.body.policy);
+	Guards.stringValue(
+		ROUTES_SOURCE,
+		nameof(httpRequestContext.nodeIdentity),
+		httpRequestContext.nodeIdentity
+	);
+
+	const component = ComponentFactory.get<IRightsManagementComponent>(componentName);
+	const updatedPolicy = await component.papUpdate(request.pathParams.id, request.body.policy);
+
+	return {
+		body: updatedPolicy
 	};
 }
 

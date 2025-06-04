@@ -23,8 +23,8 @@
 	"paths": {
 		"/rights-management/pap": {
 			"post": {
-				"operationId": "papStore",
-				"summary": "Store a policy",
+				"operationId": "papCreate",
+				"summary": "Create a policy",
 				"tags": [
 					"Policy Administration Point"
 				],
@@ -34,15 +34,29 @@
 					}
 				],
 				"requestBody": {
-					"description": "The request structure for storing a policy.",
+					"description": "The request structure for creating a policy.",
 					"required": true,
 					"content": {
 						"application/json": {
 							"schema": {
-								"$ref": "#/components/schemas/PapStoreRequest"
+								"$ref": "#/components/schemas/PapCreateRequest"
 							},
 							"examples": {
-								"papStoreExample": {
+								"papCreateExample": {
+									"value": {
+										"policy": {
+											"@context": "https://www.w3.org/ns/odrl/2/",
+											"@type": "Set",
+											"permission": [
+												{
+													"target": "http://example.com/asset/1",
+													"action": "use"
+												}
+											]
+										}
+									}
+								},
+								"papCreateWithUidExample": {
 									"value": {
 										"policy": {
 											"@context": "https://www.w3.org/ns/odrl/2/",
@@ -62,14 +76,20 @@
 					}
 				},
 				"responses": {
-					"201": {
-						"description": "The rest request ended in created response.",
-						"headers": {
-							"location": {
+					"200": {
+						"description": "The response structure for creating a policy.",
+						"content": {
+							"application/json": {
 								"schema": {
-									"type": "string"
+									"$ref": "#/components/schemas/PapCreateResponse"
 								},
-								"description": "e.g. http://example.com/policy/1"
+								"examples": {
+									"papCreateResponseExample": {
+										"value": {
+											"uid": "urn:rights-management:abc123def456"
+										}
+									}
+								}
 							}
 						}
 					},
@@ -134,6 +154,143 @@
 			}
 		},
 		"/rights-management/pap/{id}": {
+			"put": {
+				"operationId": "papUpdate",
+				"summary": "Update a policy",
+				"tags": [
+					"Policy Administration Point"
+				],
+				"parameters": [
+					{
+						"name": "id",
+						"description": "The ID of the policy to update.",
+						"in": "path",
+						"required": true,
+						"schema": {
+							"type": "string"
+						},
+						"style": "simple",
+						"example": "http://example.com/policy/1"
+					}
+				],
+				"security": [
+					{
+						"jwtBearerAuthScheme": []
+					}
+				],
+				"requestBody": {
+					"description": "The request structure for updating a policy.",
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/PapUpdateRequest"
+							},
+							"examples": {
+								"papUpdateExample": {
+									"value": {
+										"policy": {
+											"@context": "https://www.w3.org/ns/odrl/2/",
+											"@type": "Set",
+											"uid": "http://example.com/policy/1",
+											"permission": [
+												{
+													"target": "http://example.com/asset/2",
+													"action": "read"
+												}
+											]
+										}
+									}
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "The response structure for retrieving a policy.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/OdrlPolicy"
+								},
+								"examples": {
+									"papUpdateResponseExample": {
+										"value": {
+											"@context": "https://www.w3.org/ns/odrl/2/",
+											"@type": "Set",
+											"uid": "http://example.com/policy/1",
+											"permission": [
+												{
+													"target": "http://example.com/asset/2",
+													"action": "read"
+												}
+											]
+										}
+									}
+								}
+							}
+						}
+					},
+					"400": {
+						"description": "The server cannot process the request, see the content for more details.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/Error"
+								},
+								"examples": {
+									"exampleResponse": {
+										"value": {
+											"name": "GeneralError",
+											"message": "component.error",
+											"properties": {
+												"foo": "bar"
+											}
+										}
+									}
+								}
+							}
+						}
+					},
+					"401": {
+						"description": "You are not authorized to use the API or no credentials were supplied, see the content for more details.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/Error"
+								},
+								"examples": {
+									"exampleResponse": {
+										"value": {
+											"name": "UnauthorizedError",
+											"message": "component.error"
+										}
+									}
+								}
+							}
+						}
+					},
+					"500": {
+						"description": "The server has encountered a situation it does not know how to handle, see the content for more details.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/Error"
+								},
+								"examples": {
+									"exampleResponse": {
+										"value": {
+											"name": "InternalServerError",
+											"message": "component.error"
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			},
 			"get": {
 				"operationId": "papRetrieve",
 				"summary": "Retrieve a policy",
@@ -3849,6 +4006,347 @@
 				],
 				"description": "The types for ODRL Operators."
 			},
+			"PapCreateRequest": {
+				"type": "object",
+				"properties": {
+					"policy": {
+						"type": "object",
+						"additionalProperties": false,
+						"properties": {
+							"uid": {
+								"type": "string",
+								"description": "The optional unique identifier for the policy. If not provided, will be auto-generated."
+							},
+							"@context": {
+								"$ref": "#/components/schemas/OdrlContextType"
+							},
+							"@type": {
+								"$ref": "#/components/schemas/PolicyType"
+							},
+							"profile": {
+								"anyOf": [
+									{
+										"type": "string"
+									},
+									{
+										"type": "array",
+										"items": {
+											"type": "string"
+										}
+									}
+								],
+								"description": "The profile(s) this policy conforms to. IRIs identifying the ODRL Profile(s)."
+							},
+							"assigner": {
+								"anyOf": [
+									{
+										"type": "string"
+									},
+									{
+										"$ref": "#/components/schemas/OdrlParty"
+									}
+								],
+								"description": "The assigner of the policy. Applies to all rules unless overridden at rule level."
+							},
+							"assignee": {
+								"anyOf": [
+									{
+										"type": "string"
+									},
+									{
+										"$ref": "#/components/schemas/OdrlParty"
+									}
+								],
+								"description": "The assignee of the policy. Applies to all rules unless overridden at rule level."
+							},
+							"target": {
+								"anyOf": [
+									{
+										"type": "string"
+									},
+									{
+										"$ref": "#/components/schemas/OdrlAsset"
+									},
+									{
+										"type": "array",
+										"items": {
+											"anyOf": [
+												{
+													"type": "string"
+												},
+												{
+													"$ref": "#/components/schemas/OdrlAsset"
+												}
+											]
+										}
+									}
+								],
+								"description": "The target asset for the rule."
+							},
+							"action": {
+								"anyOf": [
+									{
+										"$ref": "#/components/schemas/ActionType"
+									},
+									{
+										"$ref": "#/components/schemas/OdrlAction"
+									},
+									{
+										"type": "array",
+										"items": {
+											"anyOf": [
+												{
+													"$ref": "#/components/schemas/ActionType"
+												},
+												{
+													"$ref": "#/components/schemas/OdrlAction"
+												}
+											]
+										}
+									}
+								],
+								"description": "The action associated with the rule."
+							},
+							"inheritFrom": {
+								"anyOf": [
+									{
+										"type": "string"
+									},
+									{
+										"type": "array",
+										"items": {
+											"type": "string"
+										}
+									}
+								],
+								"description": "The parent policy(ies) this policy inherits from. IRIs identifying the parent Policy(ies)."
+							},
+							"conflict": {
+								"$ref": "#/components/schemas/ConflictStrategyType"
+							},
+							"permission": {
+								"type": "array",
+								"items": {
+									"$ref": "#/components/schemas/OdrlPermission"
+								},
+								"description": "The permissions in the policy. At least one of permission, prohibition, or obligation must be present."
+							},
+							"prohibition": {
+								"type": "array",
+								"items": {
+									"$ref": "#/components/schemas/OdrlProhibition"
+								},
+								"description": "The prohibitions in the policy. At least one of permission, prohibition, or obligation must be present."
+							},
+							"obligation": {
+								"type": "array",
+								"items": {
+									"$ref": "#/components/schemas/OdrlDuty"
+								},
+								"description": "The obligations in the policy. At least one of permission, prohibition, or obligation must be present."
+							},
+							"@id": {
+								"anyOf": [
+									{
+										"$ref": "#/components/schemas/JsonLdNodePrimitive"
+									},
+									{
+										"type": "array",
+										"items": {
+											"$ref": "#/components/schemas/JsonLdNodePrimitive"
+										}
+									},
+									{
+										"$ref": "#/components/schemas/JsonLdLanguageMap"
+									},
+									{
+										"$ref": "#/components/schemas/JsonLdIndexMap"
+									},
+									{
+										"$ref": "#/components/schemas/JsonLdIncludedBlock"
+									},
+									{
+										"$ref": "#/components/schemas/JsonLdIdMap"
+									},
+									{
+										"$ref": "#/components/schemas/JsonLdTypeMap"
+									}
+								]
+							},
+							"@included": {
+								"anyOf": [
+									{
+										"$ref": "#/components/schemas/JsonLdNodePrimitive"
+									},
+									{
+										"type": "array",
+										"items": {
+											"$ref": "#/components/schemas/JsonLdNodePrimitive"
+										}
+									},
+									{
+										"$ref": "#/components/schemas/JsonLdLanguageMap"
+									},
+									{
+										"$ref": "#/components/schemas/JsonLdIndexMap"
+									},
+									{
+										"$ref": "#/components/schemas/JsonLdIncludedBlock"
+									},
+									{
+										"$ref": "#/components/schemas/JsonLdIdMap"
+									},
+									{
+										"$ref": "#/components/schemas/JsonLdTypeMap"
+									}
+								]
+							},
+							"@graph": {
+								"anyOf": [
+									{
+										"$ref": "#/components/schemas/JsonLdNodePrimitive"
+									},
+									{
+										"type": "array",
+										"items": {
+											"$ref": "#/components/schemas/JsonLdNodePrimitive"
+										}
+									},
+									{
+										"$ref": "#/components/schemas/JsonLdLanguageMap"
+									},
+									{
+										"$ref": "#/components/schemas/JsonLdIndexMap"
+									},
+									{
+										"$ref": "#/components/schemas/JsonLdIncludedBlock"
+									},
+									{
+										"$ref": "#/components/schemas/JsonLdIdMap"
+									},
+									{
+										"$ref": "#/components/schemas/JsonLdTypeMap"
+									}
+								]
+							},
+							"@nest": {
+								"anyOf": [
+									{
+										"$ref": "#/components/schemas/JsonLdNodePrimitive"
+									},
+									{
+										"type": "array",
+										"items": {
+											"$ref": "#/components/schemas/JsonLdNodePrimitive"
+										}
+									},
+									{
+										"$ref": "#/components/schemas/JsonLdLanguageMap"
+									},
+									{
+										"$ref": "#/components/schemas/JsonLdIndexMap"
+									},
+									{
+										"$ref": "#/components/schemas/JsonLdIncludedBlock"
+									},
+									{
+										"$ref": "#/components/schemas/JsonLdIdMap"
+									},
+									{
+										"$ref": "#/components/schemas/JsonLdTypeMap"
+									}
+								]
+							},
+							"@reverse": {
+								"anyOf": [
+									{
+										"$ref": "#/components/schemas/JsonLdNodePrimitive"
+									},
+									{
+										"type": "array",
+										"items": {
+											"$ref": "#/components/schemas/JsonLdNodePrimitive"
+										}
+									},
+									{
+										"$ref": "#/components/schemas/JsonLdLanguageMap"
+									},
+									{
+										"$ref": "#/components/schemas/JsonLdIndexMap"
+									},
+									{
+										"$ref": "#/components/schemas/JsonLdIncludedBlock"
+									},
+									{
+										"$ref": "#/components/schemas/JsonLdIdMap"
+									},
+									{
+										"$ref": "#/components/schemas/JsonLdTypeMap"
+									}
+								]
+							},
+							"@index": {
+								"anyOf": [
+									{
+										"$ref": "#/components/schemas/JsonLdNodePrimitive"
+									},
+									{
+										"type": "array",
+										"items": {
+											"$ref": "#/components/schemas/JsonLdNodePrimitive"
+										}
+									},
+									{
+										"$ref": "#/components/schemas/JsonLdLanguageMap"
+									},
+									{
+										"$ref": "#/components/schemas/JsonLdIndexMap"
+									},
+									{
+										"$ref": "#/components/schemas/JsonLdIncludedBlock"
+									},
+									{
+										"$ref": "#/components/schemas/JsonLdIdMap"
+									},
+									{
+										"$ref": "#/components/schemas/JsonLdTypeMap"
+									}
+								]
+							}
+						},
+						"required": [
+							"@context",
+							"@graph",
+							"@id",
+							"@included",
+							"@index",
+							"@nest",
+							"@reverse",
+							"@type"
+						],
+						"description": "The policy to create (uid is optional and will be auto-generated if not provided)."
+					}
+				},
+				"required": [
+					"policy"
+				],
+				"additionalProperties": false,
+				"description": "The body of the request."
+			},
+			"PapCreateResponse": {
+				"type": "object",
+				"properties": {
+					"uid": {
+						"type": "string",
+						"description": "The unique identifier of the created policy."
+					}
+				},
+				"required": [
+					"uid"
+				],
+				"additionalProperties": false,
+				"description": "The body of the response."
+			},
 			"PapQueryResponse": {
 				"type": "object",
 				"properties": {
@@ -3870,7 +4368,7 @@
 				"additionalProperties": false,
 				"description": "The body of the response."
 			},
-			"PapStoreRequest": {
+			"PapUpdateRequest": {
 				"type": "object",
 				"properties": {
 					"policy": {

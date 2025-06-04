@@ -29,7 +29,7 @@ export const TEST_USER_IDENTITY = "user:1234";
 export const TEST_NODE_IDENTITY = "node:5678";
 
 export const SAMPLE_POLICY: IOdrlPolicy = {
-	"@context": OdrlContexts.Context,
+	"@context": OdrlContexts.ContextRoot,
 	"@type": "Set",
 	uid: TEST_POLICY_ID,
 	permission: [
@@ -59,7 +59,7 @@ const createTestPolicy = (
 	assetId: string,
 	action: ActionType
 ): IOdrlPolicy => ({
-	"@context": OdrlContexts.Context,
+	"@context": OdrlContexts.ContextRoot,
 	"@type": policyType,
 	uid: `http://example.com/policy/${id}`,
 	permission: [
@@ -79,9 +79,7 @@ export const createTestPolicies = async (
 		const assetId = `http://example.com/asset/${Math.ceil(i / 2)}`;
 		const action = i % 3 === 0 ? ("display" as ActionType) : ("use" as ActionType);
 
-		await policyAdminPoint.store(
-			createTestPolicy(i.toString(), policyType, assetId, action),
-			TEST_NODE_IDENTITY
-		);
+		const policy = createTestPolicy(i.toString(), policyType, assetId, action);
+		await policyAdminPoint.create(policy);
 	}
 };

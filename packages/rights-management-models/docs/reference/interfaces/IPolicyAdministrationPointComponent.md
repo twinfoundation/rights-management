@@ -10,25 +10,53 @@ Policy Management Point (PMP) when it handles requests from the Policy Decision 
 
 ## Methods
 
-### store()
+### create()
 
-> **store**(`policy`): `Promise`\<`void`\>
+> **create**(`policy`): `Promise`\<\{ `uid`: `string`; \}\>
 
-Store a policy.
+Create a new policy with optional UID.
 
 #### Parameters
 
 ##### policy
 
-`IOdrlPolicy`
+`Omit`\<`IOdrlPolicy`, `"uid"`\> & `object`
 
-The policy to store.
+The policy to create (uid is optional and will be auto-generated if not provided).
 
 #### Returns
 
-`Promise`\<`void`\>
+`Promise`\<\{ `uid`: `string`; \}\>
 
-Nothing.
+The UID of the created policy.
+
+***
+
+### update()
+
+> **update**(`policyId`, `updates`): `Promise`\<`IOdrlPolicy`\>
+
+Update an existing policy.
+
+#### Parameters
+
+##### policyId
+
+`string`
+
+The id of the policy to update.
+
+##### updates
+
+`IOdrlPolicy`
+
+The policy updates to apply.
+
+#### Returns
+
+`Promise`\<`IOdrlPolicy`\>
+
+The updated policy.
 
 ***
 
