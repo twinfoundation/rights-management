@@ -57,19 +57,19 @@ export class RightsManagementClient extends BaseRestClient implements IRightsMan
 	/**
 	 * PAP: Update an existing policy.
 	 * @param policyId The id of the policy to update.
-	 * @param updates The policy updates to apply.
+	 * @param policy The policy updates to apply.
 	 * @returns The updated policy.
 	 */
-	public async papUpdate(policyId: string, updates: IOdrlPolicy): Promise<IOdrlPolicy> {
+	public async papUpdate(policyId: string, policy: IOdrlPolicy): Promise<IOdrlPolicy> {
 		Guards.stringValue(this.CLASS_NAME, nameof(policyId), policyId);
-		Guards.object(this.CLASS_NAME, nameof(updates), updates);
+		Guards.object(this.CLASS_NAME, nameof(policy), policy);
 
 		const response = await this.fetch<IPapUpdateRequest, IPapRetrieveResponse>("/pap/:id", "PUT", {
 			pathParams: {
 				id: policyId
 			},
 			body: {
-				policy: updates
+				policy
 			}
 		});
 

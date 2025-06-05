@@ -76,7 +76,7 @@ The UID of the created policy.
 
 ### papUpdate()
 
-> **papUpdate**(`policyId`, `updates`): `Promise`\<`IOdrlPolicy`\>
+> **papUpdate**(`policyId`, `policy`): `Promise`\<`IOdrlPolicy`\>
 
 PAP: Update an existing policy.
 
@@ -88,7 +88,7 @@ PAP: Update an existing policy.
 
 The id of the policy to update.
 
-##### updates
+##### policy
 
 `IOdrlPolicy`
 

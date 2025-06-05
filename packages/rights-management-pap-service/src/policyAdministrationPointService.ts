@@ -116,7 +116,7 @@ export class PolicyAdministrationPointService implements IPolicyAdministrationPo
 
 		const existingPolicy = convertFromStoragePolicy(existingStoragePolicy);
 
-		if (updates.uid && updates.uid !== policyId) {
+		if (Is.stringValue(updates.uid) && updates.uid !== policyId) {
 			throw new GeneralError(this.CLASS_NAME, "cannotUpdateUid");
 		}
 
