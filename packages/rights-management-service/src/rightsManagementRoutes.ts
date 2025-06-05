@@ -109,12 +109,12 @@ export function generateRestRoutesRightsManagement(
 					id: "papUpdateExample",
 					request: {
 						pathParams: {
-							id: "http://example.com/policy/1"
+							id: "urn:rights-management:abc123def456"
 						},
 						body: {
 							"@context": OdrlContexts.ContextRoot,
 							"@type": "Set",
-							uid: "http://example.com/policy/1",
+							uid: "urn:rights-management:abc123def456",
 							permission: [
 								{
 									target: "http://example.com/asset/2",
@@ -148,7 +148,7 @@ export function generateRestRoutesRightsManagement(
 					id: "papRetrieveExample",
 					request: {
 						pathParams: {
-							id: "http://example.com/policy/1"
+							id: "urn:rights-management:abc123def456"
 						}
 					}
 				}
@@ -164,7 +164,7 @@ export function generateRestRoutesRightsManagement(
 							body: {
 								"@context": OdrlContexts.ContextRoot,
 								"@type": "Set",
-								uid: "http://example.com/policy/1",
+								uid: "urn:rights-management:abc123def456",
 								permission: [
 									{
 										target: "http://example.com/asset/1",
@@ -194,7 +194,7 @@ export function generateRestRoutesRightsManagement(
 					id: "papRemoveExample",
 					request: {
 						pathParams: {
-							id: "http://example.com/policy/1"
+							id: "urn:rights-management:abc123def456"
 						}
 					}
 				}
@@ -241,7 +241,7 @@ export function generateRestRoutesRightsManagement(
 									{
 										"@context": OdrlContexts.ContextRoot,
 										"@type": "Set",
-										uid: "http://example.com/policy/1",
+										uid: "urn:rights-management:abc123def456",
 										permission: [
 											{
 												target: "http://example.com/asset/1",
