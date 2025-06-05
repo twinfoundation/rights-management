@@ -7,12 +7,17 @@ import type { IOdrlPolicy } from "@twin.org/standards-w3c-odrl";
  */
 export interface IPapUpdateRequest {
 	/**
-	 * The body of the request.
+	 * The path parameters of the request.
 	 */
-	body: {
+	pathParams: {
 		/**
-		 * The policy to update (must include uid).
+		 * The ID of the policy to update.
 		 */
-		policy: IOdrlPolicy;
+		id: string;
 	};
+
+	/**
+	 * The body of the request - the policy to update (must include uid).
+	 */
+	body: IOdrlPolicy;
 }

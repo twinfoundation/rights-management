@@ -7,12 +7,7 @@ import type { IOdrlPolicy } from "@twin.org/standards-w3c-odrl";
  */
 export interface IPapCreateRequest {
 	/**
-	 * The body of the request.
+	 * The body of the request - the policy to create (uid will be auto-generated).
 	 */
-	body: {
-		/**
-		 * The policy to create (uid will be auto-generated).
-		 */
-		policy: Omit<IOdrlPolicy, "uid">;
-	};
+	body: Omit<IOdrlPolicy, "uid">;
 }

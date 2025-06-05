@@ -338,7 +338,7 @@ describe("rights-management-pap", () => {
 		await expect(policyAdminPoint.update(nonExistentPolicy)).rejects.toThrow();
 	});
 
-	test("should deep merge nested objects in update", async () => {
+	test("should replace policy entirely in update", async () => {
 		// Create initial policy with complex structure
 		const initialPolicy = {
 			"@context": OdrlContexts.ContextRoot,
@@ -365,7 +365,7 @@ describe("rights-management-pap", () => {
 		const createResult = await policyAdminPoint.create(initialPolicy);
 		const policyId = createResult;
 
-		const partialUpdate: IOdrlPolicy = {
+		const replacementPolicy: IOdrlPolicy = {
 			"@context": OdrlContexts.ContextRoot,
 			"@type": "Set",
 			uid: policyId,
@@ -379,17 +379,17 @@ describe("rights-management-pap", () => {
 			}
 		};
 
-		await policyAdminPoint.update(partialUpdate);
+		await policyAdminPoint.update(replacementPolicy);
 		const result = await policyAdminPoint.retrieve(policyId);
 
 		expect(result).toBeDefined();
 		expect(result.uid).toEqual(policyId);
 
-		// Check deep merge worked
+		// Check policy was completely replaced
 		expect(result.assigner).toBeDefined();
 		if (result.assigner && typeof result.assigner === "object" && "uid" in result.assigner) {
 			expect(result.assigner.uid).toEqual("http://example.com/party/1");
-			expect(result.assigner["@type"]).toEqual("Organization"); // Updated
+			expect(result.assigner["@type"]).toEqual("Organization");
 		}
 
 		expect(result.assignee).toBeDefined();
@@ -397,11 +397,8 @@ describe("rights-management-pap", () => {
 			expect(result.assignee.uid).toEqual("http://example.com/party/2");
 		}
 
-		// Check original permission was preserved
-		expect(result.permission).toBeDefined();
-		if (result.permission && result.permission.length > 0) {
-			expect(result.permission[0].target).toEqual("http://example.com/asset/1");
-		}
+		// Check original permission was NOT preserved (policy was replaced)
+		expect(result.permission).toBeUndefined();
 	});
 
 	test("should replace arrays entirely in update", async () => {

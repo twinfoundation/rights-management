@@ -6,12 +6,6 @@ The request structure for creating a policy.
 
 ### body
 
-> **body**: `object`
+> **body**: `Omit`\<`IOdrlPolicy`, `"uid"`\>
 
-The body of the request.
-
-#### policy
-
-> **policy**: `Omit`\<`IOdrlPolicy`, `"uid"`\>
-
-The policy to create (uid will be auto-generated).
+The body of the request - the policy to create (uid will be auto-generated).

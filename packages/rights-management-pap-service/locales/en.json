@@ -1,7 +1,7 @@
 {
 	"error": {
 		"policyAdministrationPointService": {
-			"policyNotFound": "Policy not found with id: \"{policyId}\""
+			"policyNotFound": "Policy not found with id: \"{notFoundId}\""
 		}
 	}
 }

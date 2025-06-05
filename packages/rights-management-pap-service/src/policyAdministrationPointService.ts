@@ -4,7 +4,6 @@ import {
 	Guards,
 	Is,
 	NotFoundError,
-	ObjectHelper,
 	Urn,
 	Validation,
 	type IValidationFailure
@@ -67,14 +66,14 @@ export class PolicyAdministrationPointService implements IPolicyAdministrationPo
 	 * @returns The UID of the created policy.
 	 */
 	public async create(policy: Omit<IOdrlPolicy, "uid">): Promise<string> {
-		Guards.object(this.CLASS_NAME, nameof(policy), policy);
+		Guards.object<IOdrlPolicy>(this.CLASS_NAME, nameof(policy), policy);
 
 		const uid = Urn.generateRandom("rights-management").toString(false);
 
 		const completePolicy: IOdrlPolicy = {
 			...policy,
 			uid
-		} as IOdrlPolicy;
+		};
 
 		const validationFailures: IValidationFailure[] = [];
 		await JsonLdHelper.validate(completePolicy, validationFailures);
@@ -101,15 +100,11 @@ export class PolicyAdministrationPointService implements IPolicyAdministrationPo
 			throw new NotFoundError(this.CLASS_NAME, "policyNotFound", policyId);
 		}
 
-		const existingPolicy = convertFromStoragePolicy(existingStoragePolicy);
-
-		const updatedPolicy: IOdrlPolicy = ObjectHelper.merge(existingPolicy, policy);
-
 		const validationFailures: IValidationFailure[] = [];
-		await JsonLdHelper.validate(updatedPolicy, validationFailures);
-		Validation.asValidationError(this.CLASS_NAME, nameof(updatedPolicy), validationFailures);
+		await JsonLdHelper.validate(policy, validationFailures);
+		Validation.asValidationError(this.CLASS_NAME, nameof(policy), validationFailures);
 
-		const storagePolicy = convertToStoragePolicy(updatedPolicy);
+		const storagePolicy = convertToStoragePolicy(policy);
 		await this._odrlPolicyEntityStorage.set(storagePolicy);
 	}
 

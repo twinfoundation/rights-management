@@ -47,9 +47,7 @@ export class RightsManagementClient extends BaseRestClient implements IRightsMan
 		Guards.object(this.CLASS_NAME, nameof(policy), policy);
 
 		const response = await this.fetch<IPapCreateRequest, ICreatedResponse>("/pap", "POST", {
-			body: {
-				policy
-			}
+			body: policy
 		});
 
 		return response.headers.location;
@@ -62,11 +60,13 @@ export class RightsManagementClient extends BaseRestClient implements IRightsMan
 	 */
 	public async papUpdate(policy: IOdrlPolicy): Promise<void> {
 		Guards.object(this.CLASS_NAME, nameof(policy), policy);
+		Guards.stringValue(this.CLASS_NAME, "policy.uid", policy.uid);
 
-		await this.fetch<IPapUpdateRequest, never>("/pap", "PUT", {
-			body: {
-				policy
-			}
+		await this.fetch<IPapUpdateRequest, never>("/pap/:id", "PUT", {
+			pathParams: {
+				id: policy.uid
+			},
+			body: policy
 		});
 	}
 

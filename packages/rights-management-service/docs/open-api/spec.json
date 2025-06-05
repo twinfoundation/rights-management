@@ -39,21 +39,19 @@
 					"content": {
 						"application/json": {
 							"schema": {
-								"$ref": "#/components/schemas/PapCreateRequest"
+								"$ref": "#/components/schemas/Omit%3CIOdrlPolicy%2C%22uid%22%3E"
 							},
 							"examples": {
 								"papCreateExample": {
 									"value": {
-										"policy": {
-											"@context": "https://www.w3.org/ns/odrl/2/",
-											"@type": "Set",
-											"permission": [
-												{
-													"target": "http://example.com/asset/1",
-													"action": "use"
-												}
-											]
-										}
+										"@context": "https://www.w3.org/ns/odrl/2/",
+										"@type": "Set",
+										"permission": [
+											{
+												"target": "http://example.com/asset/1",
+												"action": "use"
+											}
+										]
 									}
 								}
 							}
@@ -130,12 +128,27 @@
 						}
 					}
 				}
-			},
+			}
+		},
+		"/rights-management/pap/{id}": {
 			"put": {
 				"operationId": "papUpdate",
 				"summary": "Update a policy",
 				"tags": [
 					"Policy Administration Point"
+				],
+				"parameters": [
+					{
+						"name": "id",
+						"description": "The ID of the policy to update.",
+						"in": "path",
+						"required": true,
+						"schema": {
+							"type": "string"
+						},
+						"style": "simple",
+						"example": "http://example.com/policy/1"
+					}
 				],
 				"security": [
 					{
@@ -148,22 +161,20 @@
 					"content": {
 						"application/json": {
 							"schema": {
-								"$ref": "#/components/schemas/PapUpdateRequest"
+								"$ref": "#/components/schemas/OdrlPolicy"
 							},
 							"examples": {
 								"papUpdateExample": {
 									"value": {
-										"policy": {
-											"@context": "https://www.w3.org/ns/odrl/2/",
-											"@type": "Set",
-											"uid": "http://example.com/policy/1",
-											"permission": [
-												{
-													"target": "http://example.com/asset/2",
-													"action": "read"
-												}
-											]
-										}
+										"@context": "https://www.w3.org/ns/odrl/2/",
+										"@type": "Set",
+										"uid": "http://example.com/policy/1",
+										"permission": [
+											{
+												"target": "http://example.com/asset/2",
+												"action": "read"
+											}
+										]
 									}
 								}
 							}
@@ -232,9 +243,7 @@
 						}
 					}
 				}
-			}
-		},
-		"/rights-management/pap/{id}": {
+			},
 			"get": {
 				"operationId": "papRetrieve",
 				"summary": "Retrieve a policy",
@@ -3950,19 +3959,6 @@
 				],
 				"description": "The types for ODRL Operators."
 			},
-			"PapCreateRequest": {
-				"type": "object",
-				"properties": {
-					"policy": {
-						"$ref": "#/components/schemas/Omit%3CIOdrlPolicy%2C%22uid%22%3E"
-					}
-				},
-				"required": [
-					"policy"
-				],
-				"additionalProperties": false,
-				"description": "The body of the request."
-			},
 			"PapQueryResponse": {
 				"type": "object",
 				"properties": {
@@ -3983,19 +3979,6 @@
 				],
 				"additionalProperties": false,
 				"description": "The body of the response."
-			},
-			"PapUpdateRequest": {
-				"type": "object",
-				"properties": {
-					"policy": {
-						"$ref": "#/components/schemas/OdrlPolicy"
-					}
-				},
-				"required": [
-					"policy"
-				],
-				"additionalProperties": false,
-				"description": "The body of the request."
 			},
 			"PolicyType": {
 				"anyOf": [

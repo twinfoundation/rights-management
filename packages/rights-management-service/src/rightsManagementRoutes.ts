@@ -63,16 +63,14 @@ export function generateRestRoutesRightsManagement(
 					id: "papCreateExample",
 					request: {
 						body: {
-							policy: {
-								"@context": OdrlContexts.ContextRoot,
-								"@type": "Set",
-								permission: [
-									{
-										target: "http://example.com/asset/1",
-										action: "use"
-									}
-								]
-							}
+							"@context": OdrlContexts.ContextRoot,
+							"@type": "Set",
+							permission: [
+								{
+									target: "http://example.com/asset/1",
+									action: "use"
+								}
+							]
 						}
 					}
 				}
@@ -101,7 +99,7 @@ export function generateRestRoutesRightsManagement(
 		summary: "Update a policy",
 		tag: tags[0].name,
 		method: "PUT",
-		path: `${baseRouteName}/pap/`,
+		path: `${baseRouteName}/pap/:id`,
 		handler: async (httpRequestContext, request) =>
 			papUpdate(httpRequestContext, componentName, request),
 		requestType: {
@@ -110,18 +108,19 @@ export function generateRestRoutesRightsManagement(
 				{
 					id: "papUpdateExample",
 					request: {
+						pathParams: {
+							id: "http://example.com/policy/1"
+						},
 						body: {
-							policy: {
-								"@context": OdrlContexts.ContextRoot,
-								"@type": "Set",
-								uid: "http://example.com/policy/1",
-								permission: [
-									{
-										target: "http://example.com/asset/2",
-										action: "read"
-									}
-								]
-							}
+							"@context": OdrlContexts.ContextRoot,
+							"@type": "Set",
+							uid: "http://example.com/policy/1",
+							permission: [
+								{
+									target: "http://example.com/asset/2",
+									action: "read"
+								}
+							]
 						}
 					}
 				}
@@ -276,7 +275,6 @@ export async function papCreate(
 ): Promise<ICreatedResponse> {
 	Guards.object<IPapCreateRequest>(ROUTES_SOURCE, nameof(request), request);
 	Guards.object<IPapCreateRequest["body"]>(ROUTES_SOURCE, nameof(request.body), request.body);
-	Guards.object(ROUTES_SOURCE, nameof(request.body.policy), request.body.policy);
 	Guards.stringValue(
 		ROUTES_SOURCE,
 		nameof(httpRequestContext.nodeIdentity),
@@ -285,7 +283,7 @@ export async function papCreate(
 
 	const component = ComponentFactory.get<IRightsManagementComponent>(componentName);
 
-	const policy = request.body.policy;
+	const policy = request.body;
 	const uid = await component.papCreate(policy);
 
 	return {
@@ -309,8 +307,9 @@ export async function papUpdate(
 	request: IPapUpdateRequest
 ): Promise<INoContentResponse> {
 	Guards.object(ROUTES_SOURCE, nameof(request), request);
+	Guards.object(ROUTES_SOURCE, nameof(request.pathParams), request.pathParams);
+	Guards.stringValue(ROUTES_SOURCE, nameof(request.pathParams.id), request.pathParams.id);
 	Guards.object(ROUTES_SOURCE, nameof(request.body), request.body);
-	Guards.object(ROUTES_SOURCE, nameof(request.body.policy), request.body.policy);
 	Guards.stringValue(
 		ROUTES_SOURCE,
 		nameof(httpRequestContext.nodeIdentity),
@@ -318,7 +317,7 @@ export async function papUpdate(
 	);
 
 	const component = ComponentFactory.get<IRightsManagementComponent>(componentName);
-	await component.papUpdate(request.body.policy);
+	await component.papUpdate(request.body);
 
 	return {
 		statusCode: HttpStatusCode.noContent
