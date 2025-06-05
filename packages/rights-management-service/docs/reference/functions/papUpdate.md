@@ -1,6 +1,6 @@
 # Function: papUpdate()
 
-> **papUpdate**(`httpRequestContext`, `componentName`, `request`): `Promise`\<`IPapRetrieveResponse`\>
+> **papUpdate**(`httpRequestContext`, `componentName`, `request`): `Promise`\<`INoContentResponse`\>
 
 PAP: Update a policy.
 
@@ -26,6 +26,6 @@ The request.
 
 ## Returns
 
-`Promise`\<`IPapRetrieveResponse`\>
+`Promise`\<`INoContentResponse`\>
 
 The response object with additional http response properties.

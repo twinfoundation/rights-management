@@ -1,6 +1,6 @@
 # Function: papCreate()
 
-> **papCreate**(`httpRequestContext`, `componentName`, `request`): `Promise`\<`IPapCreateResponse`\>
+> **papCreate**(`httpRequestContext`, `componentName`, `request`): `Promise`\<`ICreatedResponse`\>
 
 PAP: Create a policy.
 
@@ -26,6 +26,6 @@ The request.
 
 ## Returns
 
-`Promise`\<`IPapCreateResponse`\>
+`Promise`\<`ICreatedResponse`\>
 
 The response object with additional http response properties.

@@ -10,7 +10,6 @@
 - [IPolicyManagementPointComponent](interfaces/IPolicyManagementPointComponent.md)
 - [IRightsManagementComponent](interfaces/IRightsManagementComponent.md)
 - [IPapCreateRequest](interfaces/IPapCreateRequest.md)
-- [IPapCreateResponse](interfaces/IPapCreateResponse.md)
 - [IPapQueryRequest](interfaces/IPapQueryRequest.md)
 - [IPapQueryResponse](interfaces/IPapQueryResponse.md)
 - [IPapRemoveRequest](interfaces/IPapRemoveRequest.md)

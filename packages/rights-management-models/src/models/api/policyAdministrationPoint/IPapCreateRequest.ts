@@ -11,14 +11,8 @@ export interface IPapCreateRequest {
 	 */
 	body: {
 		/**
-		 * The policy to create (uid is optional and will be auto-generated if not provided).
+		 * The policy to create (uid will be auto-generated).
 		 */
-		policy: Omit<IOdrlPolicy, "uid"> & {
-			/**
-			 * The optional unique identifier for the policy.
-			 * If not provided, will be auto-generated.
-			 */
-			uid?: string;
-		};
+		policy: Omit<IOdrlPolicy, "uid">;
 	};
 }

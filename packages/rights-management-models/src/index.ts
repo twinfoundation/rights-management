@@ -8,7 +8,6 @@ export * from "./models/IPolicyInformationPointComponent";
 export * from "./models/IPolicyManagementPointComponent";
 export * from "./models/policyActionCallback";
 export * from "./models/api/policyAdministrationPoint/IPapCreateRequest";
-export * from "./models/api/policyAdministrationPoint/IPapCreateResponse";
 export * from "./models/api/policyAdministrationPoint/IPapUpdateRequest";
 export * from "./models/api/policyAdministrationPoint/IPapRetrieveRequest";
 export * from "./models/api/policyAdministrationPoint/IPapRetrieveResponse";

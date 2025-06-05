@@ -42,13 +42,11 @@ export class RightsManagementService implements IRightsManagementComponent {
 	}
 
 	/**
-	 * PAP: Create a new policy with optional UID.
-	 * @param policy The policy to create (uid is optional and will be auto-generated if not provided).
+	 * PAP: Create a new policy with auto-generated UID.
+	 * @param policy The policy to create (uid will be auto-generated).
 	 * @returns The UID of the created policy.
 	 */
-	public async papCreate(
-		policy: Omit<IOdrlPolicy, "uid"> & { uid?: string }
-	): Promise<{ uid: string }> {
+	public async papCreate(policy: Omit<IOdrlPolicy, "uid">): Promise<string> {
 		try {
 			Guards.object(this.CLASS_NAME, nameof(policy), policy);
 
@@ -61,17 +59,14 @@ export class RightsManagementService implements IRightsManagementComponent {
 
 	/**
 	 * PAP: Update an existing policy.
-	 * @param policyId The id of the policy to update.
-	 * @param updates The policy updates to apply.
-	 * @returns The updated policy.
+	 * @param policy The policy to update (must include uid).
+	 * @returns Nothing.
 	 */
-	public async papUpdate(policyId: string, updates: IOdrlPolicy): Promise<IOdrlPolicy> {
+	public async papUpdate(policy: IOdrlPolicy): Promise<void> {
 		try {
-			Guards.stringValue(this.CLASS_NAME, nameof(policyId), policyId);
-			Guards.object(this.CLASS_NAME, nameof(updates), updates);
+			Guards.object(this.CLASS_NAME, nameof(policy), policy);
 
-			const updatedPolicy = await this._papComponent.update(policyId, updates);
-			return updatedPolicy;
+			await this._papComponent.update(policy);
 		} catch (error) {
 			throw new GeneralError(this.CLASS_NAME, "papUpdateFailed", undefined, error);
 		}

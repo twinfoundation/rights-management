@@ -1,13 +1,16 @@
 // Copyright 2024 IOTA Stiftung.
 // SPDX-License-Identifier: Apache-2.0.
 import { BaseRestClient } from "@twin.org/api-core";
-import { HttpParameterHelper, type IBaseRestClientConfig } from "@twin.org/api-models";
+import {
+	HttpParameterHelper,
+	type IBaseRestClientConfig,
+	type ICreatedResponse
+} from "@twin.org/api-models";
 import { Coerce, Guards } from "@twin.org/core";
 import type { EntityCondition } from "@twin.org/entity";
 import { nameof } from "@twin.org/nameof";
 import type {
 	IPapCreateRequest,
-	IPapCreateResponse,
 	IPapQueryRequest,
 	IPapQueryResponse,
 	IPapRemoveRequest,
@@ -36,44 +39,35 @@ export class RightsManagementClient extends BaseRestClient implements IRightsMan
 	}
 
 	/**
-	 * PAP: Create a new policy with optional UID.
-	 * @param policy The policy to create (uid is optional and will be auto-generated if not provided).
+	 * PAP: Create a new policy with auto-generated UID.
+	 * @param policy The policy to create (uid will be auto-generated).
 	 * @returns The UID of the created policy.
 	 */
-	public async papCreate(
-		policy: Omit<IOdrlPolicy, "uid"> & { uid?: string }
-	): Promise<{ uid: string }> {
+	public async papCreate(policy: Omit<IOdrlPolicy, "uid">): Promise<string> {
 		Guards.object(this.CLASS_NAME, nameof(policy), policy);
 
-		const response = await this.fetch<IPapCreateRequest, IPapCreateResponse>("/pap", "POST", {
+		const response = await this.fetch<IPapCreateRequest, ICreatedResponse>("/pap", "POST", {
 			body: {
 				policy
 			}
 		});
 
-		return response.body;
+		return response.headers.location;
 	}
 
 	/**
 	 * PAP: Update an existing policy.
-	 * @param policyId The id of the policy to update.
-	 * @param policy The policy updates to apply.
-	 * @returns The updated policy.
+	 * @param policy The policy to update (must include uid).
+	 * @returns Nothing.
 	 */
-	public async papUpdate(policyId: string, policy: IOdrlPolicy): Promise<IOdrlPolicy> {
-		Guards.stringValue(this.CLASS_NAME, nameof(policyId), policyId);
+	public async papUpdate(policy: IOdrlPolicy): Promise<void> {
 		Guards.object(this.CLASS_NAME, nameof(policy), policy);
 
-		const response = await this.fetch<IPapUpdateRequest, IPapRetrieveResponse>("/pap/:id", "PUT", {
-			pathParams: {
-				id: policyId
-			},
+		await this.fetch<IPapUpdateRequest, never>("/pap", "PUT", {
 			body: {
 				policy
 			}
 		});
-
-		return response.body;
 	}
 
 	/**

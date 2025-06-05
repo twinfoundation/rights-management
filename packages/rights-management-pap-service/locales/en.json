@@ -1,9 +1,7 @@
 {
 	"error": {
 		"policyAdministrationPointService": {
-			"policyNotFound": "Policy not found with id: \"{notFoundId}\"",
-			"policyAlreadyExists": "Policy already exists with UID: \"{uid}\"",
-			"cannotUpdateUid": "Cannot update the UID of an existing policy"
+			"policyNotFound": "Policy not found with id: \"{policyId}\""
 		}
 	}
 }

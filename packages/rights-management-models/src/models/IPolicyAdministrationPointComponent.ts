@@ -5,25 +5,22 @@ import type { EntityCondition } from "@twin.org/entity";
 import type { IOdrlPolicy } from "@twin.org/standards-w3c-odrl";
 
 /**
- * Interface describing a Policy Administration Point (PAP) contract.
- * Manages policies for the rights management, policies are also queried by the
- * Policy Management Point (PMP) when it handles requests from the Policy Decision Point (PDP).
+ * Interface describing a Policy Administration Point (PAP) component that manages ODRL policies.
  */
 export interface IPolicyAdministrationPointComponent extends IComponent {
 	/**
-	 * Create a new policy with optional UID.
-	 * @param policy The policy to create (uid is optional and will be auto-generated if not provided).
+	 * Create a new policy with auto-generated UID.
+	 * @param policy The policy to create (uid will be auto-generated).
 	 * @returns The UID of the created policy.
 	 */
-	create(policy: Omit<IOdrlPolicy, "uid"> & { uid?: string }): Promise<{ uid: string }>;
+	create(policy: Omit<IOdrlPolicy, "uid">): Promise<string>;
 
 	/**
 	 * Update an existing policy.
-	 * @param policyId The id of the policy to update.
-	 * @param updates The policy updates to apply.
-	 * @returns The updated policy.
+	 * @param policy The policy to update (must include uid).
+	 * @returns Nothing.
 	 */
-	update(policyId: string, updates: IOdrlPolicy): Promise<IOdrlPolicy>;
+	update(policy: IOdrlPolicy): Promise<void>;
 
 	/**
 	 * Retrieve a policy.

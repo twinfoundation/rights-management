@@ -4,20 +4,6 @@ The request structure for updating a policy.
 
 ## Properties
 
-### pathParams
-
-> **pathParams**: `object`
-
-The path parameters of the request.
-
-#### id
-
-> **id**: `string`
-
-The ID of the policy to update.
-
-***
-
 ### body
 
 > **body**: `object`
@@ -28,4 +14,4 @@ The body of the request.
 
 > **policy**: `IOdrlPolicy`
 
-The policy updates to apply.
+The policy to update (must include uid).

@@ -4,12 +4,10 @@ import {
 	Guards,
 	Is,
 	NotFoundError,
+	ObjectHelper,
+	Urn,
 	Validation,
-	type IValidationFailure,
-	GeneralError,
-	Converter,
-	RandomHelper,
-	ObjectHelper
+	type IValidationFailure
 } from "@twin.org/core";
 import { JsonLdHelper } from "@twin.org/data-json-ld";
 import type { EntityCondition } from "@twin.org/entity";
@@ -64,25 +62,14 @@ export class PolicyAdministrationPointService implements IPolicyAdministrationPo
 	}
 
 	/**
-	 * Create a new policy with optional UID.
-	 * @param policy The policy to create (uid is optional and will be auto-generated if not provided).
+	 * Create a new policy with auto-generated UID.
+	 * @param policy The policy to create (uid will be auto-generated).
 	 * @returns The UID of the created policy.
 	 */
-	public async create(
-		policy: Omit<IOdrlPolicy, "uid"> & { uid?: string }
-	): Promise<{ uid: string }> {
+	public async create(policy: Omit<IOdrlPolicy, "uid">): Promise<string> {
 		Guards.object(this.CLASS_NAME, nameof(policy), policy);
 
-		let uid = policy.uid;
-
-		if (uid) {
-			const existingPolicy = await this._odrlPolicyEntityStorage.get(uid);
-			if (existingPolicy) {
-				throw new GeneralError(this.CLASS_NAME, "policyAlreadyExists", { uid });
-			}
-		} else {
-			uid = `urn:rights-management:${Converter.bytesToHex(RandomHelper.generate(32))}`;
-		}
+		const uid = Urn.generateRandom("rights-management").toString(false);
 
 		const completePolicy: IOdrlPolicy = {
 			...policy,
@@ -96,34 +83,27 @@ export class PolicyAdministrationPointService implements IPolicyAdministrationPo
 		const storagePolicy = convertToStoragePolicy(completePolicy);
 		await this._odrlPolicyEntityStorage.set(storagePolicy);
 
-		return { uid };
+		return uid;
 	}
 
 	/**
 	 * Update an existing policy.
-	 * @param policyId The ID of the policy to update.
-	 * @param updates The policy updates to apply.
-	 * @returns The updated policy.
+	 * @param policy The policy to update (must include uid).
+	 * @returns Nothing.
 	 */
-	public async update(policyId: string, updates: IOdrlPolicy): Promise<IOdrlPolicy> {
-		Guards.stringValue(this.CLASS_NAME, nameof(policyId), policyId);
-		Guards.object(this.CLASS_NAME, nameof(updates), updates);
+	public async update(policy: IOdrlPolicy): Promise<void> {
+		Guards.object(this.CLASS_NAME, nameof(policy), policy);
+		Guards.stringValue(this.CLASS_NAME, "policy.uid", policy.uid);
 
+		const policyId = policy.uid;
 		const existingStoragePolicy = await this._odrlPolicyEntityStorage.get(policyId);
 		if (!existingStoragePolicy) {
-			throw new NotFoundError(this.CLASS_NAME, "policyNotFound");
+			throw new NotFoundError(this.CLASS_NAME, "policyNotFound", policyId);
 		}
 
 		const existingPolicy = convertFromStoragePolicy(existingStoragePolicy);
 
-		if (Is.stringValue(updates.uid) && updates.uid !== policyId) {
-			throw new GeneralError(this.CLASS_NAME, "cannotUpdateUid");
-		}
-
-		const updatedPolicy: IOdrlPolicy = ObjectHelper.merge(existingPolicy, {
-			...updates,
-			uid: policyId // Ensure UID cannot be changed
-		});
+		const updatedPolicy: IOdrlPolicy = ObjectHelper.merge(existingPolicy, policy);
 
 		const validationFailures: IValidationFailure[] = [];
 		await JsonLdHelper.validate(updatedPolicy, validationFailures);
@@ -131,8 +111,6 @@ export class PolicyAdministrationPointService implements IPolicyAdministrationPo
 
 		const storagePolicy = convertToStoragePolicy(updatedPolicy);
 		await this._odrlPolicyEntityStorage.set(storagePolicy);
-
-		return updatedPolicy;
 	}
 
 	/**
@@ -145,7 +123,7 @@ export class PolicyAdministrationPointService implements IPolicyAdministrationPo
 
 		const storagePolicy = await this._odrlPolicyEntityStorage.get(policyId);
 		if (!storagePolicy) {
-			throw new NotFoundError(this.CLASS_NAME, "policyNotFound");
+			throw new NotFoundError(this.CLASS_NAME, "policyNotFound", policyId);
 		}
 		return convertFromStoragePolicy(storagePolicy);
 	}

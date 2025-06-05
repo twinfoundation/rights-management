@@ -12,15 +12,6 @@ The body of the request.
 
 #### policy
 
-> **policy**: `Omit`\<`IOdrlPolicy`, `"uid"`\> & `object`
+> **policy**: `Omit`\<`IOdrlPolicy`, `"uid"`\>
 
-The policy to create (uid is optional and will be auto-generated if not provided).
-
-##### Type declaration
-
-###### uid?
-
-> `optional` **uid**: `string`
-
-The optional unique identifier for the policy.
-If not provided, will be auto-generated.
+The policy to create (uid will be auto-generated).

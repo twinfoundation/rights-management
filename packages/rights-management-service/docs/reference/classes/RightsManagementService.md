@@ -51,21 +51,21 @@ Runtime name for the class.
 
 ### papCreate()
 
-> **papCreate**(`policy`): `Promise`\<\{ `uid`: `string`; \}\>
+> **papCreate**(`policy`): `Promise`\<`string`\>
 
-PAP: Create a new policy with optional UID.
+PAP: Create a new policy with auto-generated UID.
 
 #### Parameters
 
 ##### policy
 
-`Omit`\<`IOdrlPolicy`, `"uid"`\> & `object`
+`Omit`\<`IOdrlPolicy`, `"uid"`\>
 
-The policy to create (uid is optional and will be auto-generated if not provided).
+The policy to create (uid will be auto-generated).
 
 #### Returns
 
-`Promise`\<\{ `uid`: `string`; \}\>
+`Promise`\<`string`\>
 
 The UID of the created policy.
 
@@ -77,29 +77,23 @@ The UID of the created policy.
 
 ### papUpdate()
 
-> **papUpdate**(`policyId`, `updates`): `Promise`\<`IOdrlPolicy`\>
+> **papUpdate**(`policy`): `Promise`\<`void`\>
 
 PAP: Update an existing policy.
 
 #### Parameters
 
-##### policyId
-
-`string`
-
-The id of the policy to update.
-
-##### updates
+##### policy
 
 `IOdrlPolicy`
 
-The policy updates to apply.
+The policy to update (must include uid).
 
 #### Returns
 
-`Promise`\<`IOdrlPolicy`\>
+`Promise`\<`void`\>
 
-The updated policy.
+Nothing.
 
 #### Implementation of
 
