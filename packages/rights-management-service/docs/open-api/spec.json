@@ -39,7 +39,7 @@
 					"content": {
 						"application/json": {
 							"schema": {
-								"$ref": "#/components/schemas/Omit%3CIOdrlPolicy%2C%22uid%22%3E"
+								"$ref": "#/components/schemas/OdrlPolicy"
 							},
 							"examples": {
 								"papCreateExample": {
@@ -835,7 +835,7 @@
 						"description": "To apply a watermark to the Asset."
 					}
 				],
-				"description": "The types for ODRL Actions."
+				"description": "The types for ODRL Actions. Simple action types (for direct string usage)   The types for ODRL Actions."
 			},
 			"ConflictStrategyType": {
 				"anyOf": [
