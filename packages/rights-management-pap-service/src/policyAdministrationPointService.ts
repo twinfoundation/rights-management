@@ -1,6 +1,13 @@
 // Copyright 2024 IOTA Stiftung.
 // SPDX-License-Identifier: Apache-2.0.
-import { Guards, Is, NotFoundError, Validation, type IValidationFailure } from "@twin.org/core";
+import {
+	Guards,
+	Is,
+	NotFoundError,
+	Urn,
+	Validation,
+	type IValidationFailure
+} from "@twin.org/core";
 import { JsonLdHelper } from "@twin.org/data-json-ld";
 import type { EntityCondition } from "@twin.org/entity";
 import {
@@ -54,14 +61,45 @@ export class PolicyAdministrationPointService implements IPolicyAdministrationPo
 	}
 
 	/**
-	 * Store a policy in the entity storage.
-	 * @param policy The policy to store.
+	 * Create a new policy with auto-generated UID.
+	 * @param policy The policy to create (uid will be auto-generated).
+	 * @returns The UID of the created policy.
 	 */
-	public async store(policy: IOdrlPolicy): Promise<void> {
-		Guards.object(this.CLASS_NAME, nameof(policy), policy);
-		Guards.stringValue(this.CLASS_NAME, nameof(policy.uid), policy.uid);
+	public async create(policy: Omit<IOdrlPolicy, "uid">): Promise<string> {
+		Guards.object<IOdrlPolicy>(this.CLASS_NAME, nameof(policy), policy);
 
-		// Validate the policy as JSON-LD
+		const uid = Urn.generateRandom("rights-management").toString(false);
+
+		const completePolicy: IOdrlPolicy = {
+			...policy,
+			uid
+		};
+
+		const validationFailures: IValidationFailure[] = [];
+		await JsonLdHelper.validate(completePolicy, validationFailures);
+		Validation.asValidationError(this.CLASS_NAME, nameof(completePolicy), validationFailures);
+
+		const storagePolicy = convertToStoragePolicy(completePolicy);
+		await this._odrlPolicyEntityStorage.set(storagePolicy);
+
+		return uid;
+	}
+
+	/**
+	 * Update an existing policy.
+	 * @param policy The policy to update (must include uid).
+	 * @returns Nothing.
+	 */
+	public async update(policy: IOdrlPolicy): Promise<void> {
+		Guards.object(this.CLASS_NAME, nameof(policy), policy);
+		Guards.stringValue(this.CLASS_NAME, "policy.uid", policy.uid);
+
+		const policyId = policy.uid;
+		const existingStoragePolicy = await this._odrlPolicyEntityStorage.get(policyId);
+		if (!existingStoragePolicy) {
+			throw new NotFoundError(this.CLASS_NAME, "policyNotFound", policyId);
+		}
+
 		const validationFailures: IValidationFailure[] = [];
 		await JsonLdHelper.validate(policy, validationFailures);
 		Validation.asValidationError(this.CLASS_NAME, nameof(policy), validationFailures);
@@ -80,7 +118,7 @@ export class PolicyAdministrationPointService implements IPolicyAdministrationPo
 
 		const storagePolicy = await this._odrlPolicyEntityStorage.get(policyId);
 		if (!storagePolicy) {
-			throw new NotFoundError(this.CLASS_NAME, "policyNotFound");
+			throw new NotFoundError(this.CLASS_NAME, "policyNotFound", policyId);
 		}
 		return convertFromStoragePolicy(storagePolicy);
 	}

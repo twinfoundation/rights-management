@@ -11,16 +11,17 @@ import {
 import { ComponentFactory, Coerce, Guards } from "@twin.org/core";
 import { nameof } from "@twin.org/nameof";
 import type {
+	IPapCreateRequest,
 	IPapQueryRequest,
 	IPapQueryResponse,
 	IPapRemoveRequest,
 	IPapRetrieveRequest,
 	IPapRetrieveResponse,
-	IPapStoreRequest,
+	IPapUpdateRequest,
 	IRightsManagementComponent
 } from "@twin.org/rights-management-models";
 import { OdrlContexts } from "@twin.org/standards-w3c-odrl";
-import { HeaderTypes, HttpStatusCode } from "@twin.org/web";
+import { HttpStatusCode } from "@twin.org/web";
 
 /**
  * The source used when communicating about these routes.
@@ -47,32 +48,29 @@ export function generateRestRoutesRightsManagement(
 	baseRouteName: string,
 	componentName: string
 ): IRestRoute[] {
-	const storeRoute: IRestRoute<IPapStoreRequest, ICreatedResponse> = {
-		operationId: "papStore",
-		summary: "Store a policy",
+	const createRoute: IRestRoute<IPapCreateRequest, ICreatedResponse> = {
+		operationId: "papCreate",
+		summary: "Create a policy",
 		tag: tags[0].name,
 		method: "POST",
 		path: `${baseRouteName}/pap/`,
 		handler: async (httpRequestContext, request) =>
-			papStore(httpRequestContext, componentName, request),
+			papCreate(httpRequestContext, componentName, request),
 		requestType: {
-			type: nameof<IPapStoreRequest>(),
+			type: nameof<IPapCreateRequest>(),
 			examples: [
 				{
-					id: "papStoreExample",
+					id: "papCreateExample",
 					request: {
 						body: {
-							policy: {
-								"@context": OdrlContexts.ContextRoot,
-								"@type": "Set",
-								uid: "http://example.com/policy/1",
-								permission: [
-									{
-										target: "http://example.com/asset/1",
-										action: "use"
-									}
-								]
-							}
+							"@context": OdrlContexts.ContextRoot,
+							"@type": "Set",
+							permission: [
+								{
+									target: "http://example.com/asset/1",
+									action: "use"
+								}
+							]
 						}
 					}
 				}
@@ -83,15 +81,54 @@ export function generateRestRoutesRightsManagement(
 				type: nameof<ICreatedResponse>(),
 				examples: [
 					{
-						id: "papStoreResponseExample",
+						id: "papCreateResponseExample",
 						response: {
-							statusCode: HttpStatusCode.created,
+							statusCode: 201,
 							headers: {
-								[HeaderTypes.Location]: "http://example.com/policy/1"
+								location: "urn:rights-management:abc123def456"
 							}
 						}
 					}
 				]
+			}
+		]
+	};
+
+	const updateRoute: IRestRoute<IPapUpdateRequest, INoContentResponse> = {
+		operationId: "papUpdate",
+		summary: "Update a policy",
+		tag: tags[0].name,
+		method: "PUT",
+		path: `${baseRouteName}/pap/:id`,
+		handler: async (httpRequestContext, request) =>
+			papUpdate(httpRequestContext, componentName, request),
+		requestType: {
+			type: nameof<IPapUpdateRequest>(),
+			examples: [
+				{
+					id: "papUpdateExample",
+					request: {
+						pathParams: {
+							id: "urn:rights-management:abc123def456"
+						},
+						body: {
+							"@context": OdrlContexts.ContextRoot,
+							"@type": "Set",
+							uid: "urn:rights-management:abc123def456",
+							permission: [
+								{
+									target: "http://example.com/asset/2",
+									action: "read"
+								}
+							]
+						}
+					}
+				}
+			]
+		},
+		responseType: [
+			{
+				type: nameof<INoContentResponse>()
 			}
 		]
 	};
@@ -111,7 +148,7 @@ export function generateRestRoutesRightsManagement(
 					id: "papRetrieveExample",
 					request: {
 						pathParams: {
-							id: "http://example.com/policy/1"
+							id: "urn:rights-management:abc123def456"
 						}
 					}
 				}
@@ -127,7 +164,7 @@ export function generateRestRoutesRightsManagement(
 							body: {
 								"@context": OdrlContexts.ContextRoot,
 								"@type": "Set",
-								uid: "http://example.com/policy/1",
+								uid: "urn:rights-management:abc123def456",
 								permission: [
 									{
 										target: "http://example.com/asset/1",
@@ -157,7 +194,7 @@ export function generateRestRoutesRightsManagement(
 					id: "papRemoveExample",
 					request: {
 						pathParams: {
-							id: "http://example.com/policy/1"
+							id: "urn:rights-management:abc123def456"
 						}
 					}
 				}
@@ -204,7 +241,7 @@ export function generateRestRoutesRightsManagement(
 									{
 										"@context": OdrlContexts.ContextRoot,
 										"@type": "Set",
-										uid: "http://example.com/policy/1",
+										uid: "urn:rights-management:abc123def456",
 										permission: [
 											{
 												target: "http://example.com/asset/1",
@@ -221,24 +258,23 @@ export function generateRestRoutesRightsManagement(
 		]
 	};
 
-	return [storeRoute, retrieveRoute, removeRoute, queryRoute];
+	return [createRoute, updateRoute, retrieveRoute, removeRoute, queryRoute];
 }
 
 /**
- * PAP: Store a policy.
+ * PAP: Create a policy.
  * @param httpRequestContext The request context for the API.
  * @param componentName The name of the component to use in the routes.
  * @param request The request.
  * @returns The response object with additional http response properties.
  */
-export async function papStore(
+export async function papCreate(
 	httpRequestContext: IHttpRequestContext,
 	componentName: string,
-	request: IPapStoreRequest
+	request: IPapCreateRequest
 ): Promise<ICreatedResponse> {
-	Guards.object<IPapStoreRequest>(ROUTES_SOURCE, nameof(request), request);
-	Guards.object<IPapStoreRequest["body"]>(ROUTES_SOURCE, nameof(request.body), request.body);
-	Guards.object(ROUTES_SOURCE, nameof(request.body.policy), request.body.policy);
+	Guards.object<IPapCreateRequest>(ROUTES_SOURCE, nameof(request), request);
+	Guards.object<IPapCreateRequest["body"]>(ROUTES_SOURCE, nameof(request.body), request.body);
 	Guards.stringValue(
 		ROUTES_SOURCE,
 		nameof(httpRequestContext.nodeIdentity),
@@ -247,14 +283,44 @@ export async function papStore(
 
 	const component = ComponentFactory.get<IRightsManagementComponent>(componentName);
 
-	const policy = request.body.policy;
-	await component.papStore(policy);
+	const policy = request.body;
+	const uid = await component.papCreate(policy);
 
 	return {
 		statusCode: HttpStatusCode.created,
 		headers: {
-			[HeaderTypes.Location]: policy.uid ?? ""
+			location: uid
 		}
+	};
+}
+
+/**
+ * PAP: Update a policy.
+ * @param httpRequestContext The request context for the API.
+ * @param componentName The name of the component to use in the routes.
+ * @param request The request.
+ * @returns The response object with additional http response properties.
+ */
+export async function papUpdate(
+	httpRequestContext: IHttpRequestContext,
+	componentName: string,
+	request: IPapUpdateRequest
+): Promise<INoContentResponse> {
+	Guards.object(ROUTES_SOURCE, nameof(request), request);
+	Guards.object(ROUTES_SOURCE, nameof(request.pathParams), request.pathParams);
+	Guards.stringValue(ROUTES_SOURCE, nameof(request.pathParams.id), request.pathParams.id);
+	Guards.object(ROUTES_SOURCE, nameof(request.body), request.body);
+	Guards.stringValue(
+		ROUTES_SOURCE,
+		nameof(httpRequestContext.nodeIdentity),
+		httpRequestContext.nodeIdentity
+	);
+
+	const component = ComponentFactory.get<IRightsManagementComponent>(componentName);
+	await component.papUpdate(request.body);
+
+	return {
+		statusCode: HttpStatusCode.noContent
 	};
 }
 

@@ -1,17 +1,22 @@
 // Copyright 2024 IOTA Stiftung.
 // SPDX-License-Identifier: Apache-2.0.
 import { BaseRestClient } from "@twin.org/api-core";
-import { HttpParameterHelper, type IBaseRestClientConfig } from "@twin.org/api-models";
+import {
+	HttpParameterHelper,
+	type IBaseRestClientConfig,
+	type ICreatedResponse
+} from "@twin.org/api-models";
 import { Coerce, Guards } from "@twin.org/core";
 import type { EntityCondition } from "@twin.org/entity";
 import { nameof } from "@twin.org/nameof";
 import type {
+	IPapCreateRequest,
 	IPapQueryRequest,
 	IPapQueryResponse,
 	IPapRemoveRequest,
 	IPapRetrieveRequest,
 	IPapRetrieveResponse,
-	IPapStoreRequest,
+	IPapUpdateRequest,
 	IRightsManagementComponent
 } from "@twin.org/rights-management-models";
 import type { IOdrlPolicy } from "@twin.org/standards-w3c-odrl";
@@ -34,17 +39,34 @@ export class RightsManagementClient extends BaseRestClient implements IRightsMan
 	}
 
 	/**
-	 * PAP: Store a policy.
-	 * @param policy The policy to store.
-	 * @returns Nothing.
+	 * PAP: Create a new policy with auto-generated UID.
+	 * @param policy The policy to create (uid will be auto-generated).
+	 * @returns The UID of the created policy.
 	 */
-	public async papStore(policy: IOdrlPolicy): Promise<void> {
+	public async papCreate(policy: Omit<IOdrlPolicy, "uid">): Promise<string> {
 		Guards.object(this.CLASS_NAME, nameof(policy), policy);
 
-		await this.fetch<IPapStoreRequest, never>("/pap", "POST", {
-			body: {
-				policy
-			}
+		const response = await this.fetch<IPapCreateRequest, ICreatedResponse>("/pap", "POST", {
+			body: policy
+		});
+
+		return response.headers.location;
+	}
+
+	/**
+	 * PAP: Update an existing policy.
+	 * @param policy The policy to update (must include uid).
+	 * @returns Nothing.
+	 */
+	public async papUpdate(policy: IOdrlPolicy): Promise<void> {
+		Guards.object(this.CLASS_NAME, nameof(policy), policy);
+		Guards.stringValue(this.CLASS_NAME, "policy.uid", policy.uid);
+
+		await this.fetch<IPapUpdateRequest, never>("/pap/:id", "PUT", {
+			pathParams: {
+				id: policy.uid
+			},
+			body: policy
 		});
 	}
 

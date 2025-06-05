@@ -23,8 +23,8 @@
 	"paths": {
 		"/rights-management/pap": {
 			"post": {
-				"operationId": "papStore",
-				"summary": "Store a policy",
+				"operationId": "papCreate",
+				"summary": "Create a policy",
 				"tags": [
 					"Policy Administration Point"
 				],
@@ -34,27 +34,24 @@
 					}
 				],
 				"requestBody": {
-					"description": "The request structure for storing a policy.",
+					"description": "The request structure for creating a policy.",
 					"required": true,
 					"content": {
 						"application/json": {
 							"schema": {
-								"$ref": "#/components/schemas/PapStoreRequest"
+								"$ref": "#/components/schemas/Omit%3CIOdrlPolicy%2C%22uid%22%3E"
 							},
 							"examples": {
-								"papStoreExample": {
+								"papCreateExample": {
 									"value": {
-										"policy": {
-											"@context": "https://www.w3.org/ns/odrl/2/",
-											"@type": "Set",
-											"uid": "http://example.com/policy/1",
-											"permission": [
-												{
-													"target": "http://example.com/asset/1",
-													"action": "use"
-												}
-											]
-										}
+										"@context": "https://www.w3.org/ns/odrl/2/",
+										"@type": "Set",
+										"permission": [
+											{
+												"target": "http://example.com/asset/1",
+												"action": "use"
+											}
+										]
 									}
 								}
 							}
@@ -69,7 +66,7 @@
 								"schema": {
 									"type": "string"
 								},
-								"description": "e.g. http://example.com/policy/1"
+								"description": "e.g. urn:rights-management:abc123def456"
 							}
 						}
 					},
@@ -134,6 +131,119 @@
 			}
 		},
 		"/rights-management/pap/{id}": {
+			"put": {
+				"operationId": "papUpdate",
+				"summary": "Update a policy",
+				"tags": [
+					"Policy Administration Point"
+				],
+				"parameters": [
+					{
+						"name": "id",
+						"description": "The ID of the policy to update.",
+						"in": "path",
+						"required": true,
+						"schema": {
+							"type": "string"
+						},
+						"style": "simple",
+						"example": "urn:rights-management:abc123def456"
+					}
+				],
+				"security": [
+					{
+						"jwtBearerAuthScheme": []
+					}
+				],
+				"requestBody": {
+					"description": "The request structure for updating a policy.",
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/OdrlPolicy"
+							},
+							"examples": {
+								"papUpdateExample": {
+									"value": {
+										"@context": "https://www.w3.org/ns/odrl/2/",
+										"@type": "Set",
+										"uid": "urn:rights-management:abc123def456",
+										"permission": [
+											{
+												"target": "http://example.com/asset/2",
+												"action": "read"
+											}
+										]
+									}
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"204": {
+						"description": "The rest request ended in success with no data."
+					},
+					"400": {
+						"description": "The server cannot process the request, see the content for more details.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/Error"
+								},
+								"examples": {
+									"exampleResponse": {
+										"value": {
+											"name": "GeneralError",
+											"message": "component.error",
+											"properties": {
+												"foo": "bar"
+											}
+										}
+									}
+								}
+							}
+						}
+					},
+					"401": {
+						"description": "You are not authorized to use the API or no credentials were supplied, see the content for more details.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/Error"
+								},
+								"examples": {
+									"exampleResponse": {
+										"value": {
+											"name": "UnauthorizedError",
+											"message": "component.error"
+										}
+									}
+								}
+							}
+						}
+					},
+					"500": {
+						"description": "The server has encountered a situation it does not know how to handle, see the content for more details.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/Error"
+								},
+								"examples": {
+									"exampleResponse": {
+										"value": {
+											"name": "InternalServerError",
+											"message": "component.error"
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			},
 			"get": {
 				"operationId": "papRetrieve",
 				"summary": "Retrieve a policy",
@@ -150,7 +260,7 @@
 							"type": "string"
 						},
 						"style": "simple",
-						"example": "http://example.com/policy/1"
+						"example": "urn:rights-management:abc123def456"
 					}
 				],
 				"security": [
@@ -171,7 +281,7 @@
 										"value": {
 											"@context": "https://www.w3.org/ns/odrl/2/",
 											"@type": "Set",
-											"uid": "http://example.com/policy/1",
+											"uid": "urn:rights-management:abc123def456",
 											"permission": [
 												{
 													"target": "http://example.com/asset/1",
@@ -259,7 +369,7 @@
 							"type": "string"
 						},
 						"style": "simple",
-						"example": "http://example.com/policy/1"
+						"example": "urn:rights-management:abc123def456"
 					}
 				],
 				"security": [
@@ -389,7 +499,7 @@
 												{
 													"@context": "https://www.w3.org/ns/odrl/2/",
 													"@type": "Set",
-													"uid": "http://example.com/policy/1",
+													"uid": "urn:rights-management:abc123def456",
 													"permission": [
 														{
 															"target": "http://example.com/asset/1",
@@ -3869,19 +3979,6 @@
 				],
 				"additionalProperties": false,
 				"description": "The body of the response."
-			},
-			"PapStoreRequest": {
-				"type": "object",
-				"properties": {
-					"policy": {
-						"$ref": "#/components/schemas/OdrlPolicy"
-					}
-				},
-				"required": [
-					"policy"
-				],
-				"additionalProperties": false,
-				"description": "The body of the request."
 			},
 			"PolicyType": {
 				"anyOf": [

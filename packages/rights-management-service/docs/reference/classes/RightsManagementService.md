@@ -49,11 +49,37 @@ Runtime name for the class.
 
 ## Methods
 
-### papStore()
+### papCreate()
 
-> **papStore**(`policy`): `Promise`\<`void`\>
+> **papCreate**(`policy`): `Promise`\<`string`\>
 
-PAP: Store a policy.
+PAP: Create a new policy with auto-generated UID.
+
+#### Parameters
+
+##### policy
+
+`Omit`\<`IOdrlPolicy`, `"uid"`\>
+
+The policy to create (uid will be auto-generated).
+
+#### Returns
+
+`Promise`\<`string`\>
+
+The UID of the created policy.
+
+#### Implementation of
+
+`IRightsManagementComponent.papCreate`
+
+***
+
+### papUpdate()
+
+> **papUpdate**(`policy`): `Promise`\<`void`\>
+
+PAP: Update an existing policy.
 
 #### Parameters
 
@@ -61,7 +87,7 @@ PAP: Store a policy.
 
 `IOdrlPolicy`
 
-The policy to store.
+The policy to update (must include uid).
 
 #### Returns
 
@@ -71,7 +97,7 @@ Nothing.
 
 #### Implementation of
 
-`IRightsManagementComponent.papStore`
+`IRightsManagementComponent.papUpdate`
 
 ***
 

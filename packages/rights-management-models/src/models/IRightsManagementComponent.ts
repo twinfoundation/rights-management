@@ -10,11 +10,18 @@ import type { IOdrlPolicy } from "@twin.org/standards-w3c-odrl";
  */
 export interface IRightsManagementComponent extends IComponent {
 	/**
-	 * PAP: Store a policy.
-	 * @param policy The policy to store.
+	 * Create a new policy with auto-generated UID.
+	 * @param policy The policy to create (uid will be auto-generated).
+	 * @returns The UID of the created policy.
+	 */
+	papCreate(policy: Omit<IOdrlPolicy, "uid">): Promise<string>;
+
+	/**
+	 * PAP: Update an existing policy.
+	 * @param policy The policy to update (must include uid).
 	 * @returns Nothing.
 	 */
-	papStore(policy: IOdrlPolicy): Promise<void>;
+	papUpdate(policy: IOdrlPolicy): Promise<void>;
 
 	/**
 	 * PAP: Retrieve a policy.

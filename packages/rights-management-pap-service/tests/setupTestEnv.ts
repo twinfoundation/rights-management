@@ -29,7 +29,7 @@ export const TEST_USER_IDENTITY = "user:1234";
 export const TEST_NODE_IDENTITY = "node:5678";
 
 export const SAMPLE_POLICY: IOdrlPolicy = {
-	"@context": OdrlContexts.Context,
+	"@context": OdrlContexts.ContextRoot,
 	"@type": "Set",
 	uid: TEST_POLICY_ID,
 	permission: [
@@ -52,16 +52,15 @@ EntityStorageConnectorFactory.register(
 		})
 );
 
-// Helper function to create test policies
+// Helper function to create test policy without UID (for auto-generation)
 const createTestPolicy = (
 	id: string,
 	policyType: PolicyType,
 	assetId: string,
 	action: ActionType
-): IOdrlPolicy => ({
-	"@context": OdrlContexts.Context,
+): Omit<IOdrlPolicy, "uid"> => ({
+	"@context": OdrlContexts.ContextRoot,
 	"@type": policyType,
-	uid: `http://example.com/policy/${id}`,
 	permission: [
 		{
 			target: assetId,
@@ -70,18 +69,23 @@ const createTestPolicy = (
 	]
 });
 
-// Create multiple policies with different attributes for testing
+// Store mapping of expected ID to generated UID
+export const testPolicyMapping = new Map<string, string>();
+
 export const createTestPolicies = async (
 	policyAdminPoint: PolicyAdministrationPointService
 ): Promise<void> => {
+	testPolicyMapping.clear();
+
 	for (let i = 1; i <= 10; i++) {
 		const policyType = i % 2 === 0 ? ("Set" as PolicyType) : ("Offer" as PolicyType);
 		const assetId = `http://example.com/asset/${Math.ceil(i / 2)}`;
 		const action = i % 3 === 0 ? ("display" as ActionType) : ("use" as ActionType);
 
-		await policyAdminPoint.store(
-			createTestPolicy(i.toString(), policyType, assetId, action),
-			TEST_NODE_IDENTITY
-		);
+		const policy = createTestPolicy(i.toString(), policyType, assetId, action);
+		const generatedUid = await policyAdminPoint.create(policy);
+
+		// Store mapping for tests that need to know the generated UID
+		testPolicyMapping.set(`http://example.com/policy/${i}`, generatedUid);
 	}
 };

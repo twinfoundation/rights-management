@@ -48,11 +48,37 @@ The class name of the Policy Administration Point Service.
 
 ## Methods
 
-### store()
+### create()
 
-> **store**(`policy`): `Promise`\<`void`\>
+> **create**(`policy`): `Promise`\<`string`\>
 
-Store a policy in the entity storage.
+Create a new policy with auto-generated UID.
+
+#### Parameters
+
+##### policy
+
+`Omit`\<`IOdrlPolicy`, `"uid"`\>
+
+The policy to create (uid will be auto-generated).
+
+#### Returns
+
+`Promise`\<`string`\>
+
+The UID of the created policy.
+
+#### Implementation of
+
+`IPolicyAdministrationPointComponent.create`
+
+***
+
+### update()
+
+> **update**(`policy`): `Promise`\<`void`\>
+
+Update an existing policy.
 
 #### Parameters
 
@@ -60,15 +86,17 @@ Store a policy in the entity storage.
 
 `IOdrlPolicy`
 
-The policy to store.
+The policy to update (must include uid).
 
 #### Returns
 
 `Promise`\<`void`\>
 
+Nothing.
+
 #### Implementation of
 
-`IPolicyAdministrationPointComponent.store`
+`IPolicyAdministrationPointComponent.update`
 
 ***
 

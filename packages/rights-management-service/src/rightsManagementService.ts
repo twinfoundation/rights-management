@@ -42,17 +42,33 @@ export class RightsManagementService implements IRightsManagementComponent {
 	}
 
 	/**
-	 * PAP: Store a policy.
-	 * @param policy The policy to store.
-	 * @returns Nothing.
+	 * PAP: Create a new policy with auto-generated UID.
+	 * @param policy The policy to create (uid will be auto-generated).
+	 * @returns The UID of the created policy.
 	 */
-	public async papStore(policy: IOdrlPolicy): Promise<void> {
+	public async papCreate(policy: Omit<IOdrlPolicy, "uid">): Promise<string> {
 		try {
 			Guards.object(this.CLASS_NAME, nameof(policy), policy);
 
-			await this._papComponent.store(policy);
+			const result = await this._papComponent.create(policy);
+			return result;
 		} catch (error) {
-			throw new GeneralError(this.CLASS_NAME, "papStoreFailed", undefined, error);
+			throw new GeneralError(this.CLASS_NAME, "papCreateFailed", undefined, error);
+		}
+	}
+
+	/**
+	 * PAP: Update an existing policy.
+	 * @param policy The policy to update (must include uid).
+	 * @returns Nothing.
+	 */
+	public async papUpdate(policy: IOdrlPolicy): Promise<void> {
+		try {
+			Guards.object(this.CLASS_NAME, nameof(policy), policy);
+
+			await this._papComponent.update(policy);
+		} catch (error) {
+			throw new GeneralError(this.CLASS_NAME, "papUpdateFailed", undefined, error);
 		}
 	}
 

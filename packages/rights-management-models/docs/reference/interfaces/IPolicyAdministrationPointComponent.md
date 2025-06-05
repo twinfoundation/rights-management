@@ -1,8 +1,6 @@
 # Interface: IPolicyAdministrationPointComponent
 
-Interface describing a Policy Administration Point (PAP) contract.
-Manages policies for the rights management, policies are also queried by the
-Policy Management Point (PMP) when it handles requests from the Policy Decision Point (PDP).
+Interface describing a Policy Administration Point (PAP) component that manages ODRL policies.
 
 ## Extends
 
@@ -10,11 +8,33 @@ Policy Management Point (PMP) when it handles requests from the Policy Decision 
 
 ## Methods
 
-### store()
+### create()
 
-> **store**(`policy`): `Promise`\<`void`\>
+> **create**(`policy`): `Promise`\<`string`\>
 
-Store a policy.
+Create a new policy with auto-generated UID.
+
+#### Parameters
+
+##### policy
+
+`Omit`\<`IOdrlPolicy`, `"uid"`\>
+
+The policy to create (uid will be auto-generated).
+
+#### Returns
+
+`Promise`\<`string`\>
+
+The UID of the created policy.
+
+***
+
+### update()
+
+> **update**(`policy`): `Promise`\<`void`\>
+
+Update an existing policy.
 
 #### Parameters
 
@@ -22,7 +42,7 @@ Store a policy.
 
 `IOdrlPolicy`
 
-The policy to store.
+The policy to update (must include uid).
 
 #### Returns
 
