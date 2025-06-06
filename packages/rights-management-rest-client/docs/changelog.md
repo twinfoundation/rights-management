@@ -1,5 +1,20 @@
 # @twin.org/rights-management-rest-client - Changelog
 
+## [0.0.1-next.9](https://github.com/twinfoundation/rights-management/compare/rights-management-rest-client-v0.0.1-next.8...rights-management-rest-client-v0.0.1-next.9) (2025-06-06)
+
+
+### Features
+
+* pap create, update methods ([#13](https://github.com/twinfoundation/rights-management/issues/13)) ([edb6c9e](https://github.com/twinfoundation/rights-management/commit/edb6c9efcfda55ac96f7594253bf831b4f0e5993))
+* rights management pap ([#4](https://github.com/twinfoundation/rights-management/issues/4)) ([d1165a9](https://github.com/twinfoundation/rights-management/commit/d1165a92f57128731cfb308d977832e28cf33493))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @twin.org/rights-management-models bumped from 0.0.1-next.8 to 0.0.1-next.9
+
 ## [0.0.1-next.8](https://github.com/twinfoundation/rights-management/compare/rights-management-rest-client-v0.0.1-next.7...rights-management-rest-client-v0.0.1-next.8) (2025-06-05)
 
 
