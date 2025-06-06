@@ -1,5 +1,30 @@
 # @twin.org/rights-management-pap-service - Changelog
 
+## [0.0.1-next.9](https://github.com/twinfoundation/rights-management/compare/rights-management-service-v0.0.1-next.8...rights-management-service-v0.0.1-next.9) (2025-06-06)
+
+
+### Features
+
+* pap create, update methods ([#13](https://github.com/twinfoundation/rights-management/issues/13)) ([edb6c9e](https://github.com/twinfoundation/rights-management/commit/edb6c9efcfda55ac96f7594253bf831b4f0e5993))
+* remove unnecessary config options from service ([31ef3a2](https://github.com/twinfoundation/rights-management/commit/31ef3a2eb2293efdad7e6b8b55f105cc62bba3ed))
+* rename pap entity storage to pap service ([38a2c14](https://github.com/twinfoundation/rights-management/commit/38a2c14d8f63a86e398820166c83437be5aca1b8))
+* rights management pap ([#4](https://github.com/twinfoundation/rights-management/issues/4)) ([d1165a9](https://github.com/twinfoundation/rights-management/commit/d1165a92f57128731cfb308d977832e28cf33493))
+
+
+### Bug Fixes
+
+* adding missing dependency ([#15](https://github.com/twinfoundation/rights-management/issues/15)) ([c7e6267](https://github.com/twinfoundation/rights-management/commit/c7e62678b296ef8d28c31921cb78aeabe674cd84))
+* modifying the function name for the rest routes ([#6](https://github.com/twinfoundation/rights-management/issues/6)) ([7915111](https://github.com/twinfoundation/rights-management/commit/7915111ac608c9d69bcaa819c85b553fc9bace6a))
+* slimline openapi spec ([aacb9d5](https://github.com/twinfoundation/rights-management/commit/aacb9d50f80d3652ef7419ca3777f53e542773f1))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @twin.org/rights-management-models bumped from 0.0.1-next.8 to 0.0.1-next.9
+    * @twin.org/rights-management-pap-service bumped from 0.0.1-next.8 to 0.0.1-next.9
+
 ## [0.0.1-next.8](https://github.com/twinfoundation/rights-management/compare/rights-management-service-v0.0.1-next.7...rights-management-service-v0.0.1-next.8) (2025-06-05)
 
 
