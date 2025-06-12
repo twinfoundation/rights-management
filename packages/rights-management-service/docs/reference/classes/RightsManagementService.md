@@ -155,7 +155,7 @@ Nothing.
 
 ### papQuery()
 
-> **papQuery**(`conditions?`, `cursor?`, `pageSize?`): `Promise`\<\{ `cursor`: `string`; `policies`: `IOdrlPolicy`[]; \}\>
+> **papQuery**(`conditions?`, `cursor?`, `pageSize?`): `Promise`\<\{ `cursor?`: `string`; `policies`: `IOdrlPolicy`[]; \}\>
 
 PAP: Query the policies using the specified conditions.
 
@@ -181,7 +181,7 @@ The number of results to return per page.
 
 #### Returns
 
-`Promise`\<\{ `cursor`: `string`; `policies`: `IOdrlPolicy`[]; \}\>
+`Promise`\<\{ `cursor?`: `string`; `policies`: `IOdrlPolicy`[]; \}\>
 
 Cursor for next page of results and the policies matching the query.
 

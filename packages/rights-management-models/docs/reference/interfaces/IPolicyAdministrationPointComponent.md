@@ -98,7 +98,7 @@ Nothing.
 
 ### query()
 
-> **query**(`conditions?`, `cursor?`, `pageSize?`): `Promise`\<\{ `cursor`: `string`; `policies`: `IOdrlPolicy`[]; \}\>
+> **query**(`conditions?`, `cursor?`, `pageSize?`): `Promise`\<\{ `cursor?`: `string`; `policies`: `IOdrlPolicy`[]; \}\>
 
 Query the policies using the specified conditions.
 
@@ -124,6 +124,6 @@ The number of results to return per page.
 
 #### Returns
 
-`Promise`\<\{ `cursor`: `string`; `policies`: `IOdrlPolicy`[]; \}\>
+`Promise`\<\{ `cursor?`: `string`; `policies`: `IOdrlPolicy`[]; \}\>
 
 Cursor for next page of results and the policies matching the query.

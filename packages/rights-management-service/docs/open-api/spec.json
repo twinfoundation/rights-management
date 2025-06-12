@@ -147,7 +147,7 @@
 							"type": "string"
 						},
 						"style": "simple",
-						"example": "http://example.com/policy/1"
+						"example": "urn:rights-management:abc123def456"
 					}
 				],
 				"security": [
@@ -168,7 +168,7 @@
 									"value": {
 										"@context": "https://www.w3.org/ns/odrl/2/",
 										"@type": "Set",
-										"uid": "http://example.com/policy/1",
+										"uid": "urn:rights-management:abc123def456",
 										"permission": [
 											{
 												"target": "http://example.com/asset/2",
@@ -260,7 +260,7 @@
 							"type": "string"
 						},
 						"style": "simple",
-						"example": "http://example.com/policy/1"
+						"example": "urn:rights-management:abc123def456"
 					}
 				],
 				"security": [
@@ -281,7 +281,7 @@
 										"value": {
 											"@context": "https://www.w3.org/ns/odrl/2/",
 											"@type": "Set",
-											"uid": "http://example.com/policy/1",
+											"uid": "urn:rights-management:abc123def456",
 											"permission": [
 												{
 													"target": "http://example.com/asset/1",
@@ -369,7 +369,7 @@
 							"type": "string"
 						},
 						"style": "simple",
-						"example": "http://example.com/policy/1"
+						"example": "urn:rights-management:abc123def456"
 					}
 				],
 				"security": [
@@ -499,7 +499,7 @@
 												{
 													"@context": "https://www.w3.org/ns/odrl/2/",
 													"@type": "Set",
-													"uid": "http://example.com/policy/1",
+													"uid": "urn:rights-management:abc123def456",
 													"permission": [
 														{
 															"target": "http://example.com/asset/1",

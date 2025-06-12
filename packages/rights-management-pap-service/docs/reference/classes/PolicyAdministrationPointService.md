@@ -152,7 +152,7 @@ The ID of the policy to remove.
 
 ### query()
 
-> **query**(`conditions?`, `cursor?`, `pageSize?`): `Promise`\<\{ `cursor`: `string`; `policies`: `IOdrlPolicy`[]; \}\>
+> **query**(`conditions?`, `cursor?`, `pageSize?`): `Promise`\<\{ `cursor?`: `string`; `policies`: `IOdrlPolicy`[]; \}\>
 
 Query the entity storage for policies.
 
@@ -178,7 +178,7 @@ The number of results to return per page.
 
 #### Returns
 
-`Promise`\<\{ `cursor`: `string`; `policies`: `IOdrlPolicy`[]; \}\>
+`Promise`\<\{ `cursor?`: `string`; `policies`: `IOdrlPolicy`[]; \}\>
 
 The policies.
 
