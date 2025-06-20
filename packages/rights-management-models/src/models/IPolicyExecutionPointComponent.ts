@@ -7,7 +7,7 @@ import type { PolicyActionCallback } from "./policyActionCallback";
 /**
  * Interface describing a Policy Execution Point (PXP) contract.
  * When a decision is made by the Policy Decision Point (PDP),
- * the Policy Execution Point (PEP) will execute any
+ * the Policy Execution Point (PXP) will execute any
  * registered actions based on the decision.
  */
 export interface IPolicyExecutionPointComponent extends IComponent {

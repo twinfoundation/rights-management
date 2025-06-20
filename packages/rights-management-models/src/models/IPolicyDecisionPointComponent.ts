@@ -15,7 +15,7 @@ export interface IPolicyDecisionPointComponent extends IComponent {
 	 * Evaluate requests from a Policy Enforcement Point (PEP).
 	 * Uses the Policy Management Point (PMP) to retrieve the policies and the
 	 * Policy Information Point (PIP) to retrieve additional information.
-	 * Executes any actions on the Policy Execution Point (PEP) when the decision is made.
+	 * Executes any actions on the Policy Execution Point (PXP) when the decision is made.
 	 * @param assetType The type of asset being processed.
 	 * @param action The action being performed on the asset.
 	 * @param data The data to make a decision on.
