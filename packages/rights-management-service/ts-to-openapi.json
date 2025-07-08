@@ -1,0 +1,25 @@
+{
+	"title": "TWIN - Test Endpoints",
+	"version": "1.0.0",
+	"description": "REST API for TWIN - Test Endpoints.",
+	"licenseName": "Apache 2.0 License",
+	"licenseUrl": "https://opensource.org/licenses/Apache-2.0",
+	"servers": ["https://localhost"],
+	"authMethods": ["jwtBearer"],
+	"restRoutes": [
+		{
+			"packageRoot": "./"
+		}
+	],
+	"externalReferences": {
+		"IJsonLd(.*)": "https://schema.twindev.org/json-ld/JsonLd$1",
+		"IOdrl(.*)": "https://schema.twindev.org/odrl/Odrl$1",
+		"ActionType": "https://schema.twindev.org/odrl/ActionType",
+		"ConflictStrategyType": "https://schema.twindev.org/odrl/ConflictStrategyType",
+		"LeftOperandType": "https://schema.twindev.org/odrl/LeftOperandType",
+		"OdrlContextType": "https://schema.twindev.org/odrl/OdrlContextType",
+		"OperatorType": "https://schema.twindev.org/odrl/OperatorType",
+		"PolicyType": "https://schema.twindev.org/odrl/PolicyType",
+		"StatusType": "https://schema.twindev.org/odrl/StatusType"
+	}
+}
