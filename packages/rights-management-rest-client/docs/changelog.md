@@ -1,5 +1,19 @@
 # @twin.org/rights-management-rest-client - Changelog
 
+## 0.0.1 (2025-07-08)
+
+
+### Features
+
+* release to production ([947f85a](https://github.com/twinfoundation/rights-management/commit/947f85ab9e23c117135dba7008a75c2d85435259))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @twin.org/rights-management-models bumped from ^0.0.0 to ^0.0.1
+
 ## [0.0.1-next.12](https://github.com/twinfoundation/rights-management/compare/rights-management-rest-client-v0.0.1-next.11...rights-management-rest-client-v0.0.1-next.12) (2025-06-26)
 
 

@@ -1,6 +1,6 @@
 {
 	"name": "@twin.org/rights-management-service",
-	"version": "0.0.0",
+	"version": "0.0.1",
 	"description": "Rights Management service implementation and REST endpoint definitions",
 	"repository": {
 		"type": "git",
@@ -35,8 +35,8 @@
 		"@twin.org/core": "^0.0.1",
 		"@twin.org/entity": "^0.0.1",
 		"@twin.org/nameof": "^0.0.1",
-		"@twin.org/rights-management-models": "^0.0.0",
-		"@twin.org/rights-management-pap-service": "^0.0.0",
+		"@twin.org/rights-management-models": "^0.0.1",
+		"@twin.org/rights-management-pap-service": "^0.0.1",
 		"@twin.org/standards-w3c-odrl": "^0.0.1",
 		"@twin.org/web": "^0.0.1"
 	},
