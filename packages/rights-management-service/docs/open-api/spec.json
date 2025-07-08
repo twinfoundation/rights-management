@@ -624,10 +624,12 @@
 					},
 					"policies": {
 						"type": "array",
-						"items": {
-							"$ref": "https://schema.twindev.org/odrl/OdrlPolicy"
-						},
-						"description": "The policies matching the query."
+						"description": "The policies matching the query.",
+						"prefixItems": [
+							{
+								"$ref": "https://schema.twindev.org/odrl/OdrlPolicy"
+							}
+						]
 					}
 				},
 				"required": [
