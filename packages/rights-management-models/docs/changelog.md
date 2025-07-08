@@ -1,5 +1,12 @@
 # @twin.org/rights-management-models - Changelog
 
+## 0.0.1 (2025-07-08)
+
+
+### Features
+
+* release to production ([947f85a](https://github.com/twinfoundation/rights-management/commit/947f85ab9e23c117135dba7008a75c2d85435259))
+
 ## [0.0.1-next.12](https://github.com/twinfoundation/rights-management/compare/rights-management-models-v0.0.1-next.11...rights-management-models-v0.0.1-next.12) (2025-06-26)
 
 
