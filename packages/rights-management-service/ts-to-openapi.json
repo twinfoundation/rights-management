@@ -13,13 +13,13 @@
 	],
 	"externalReferences": {
 		"IJsonLd(.*)": "https://schema.twindev.org/json-ld/JsonLd$1",
-		"IOdrl(.*)": "https://schema.twindev.org/odrl/Odrl$1",
-		"ActionType": "https://schema.twindev.org/odrl/ActionType",
-		"ConflictStrategyType": "https://schema.twindev.org/odrl/ConflictStrategyType",
-		"LeftOperandType": "https://schema.twindev.org/odrl/LeftOperandType",
-		"OdrlContextType": "https://schema.twindev.org/odrl/OdrlContextType",
-		"OperatorType": "https://schema.twindev.org/odrl/OperatorType",
-		"PolicyType": "https://schema.twindev.org/odrl/PolicyType",
-		"StatusType": "https://schema.twindev.org/odrl/StatusType"
+		"IOdrl(.*)": "https://schema.twindev.org/w3c-odrl/Odrl$1",
+		"ActionType": "https://schema.twindev.org/w3c-odrl/ActionType",
+		"ConflictStrategyType": "https://schema.twindev.org/w3c-odrl/ConflictStrategyType",
+		"LeftOperandType": "https://schema.twindev.org/w3c-odrl/LeftOperandType",
+		"OdrlContextType": "https://schema.twindev.org/w3c-odrl/OdrlContextType",
+		"OperatorType": "https://schema.twindev.org/w3c-odrl/OperatorType",
+		"PolicyType": "https://schema.twindev.org/w3c-odrl/PolicyType",
+		"StatusType": "https://schema.twindev.org/w3c-odrl/StatusType"
 	}
 }
