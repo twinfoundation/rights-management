@@ -20,6 +20,7 @@
 		"OdrlContextType": "https://schema.twindev.org/w3c-odrl/OdrlContextType",
 		"OperatorType": "https://schema.twindev.org/w3c-odrl/OperatorType",
 		"PolicyType": "https://schema.twindev.org/w3c-odrl/PolicyType",
-		"StatusType": "https://schema.twindev.org/w3c-odrl/StatusType"
+		"StatusType": "https://schema.twindev.org/w3c-odrl/StatusType",
+		"UriActionType": "https://schema.twindev.org/w3c-odrl/UriActionType"
 	}
 }
