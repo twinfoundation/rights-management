@@ -16,11 +16,6 @@ import type { IRightsManagementServiceConstructorOptions } from "./models/IRight
  */
 export class RightsManagementService implements IRightsManagementComponent {
 	/**
-	 * The namespace supported by the Rights Management service.
-	 */
-	public static readonly NAMESPACE: string = "rights-management";
-
-	/**
 	 * Runtime name for the class.
 	 */
 	public readonly CLASS_NAME: string = nameof<RightsManagementService>();
